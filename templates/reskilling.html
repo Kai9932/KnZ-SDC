@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            Reskilling Plan | K&amp;Z
+        </title>
+
+        <link rel="icon" href="static/images/logoKZ.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+        <style>
+            :root{
+                --navy:#08233f;
+                --deep:#0a3158;
+                --teal:#00a896;
+                --green:#12b57b;
+                --sky:#19b4d6;
+                --amber:#f6b02c;
+                --ink:#eaf6f8;
+                --muted:#a9c3cf;
+                --glass:rgba(8,35,63,.6);
+                --card:rgba(255,255,255,.05);
+                --line:rgba(255,255,255,.14);
+                --display:'Bricolage Grotesque',system-ui,sans-serif;
+                --body:'DM Sans',system-ui,sans-serif;
+                --side:268px;
+            }
+
+            *{
+                box-sizing:border-box;
+                margin:0;
+                padding:0
+            }
+
+            body{
+                font-family:var(--body);
+                background:var(--navy);
+                color:var(--ink);
+                line-height:1.55;
+                overflow-x:hidden;
+                min-height:100vh;
+                background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 60%,rgba(25,180,214,.12),transparent)
+            }
+
+            a{
+                color:inherit;
+                text-decoration:none
+            }
+
+            button,select,input{
+                font-family:inherit
+            }
+
+            :focus-visible{
+                outline:3px solid var(--amber);
+                outline-offset:3px
+            }
+
+            /* SIDEBAR + TOP BAR (same as other pages) */
+.edge{
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:18px;
+                z-index:80
+            }
+
+            .edge::after{
+                content:"";
+                position:absolute;
+                left:0;
+                top:50%;
+                width:4px;
+                height:90px;
+                transform:translateY(-50%);
+                border-radius:0 4px 4px 0;
+                background:linear-gradient(var(--green),var(--amber));
+                animation:hint 2.4s ease-in-out 1.2s 3
+            }
+
+            @keyframes hint{
+                50%{
+                    width:12px
+                }
+            }
+
+            .sidebar{
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:var(--side);
+                z-index:90;
+                display:flex;
+                flex-direction:column;
+                padding:18px 14px;
+                background:linear-gradient(180deg,#0a2d52,#06192d);
+                border-right:1px solid var(--line);
+                transform:translateX(-102%);
+                transition:transform .35s cubic-bezier(.2,.8,.2,1)
+            }
+
+            .sidebar.show,.edge:hover+.sidebar,.sidebar:hover{
+                transform:none;
+                box-shadow:24px 0 60px rgba(0,0,0,.45)
+            }
+
+            .s-brand{
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:2px 6px 18px;
+                border-bottom:1px solid var(--line);
+                margin-bottom:12px
+            }
+
+            .s-brand img{
+                height:52px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+
+            .s-brand span{
+                font:800 1.3rem var(--display)
+            }
+
+            .s-nav,.s-foot{
+                list-style:none;
+                display:grid;
+                gap:3px
+            }
+
+            .s-nav{
+                flex:1;
+                align-content:start;
+                overflow:auto
+            }
+
+            .s-foot{
+                border-top:1px solid var(--line);
+                padding-top:10px
+            }
+
+            .s-nav a,.s-foot a{
+                display:flex;
+                align-items:center;
+                gap:13px;
+                padding:11px 14px;
+                border-radius:12px;
+                color:var(--muted);
+                font-weight:500;
+                transition:background .2s,color .2s,transform .2s
+            }
+
+            .s-nav a:hover,.s-foot a:hover{
+                background:rgba(255,255,255,.08);
+                color:#fff
+            }
+
+            .s-nav a:hover{
+                transform:translateX(4px)
+            }
+
+            .s-nav a.active{
+                background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));
+                color:#fff;
+                border:1px solid rgba(0,168,150,.5)
+            }
+
+            .ic{
+                width:22px;
+                text-align:center
+            }
+
+            .scrim{
+                position:fixed;
+                inset:0;
+                background:rgba(3,12,22,.55);
+                backdrop-filter:blur(3px);
+                z-index:70;
+                opacity:0;
+                pointer-events:none;
+                transition:opacity .3s
+            }
+
+            .scrim.show{
+                opacity:1;
+                pointer-events:auto
+            }
+
+            .top{
+                position:fixed;
+                top:0;
+                left:0;
+                right:0;
+                z-index:60;
+                display:flex;
+                align-items:center;
+                gap:14px;
+                padding:12px 4vw;
+                transition:background .3s
+            }
+
+            .top.solid{
+                background:var(--glass);
+                backdrop-filter:blur(14px);
+                border-bottom:1px solid var(--line)
+            }
+
+            .menu-btn{
+                width:46px;
+                height:46px;
+                border-radius:14px;
+                border:1px solid var(--line);
+                background:rgba(255,255,255,.08);
+                color:#fff;
+                cursor:pointer;
+                display:grid;
+                place-items:center;
+                transition:background .2s
+            }
+
+            .menu-btn:hover{
+                background:var(--teal)
+            }
+
+            .menu-btn svg{
+                width:22px;
+                height:22px
+            }
+
+            .menu-btn line{
+                transition:transform .3s,opacity .3s;
+                transform-origin:center
+            }
+
+            .menu-btn.open .l1{
+                transform:translateY(6px) rotate(45deg)
+            }
+
+            .menu-btn.open .l2{
+                opacity:0
+            }
+
+            .menu-btn.open .l3{
+                transform:translateY(-6px) rotate(-45deg)
+            }
+
+            .top .logo{
+                height:46px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+
+            .crumb{
+                margin-left:auto;
+                font-size:.85rem;
+                color:var(--muted)
+            }
+
+            .crumb b{
+                color:#fff
+            }
+
+            /* PAGE */
+main{
+                max-width:1180px;
+                margin:0 auto;
+                padding:110px 5vw 80px
+            }
+
+            .head{
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-end;
+                gap:20px;
+                flex-wrap:wrap;
+                margin-bottom:22px
+            }
+
+            h1{
+                font:800 clamp(1.9rem,4vw,2.8rem)/1.08 var(--display);
+                letter-spacing:-.02em
+            }
+
+            .sub{
+                color:var(--muted);
+                margin-top:8px;
+                max-width:60ch
+            }
+
+            .back{
+                display:inline-block;
+                color:var(--muted);
+                font-size:.9rem;
+                margin-bottom:10px;
+                background:none;
+                border:0;
+                cursor:pointer
+            }
+
+            .back:hover{
+                color:#fff
+            }
+
+            .lbl{
+                display:block;
+                font-size:.82rem;
+                color:var(--muted);
+                margin-bottom:6px
+            }
+
+            .sel,.inp{
+                width:100%;
+                padding:12px 16px;
+                border-radius:12px;
+                border:1px solid var(--line);
+                background:rgba(0,0,0,.25);
+                color:#fff;
+                font-weight:700;
+                font-size:.95rem;
+                cursor:pointer
+            }
+
+            .sel option{
+                background:#0a2d52;
+                color:#fff
+            }
+
+            .target{
+                min-width:230px
+            }
+
+            .btn{
+                padding:12px 22px;
+                border-radius:99px;
+                border:0;
+                font-weight:700;
+                color:#fff;
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                box-shadow:0 8px 24px rgba(0,168,150,.3);
+                cursor:pointer;
+                transition:transform .2s
+            }
+
+            .btn:hover{
+                transform:translateY(-2px)
+            }
+
+            .tabs{
+                position:relative;
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                background:rgba(0,0,0,.22);
+                border-radius:14px;
+                padding:5px;
+                margin-bottom:24px
+            }
+
+            .tabs button{
+                position:relative;
+                z-index:1;
+                border:0;
+                background:none;
+                color:var(--muted);
+                padding:11px 8px;
+                font-weight:700;
+                font-size:.93rem;
+                cursor:pointer;
+                border-radius:10px;
+                transition:color .25s
+            }
+
+            .tabs button.on{
+                color:#fff
+            }
+
+            .pill{
+                position:absolute;
+                top:5px;
+                bottom:5px;
+                left:5px;
+                width:calc((100% - 10px)/3);
+                border-radius:10px;
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                transition:transform .35s cubic-bezier(.2,.8,.2,1)
+            }
+
+            .view{
+                display:none
+            }
+
+            .view.on{
+                display:block
+            }
+
+            .panel{
+                background:var(--card);
+                border:1px solid var(--line);
+                border-radius:24px;
+                padding:22px;
+                backdrop-filter:blur(10px)
+            }
+
+            .panel h2{
+                font:800 1.1rem var(--display);
+                margin-bottom:14px
+            }
+
+            .g4{
+                display:grid;
+                grid-template-columns:repeat(4,1fr);
+                gap:16px;
+                margin-bottom:18px
+            }
+
+            .g2{
+                display:grid;
+                grid-template-columns:1.3fr 1fr;
+                gap:18px;
+                margin-bottom:18px;
+                align-items:start
+            }
+
+            .col{
+                display:grid;
+                gap:18px
+            }
+
+            .stat{
+                display:flex;
+                gap:14px;
+                align-items:center;
+                padding:18px
+            }
+
+            .stat>i{
+                flex:none;
+                width:44px;
+                height:44px;
+                border-radius:12px;
+                border:1.5px dashed var(--line)
+            }
+
+            .lines{
+                display:grid;
+                gap:9px;
+                flex:1
+            }
+
+            /* skeleton parts */
+.ph{
+                display:block;
+                height:12px;
+                border-radius:6px;
+                background:rgba(255,255,255,.1)
+            }
+
+            .w30{
+                width:30%
+            }
+
+            .w45{
+                width:45%
+            }
+
+            .w60{
+                width:60%
+            }
+
+            .w80{
+                width:80%
+            }
+
+            .w100{
+                width:100%
+            }
+
+            .ph.t{
+                height:16px
+            }
+
+            .track{
+                height:12px;
+                border-radius:6px;
+                background:rgba(255,255,255,.07)
+            }
+
+            .ring{
+                flex:none;
+                width:92px;
+                height:92px;
+                border-radius:50%;
+                border:10px solid rgba(255,255,255,.09);
+                display:grid;
+                place-items:center;
+                color:var(--muted);
+                font-weight:700;
+                font-size:.9rem
+            }
+
+            .dash{
+                border:1.5px dashed var(--line);
+                border-radius:14px;
+                background:rgba(0,0,0,.15);
+                color:var(--muted);
+                font-size:.88rem;
+                text-align:center;
+                padding:16px;
+                display:grid;
+                place-items:center
+            }
+
+            .tag{
+                display:inline-block;
+                height:26px;
+                border-radius:99px;
+                border:1px dashed var(--line);
+                background:rgba(255,255,255,.06)
+            }
+
+            .note{
+                margin-top:14px;
+                color:var(--muted);
+                font-size:.86rem;
+                text-align:center;
+                padding:11px;
+                border:1.5px dashed var(--line);
+                border-radius:14px
+            }
+
+            .img{
+                width:150px;
+                aspect-ratio:4/3;
+                flex:none
+            }
+
+            /* timeline dots */
+.phases{
+                display:grid;
+                grid-template-columns:repeat(4,1fr);
+                gap:10px;
+                margin-bottom:14px
+            }
+
+            .phases div{
+                display:grid;
+                gap:7px;
+                justify-items:center
+            }
+
+            .dots{
+                display:flex;
+                justify-content:space-between;
+                gap:4px;
+                padding-top:6px;
+                border-top:2px solid rgba(255,255,255,.1)
+            }
+
+            .dots i{
+                width:18px;
+                height:18px;
+                border-radius:50%;
+                border:1.5px dashed var(--line);
+                margin-top:-12px;
+                background:var(--navy)
+            }
+
+            .sk{
+                display:grid;
+                gap:14px
+            }
+
+            .sk div{
+                display:grid;
+                gap:7px
+            }
+
+            /* upcoming / course header */
+.flex{
+                display:flex;
+                gap:18px;
+                align-items:center;
+                flex-wrap:wrap
+            }
+
+            .flex .lines{
+                min-width:200px
+            }
+
+            /* inner tabs (course) */
+.itabs{
+                display:flex;
+                gap:6px;
+                border-bottom:1px solid var(--line);
+                margin:18px 0
+            }
+
+            .itabs button{
+                border:0;
+                background:none;
+                color:var(--muted);
+                padding:10px 18px;
+                font-weight:700;
+                cursor:pointer;
+                border-bottom:3px solid transparent;
+                margin-bottom:-1px
+            }
+
+            .itabs button.on{
+                color:#fff;
+                border-color:var(--teal)
+            }
+
+            .ipane{
+                display:none
+            }
+
+            .ipane.on{
+                display:block
+            }
+
+            .chk{
+                display:flex;
+                gap:12px;
+                align-items:center;
+                padding:8px 0
+            }
+
+            .chk i{
+                flex:none;
+                width:22px;
+                height:22px;
+                border-radius:50%;
+                border:1.5px dashed var(--line)
+            }
+
+            .chk .ph{
+                flex:1
+            }
+
+            .chk .tag{
+                width:74px;
+                height:22px
+            }
+
+            .bar{
+                height:8px;
+                border-radius:4px;
+                background:rgba(255,255,255,.1);
+                margin-top:8px
+            }
+
+            /* progress */
+.chart{
+                height:200px;
+                background:repeating-linear-gradient(0deg,transparent 0 39px,rgba(255,255,255,.06) 39px 40px),rgba(0,0,0,.15)
+            }
+
+            .axis{
+                display:flex;
+                justify-content:space-around;
+                color:rgba(255,255,255,.35);
+                font-size:.75rem;
+                margin-top:8px
+            }
+
+            .chips{
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px
+            }
+
+            .badges{
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:12px
+            }
+
+            .badge{
+                display:grid;
+                gap:8px;
+                justify-items:center;
+                padding:14px 8px;
+                border-radius:14px;
+                border:1px solid var(--line);
+                background:rgba(0,0,0,.16)
+            }
+
+            .badge i{
+                width:42px;
+                height:42px;
+                border-radius:50%;
+                border:1.5px dashed var(--line)
+            }
+
+            .viewall{
+                float:right;
+                font-size:.82rem;
+                color:var(--sky);
+                font-weight:700
+            }
+
+            /* customise */
+.field{
+                margin-bottom:18px
+            }
+
+            .range{
+                width:100%;
+                accent-color:var(--teal)
+            }
+
+            .ticks{
+                display:flex;
+                justify-content:space-between;
+                color:var(--muted);
+                font-size:.75rem;
+                margin-top:2px
+            }
+
+            .rowline{
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:10px
+            }
+
+            .rowline b{
+                color:var(--sky);
+                font-size:.88rem
+            }
+
+            .sw{
+                position:relative;
+                width:46px;
+                height:26px;
+                flex:none
+            }
+
+            .sw input{
+                opacity:0;
+                width:100%;
+                height:100%;
+                position:absolute;
+                cursor:pointer;
+                z-index:1
+            }
+
+            .sw span{
+                position:absolute;
+                inset:0;
+                border-radius:99px;
+                background:rgba(255,255,255,.15);
+                transition:background .25s
+            }
+
+            .sw span::after{
+                content:"";
+                position:absolute;
+                top:3px;
+                left:3px;
+                width:20px;
+                height:20px;
+                border-radius:50%;
+                background:#fff;
+                transition:transform .25s
+            }
+
+            .sw input:checked+span{
+                background:var(--teal)
+            }
+
+            .sw input:checked+span::after{
+                transform:translateX(20px)
+            }
+
+            .sw input:focus-visible+span{
+                outline:3px solid var(--amber)
+            }
+
+            .prev{
+                position:relative;
+                display:grid;
+                gap:12px;
+                padding-left:50px
+            }
+
+            .prev::before{
+                content:"";
+                position:absolute;
+                left:17px;
+                top:18px;
+                bottom:18px;
+                width:2px;
+                background:linear-gradient(var(--green),var(--sky),var(--amber));
+                opacity:.35
+            }
+
+            .pi{
+                position:relative;
+                display:flex;
+                align-items:center;
+                gap:12px;
+                padding:14px;
+                border:1px solid var(--line);
+                border-radius:14px;
+                background:rgba(0,0,0,.16)
+            }
+
+            .pi>b{
+                position:absolute;
+                left:-50px;
+                width:36px;
+                height:36px;
+                border-radius:50%;
+                display:grid;
+                place-items:center;
+                background:var(--deep);
+                border:2px solid var(--line);
+                font:800 1rem var(--display)
+            }
+
+            .pi .tag{
+                width:70px;
+                height:24px
+            }
+
+            footer{
+                padding:26px 5vw;
+                text-align:center;
+                font-size:.85rem;
+                color:var(--muted);
+                background:#041321
+            }
+
+            @media(max-width:960px){
+                .g4{
+                    grid-template-columns:1fr 1fr
+                }
+                .g2{
+                    grid-template-columns:1fr
+                }
+                .crumb,.edge{
+                    display:none
+                }
+            }
+
+            @media(max-width:620px){
+                .g4{
+                    grid-template-columns:1fr
+                }
+                .tabs{
+                    display:flex;
+                    overflow-x:auto
+                }
+                .tabs button{
+                    white-space:nowrap;
+                    padding:11px 16px
+                }
+                .pill{
+                    display:none
+                }
+                .tabs button.on{
+                    background:linear-gradient(135deg,var(--teal),var(--green))
+                }
+                .badges{
+                    grid-template-columns:1fr
+                }
+                .img{
+                    width:100%
+                }
+            }
+
+            @media(prefers-reduced-motion:reduce){
+                *{
+                    animation:none!important;
+                    transition:none!important
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="edge" aria-hidden="true">
+        </div>
+
+        <aside class="sidebar" id="sidebar" aria-label="Main menu">
+            <div class="s-brand">
+                <img src="static/images/logoKZ.png" alt="K&amp;Z logo">
+                <span>
+                    K&amp;Z
+                </span>
+            </div>
+            <ul class="s-nav">
+                <li>
+                    <a href="/home">
+                        <span class="ic">
+                            🏠
+                        </span>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="/mabout">
+                        <span class="ic">
+                            ℹ️
+                        </span>
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile">
+                        <span class="ic">
+                            👤
+                        </span>
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="/career-quiz">
+                        <span class="ic">
+                            📝
+                        </span>
+                        Career Quiz
+                    </a>
+                </li>
+                <li>
+                    <a href="/futuresk">
+                        <span class="ic">
+                            🔮
+                        </span>
+                        Future Skills
+                    </a>
+                </li>
+                <li>
+                    <a href="/careerde">
+                        <span class="ic">
+                            🎯
+                        </span>
+                        Career Matches
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active" aria-current="page">
+                        <span class="ic">
+                            🛠
+                        </span>
+                        Reskilling Plan
+                    </a>
+                </li>
+                <li>
+                    <a href="/sdg">
+                        <span class="ic">
+                            🌏
+                        </span>
+                        SDG Impact
+                    </a>
+                </li>
+                <li>
+                    <a href="/scenarios">
+                        <span class="ic">
+                            🎛
+                        </span>
+                        Scenario Simulator
+                    </a>
+                </li>
+            </ul>
+            <ul class="s-foot">
+                <li>
+                    <a href="/settings">
+                        <span class="ic">
+                            ⚙️
+                        </span>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <span class="ic">
+                            🚪
+                        </span>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="scrim" id="scrim">
+        </div>
+
+        <header class="top" id="top">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <line class="l1" x1="4" y1="6" x2="20" y2="6"/>
+                    <line class="l2" x1="4" y1="12" x2="20" y2="12"/>
+                    <line class="l3" x1="4" y1="18" x2="20" y2="18"/>
+                </svg>
+            </button>
+            <a href="#">
+                <img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z">
+            </a>
+            <div class="crumb">
+                K&amp;Z /
+                <b>
+                    Reskilling Plan
+                </b>
+            </div>
+        </header>
+
+        <main>
+            <div class="tabs" id="mainTabs" role="tablist">
+                <span class="pill" id="pill">
+                </span>
+                <button class="on" role="tab" data-v="0">
+                    Learning Plan
+                </button>
+                <button role="tab" data-v="1">
+                    Progress &amp; Achievements
+                </button>
+                <button role="tab" data-v="2">
+                    Customise My Plan
+                </button>
+            </div>
+            <!-- 1. LEARNING PLAN OVERVIEW -->
+            <section class="view on" id="v0">
+                <div class="head">
+                    <div>
+                        <h1>
+                            Learning Plan Overview
+                        </h1>
+                        <p class="sub">
+                            A structured plan to help you build the skills for your target career.
+                        </p>
+                    </div>
+                    <div class="target">
+                        <label class="lbl" for="targetCareer">
+                            Target career
+                        </label>
+                        <select class="sel career" id="targetCareer">
+                            <option value="">
+                                Select a job field
+                            </option>
+                            <option disabled>
+                                No options yet
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="g4">
+                    <div class="panel stat">
+                        <div class="ring">
+                            – %
+                        </div>
+                        <div class="lines">
+                            <span class="ph w80">
+                            </span>
+                            <span class="ph w60">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel stat">
+                        <i>
+                        </i>
+                        <div class="lines">
+                            <span class="ph w60">
+                            </span>
+                            <span class="ph w80">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel stat">
+                        <i>
+                        </i>
+                        <div class="lines">
+                            <span class="ph w60">
+                            </span>
+                            <span class="ph w80">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel stat">
+                        <i>
+                        </i>
+                        <div class="lines">
+                            <span class="ph w60">
+                            </span>
+                            <span class="ph w80">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="g2">
+                    <div class="panel">
+                        <h2>
+                            Your learning timeline
+                        </h2>
+                        <div class="phases" id="phases">
+                        </div>
+                        <div class="dots" id="dots">
+                        </div>
+                        <p class="note">
+                            No data yet. Your phases and weeks will appear here.
+                        </p>
+                    </div>
+                    <div class="panel">
+                        <h2>
+                            Skill gap summary
+                        </h2>
+                        <div class="sk" id="gaps">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h2>
+                        Upcoming module
+                    </h2>
+                    <div class="flex">
+                        <div class="dash img">
+                            Image
+                        </div>
+                        <div class="lines">
+                            <span class="ph t w60">
+                            </span>
+                            <span class="ph w80">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                        <button class="btn" type="button" data-open-course>
+                            Continue learning
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- 2. COURSE DETAILS -->
+            <section class="view" id="vc">
+                <button class="back" type="button" data-back>
+                    ← Back to Learning Plan
+                </button>
+                <div class="head" style="margin-bottom:14px">
+                    <div>
+                        <h1>
+                            Course Details
+                        </h1>
+                        <p class="sub">
+                            Detailed information about this course and your learning progress.
+                        </p>
+                    </div>
+                </div>
+                <div class="panel flex" style="justify-content:space-between">
+                    <div class="flex" style="flex:1">
+                        <div class="dash img">
+                            Course image
+                        </div>
+                        <div class="lines" style="max-width:420px">
+                            <span class="ph t w60">
+                            </span>
+                            <span class="ph w100">
+                            </span>
+                            <span class="ph w80">
+                            </span>
+                            <span class="chips">
+                                <span class="tag" style="width:84px">
+                                </span>
+                                <span class="tag" style="width:96px">
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div style="min-width:220px">
+                        <button class="btn" type="button" style="width:100%">
+                            Mark complete
+                        </button>
+                        <div class="bar">
+                            <div style="width:0">
+                            </div>
+                        </div>
+                        <small style="color:var(--muted)">
+                            – % complete
+                        </small>
+                    </div>
+                </div>
+                <div class="itabs" id="itabs" role="tablist">
+                    <button class="on" data-p="0">
+                        Overview
+                    </button>
+                    <button data-p="1">
+                        Modules
+                    </button>
+                    <button data-p="2">
+                        Resources
+                    </button>
+                    <button data-p="3">
+                        Discussion
+                    </button>
+                </div>
+                <div class="ipane on">
+                    <div class="g2" style="grid-template-columns:1.2fr 1fr">
+                        <div class="col">
+                            <div class="panel">
+                                <h2>
+                                    Learning outcomes
+                                </h2>
+                                <div id="outc">
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <h2>
+                                    Course information
+                                </h2>
+                                <div class="g4" style="grid-template-columns:repeat(4,1fr);margin:0">
+                                    <div class="lines">
+                                        <span class="ph w60">
+                                        </span>
+                                        <span class="ph w80">
+                                        </span>
+                                    </div>
+                                    <div class="lines">
+                                        <span class="ph w60">
+                                        </span>
+                                        <span class="ph w80">
+                                        </span>
+                                    </div>
+                                    <div class="lines">
+                                        <span class="ph w60">
+                                        </span>
+                                        <span class="ph w80">
+                                        </span>
+                                    </div>
+                                    <div class="lines">
+                                        <span class="ph w60">
+                                        </span>
+                                        <span class="ph w80">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <h2>
+                                Module checklist
+                                <small style="float:right;color:var(--muted);font-weight:500">
+                                    – of – completed
+                                </small>
+                            </h2>
+                            <div id="mods">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ipane">
+                    <div class="panel">
+                        <div class="dash">
+                            No data yet. Course modules will appear here.
+                        </div>
+                    </div>
+                </div>
+                <div class="ipane">
+                    <div class="panel">
+                        <div class="dash">
+                            No data yet. Learning resources and links will appear here.
+                        </div>
+                    </div>
+                </div>
+                <div class="ipane">
+                    <div class="panel">
+                        <div class="dash">
+                            No data yet. Discussion will appear here.
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 3. PROGRESS & ACHIEVEMENTS -->
+            <section class="view" id="v1">
+                <div class="head">
+                    <div>
+                        <h1>
+                            Progress &amp; Achievements
+                        </h1>
+                        <p class="sub">
+                            Track your learning progress and see the skills you have gained.
+                        </p>
+                    </div>
+                </div>
+                <div class="g4">
+                    <div class="panel stat">
+                        <div class="ring">
+                            – %
+                        </div>
+                        <div class="lines">
+                            <span class="ph w80">
+                            </span>
+                            <span class="ph w60">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel stat">
+                        <i>
+                        </i>
+                        <div class="lines">
+                            <span class="ph w60">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel stat">
+                        <i>
+                        </i>
+                        <div class="lines">
+                            <span class="ph w60">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel stat">
+                        <i>
+                        </i>
+                        <div class="lines">
+                            <span class="ph w60">
+                            </span>
+                            <span class="ph w45">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="g2" style="grid-template-columns:1fr 1.2fr">
+                    <div class="panel">
+                        <h2>
+                            Skills gained
+                        </h2>
+                        <div class="chips" id="gained">
+                        </div>
+                        <p class="note">
+                            Skills from completed modules will appear here.
+                        </p>
+                    </div>
+                    <div class="panel">
+                        <h2>
+                            Weekly study time
+                        </h2>
+                        <div class="dash chart">
+                            No chart yet.
+                        </div>
+                        <div class="axis">
+                            <span>
+                                Week 1
+                            </span>
+                            <span>
+                                Week 2
+                            </span>
+                            <span>
+                                Week 3
+                            </span>
+                            <span>
+                                Week 4
+                            </span>
+                            <span>
+                                Week 5
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="g2" style="grid-template-columns:1.2fr 1fr">
+                    <div class="panel">
+                        <h2>
+                            Recent activity
+                        </h2>
+                        <div id="act">
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <h2>
+                            Achievements
+                            <a class="viewall" href="#">
+                                View all
+                            </a>
+                        </h2>
+                        <div class="badges" id="badges">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 4. CUSTOMISE MY PLAN -->
+            <section class="view" id="v2">
+                <div class="head">
+                    <div>
+                        <h1>
+                            Customise My Plan
+                        </h1>
+                        <p class="sub">
+                            Adjust your preferences to create a personalised reskilling plan.
+                        </p>
+                    </div>
+                    <button class="btn" type="button" id="regen">
+                        Regenerate plan
+                    </button>
+                </div>
+                <div class="g2" style="grid-template-columns:1fr 1.3fr">
+                    <div class="panel">
+                        <h2>
+                            Learning preferences
+                        </h2>
+                        <div class="field">
+                            <label class="lbl" for="pCareer">
+                                Target career
+                            </label>
+                            <select class="sel career" id="pCareer">
+                                <option value="">
+                                    Select a job field
+                                </option>
+                                <option disabled>
+                                    No options yet
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label class="lbl" for="pLevel">
+                                Current skill level
+                            </label>
+                            <select class="sel" id="pLevel">
+                                <option>
+                                    Beginner
+                                </option>
+                                <option>
+                                    Intermediate
+                                </option>
+                                <option>
+                                    Advanced
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <div class="rowline">
+                                <label class="lbl" for="pHours" style="margin:0">
+                                    Weekly learning hours
+                                </label>
+                                <b id="hrsOut">
+                                    5 hours/week
+                                </b>
+                            </div>
+                            <input class="range" type="range" id="pHours" min="1" max="15" value="5">
+                            <div class="ticks">
+                                <span>
+                                    1
+                                </span>
+                                <span>
+                                    3
+                                </span>
+                                <span>
+                                    5
+                                </span>
+                                <span>
+                                    10
+                                </span>
+                                <span>
+                                    15
+                                </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="lbl" for="pStyle">
+                                Preferred learning style
+                            </label>
+                            <select class="sel" id="pStyle">
+                                <option>
+                                    Video &amp; hands-on practice
+                                </option>
+                                <option>
+                                    Reading &amp; articles
+                                </option>
+                                <option>
+                                    Mixed
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field rowline">
+                            <div>
+                                <b style="color:#fff">
+                                    Show free-only resources
+                                </b>
+                                <br>
+                                <small style="color:var(--muted)">
+                                    Only include free courses and materials
+                                </small>
+                            </div>
+                            <label class="sw">
+                                <input type="checkbox" id="pFree" checked aria-label="Free resources only">
+                                <span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="field">
+                            <label class="lbl" for="pDate">
+                                Target completion date
+                            </label>
+                            <input class="inp" type="date" id="pDate" style="color-scheme:dark">
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <h2>
+                            Recommended plan preview
+                        </h2>
+                        <p class="sub" style="margin:0 0 16px;font-size:.9rem">
+                            Based on your preferences, here is a suggested learning plan.
+                        </p>
+                        <div class="prev" id="prev">
+                        </div>
+                        <p class="note">
+                            No data yet. Your plan preview will appear here after you choose a target career.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            © 2026 K&amp;Z. People × AI × Sustainable Tomorrow.
+        </footer>
+
+        <script>
+            const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+            const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim'),topbar=$('#top');
+            function setMenu(o){
+                side.classList.toggle('show',o);scrim.classList.toggle('show',o);
+                btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);
+                btn.setAttribute('aria-label',o?'Close menu':'Open menu');
+            }
+            btn.onclick=()=>setMenu(!side.classList.contains('show'));
+            scrim.onclick=()=>setMenu(false);
+            addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+            addEventListener('scroll',()=>topbar.classList.toggle('solid',scrollY>30),{passive:true});
+
+            /* Views: 3 main tabs + course details page */
+            const tabBtns=$$('#mainTabs button'),views=['v0','v1','v2'];
+            let last=0;
+            function show(id){
+                $$('.view').forEach(v=>v.classList.toggle('on',v.id===id));
+                $('#mainTabs').style.display=id==='vc'?'none':'';
+                scrollTo({top:0});
+            }
+            tabBtns.forEach(b=>b.onclick=()=>{
+                const i=+b.dataset.v;last=i;
+                tabBtns.forEach((x,j)=>x.classList.toggle('on',j===i));
+                $('#pill').style.transform=`translateX(${i*100}%)`;
+                show(views[i]);
+            });
+            $$('[data-open-course]').forEach(b=>b.onclick=()=>show('vc'));
+            $$('[data-back]').forEach(b=>b.onclick=()=>show(views[last]));
+            $$('#itabs button').forEach(b=>b.onclick=()=>{
+                const i=+b.dataset.p;
+                $$('#itabs button').forEach((x,j)=>x.classList.toggle('on',j===i));
+                $$('.ipane').forEach((p,j)=>p.classList.toggle('on',j===i));
+            });
+
+            /* Target career dropdowns: work, but no options yet.
+            Later: fillCareers([{value:'data-analyst',label:'Data Analyst'}, ...]) */
+            function fillCareers(opts){
+                $$('.career').forEach(el=>{
+                    const first=el.options[0];el.innerHTML='';el.appendChild(first);
+                    opts.forEach(o=>el.add(new Option(o.label,o.value)));
+                });
+            }
+            $$('.career').forEach(el=>el.addEventListener('change',()=>{
+                $$('.career').forEach(o=>o.value=el.value); /* keep both dropdowns in sync */
+                /* TODO: load the plan for el.value */
+            }));
+            $('#pHours').oninput=e=>$('#hrsOut').textContent=e.target.value+' hours/week';
+            $('#regen').onclick=()=>{/* TODO: regenerate the plan from the preference fields */};
+
+            /* Empty skeleton builders. Replace with real data later. */
+            const rep=(n,f)=>Array.from({length:n},(_,i)=>f(i)).join('');
+            $('#phases').innerHTML=rep(4,()=>'<div><span class="ph w80"></span><span class="ph w60" style="height:10px"></span></div>');
+            $('#dots').innerHTML=rep(16,()=>'<i></i>');
+            $('#gaps').innerHTML=rep(5,()=>'<div><span class="ph w45"></span><span class="track"></span></div>');
+            $('#outc').innerHTML=rep(4,()=>'<div class="chk"><i></i><span class="ph"></span></div>');
+            $('#mods').innerHTML=rep(8,()=>'<div class="chk"><i></i><span class="ph"></span><span class="tag"></span></div>');
+            $('#gained').innerHTML=rep(6,i=>`<span class="tag" style="width:${[96,110,100,104,80,112][i]}px"></span>`);
+            $('#act').innerHTML=rep(4,()=>'<div class="chk"><i></i><span class="ph"></span><span class="ph w30" style="flex:none;width:60px"></span></div>');
+            $('#badges').innerHTML=rep(3,()=>'<div class="badge"><i></i><span class="ph w80"></span><span class="ph w60" style="height:10px"></span></div>');
+            $('#prev').innerHTML=rep(4,i=>`<div class="pi"><b>${i+1}</b><div class="lines"><span class="ph w60"></span><span class="ph w80" style="height:10px"></span></div><span class="tag"></span></div>`);
+        </script>
+
+        <script src="/static/js/reskilling.js?v=3"></script>
+        <script src="/static/js/lessons.js?v=3"></script>
+    </body>
+
+</html>

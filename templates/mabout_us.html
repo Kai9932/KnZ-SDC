@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            About Us | K&amp;Z
+        </title>
+        <link rel="icon" href="static/images/logoKZ.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        >
+        <style>
+
+            :root{
+
+                --navy:#08233f;
+                --deep:#0a3158;
+                --teal:#00a896;
+                --green:#12b57b;
+                --sky:#19b4d6;
+                --amber:#f6b02c;
+                --ink:#eaf6f8;
+                --muted:#a9c3cf;
+                --glass:rgba(8,35,63,.6);
+                --line:rgba(255,255,255,.14);
+                --display:'Bricolage Grotesque',system-ui,sans-serif;
+                --body:'DM Sans',system-ui,sans-serif;
+                --side:268px;
+            }
+
+            *{
+
+                box-sizing:border-box;
+                margin:0;
+                padding:0
+            }
+
+            html{
+
+                scroll-behavior:smooth
+            }
+            .steps .media {
+                background: transparent;
+            }
+            body{
+
+                font-family:var(--body);
+                background:var(--navy);
+                color:var(--ink);
+                line-height:1.6;
+                overflow-x:hidden;
+                background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 60%,rgba(25,180,214,.12),transparent)
+            }
+
+            a{
+
+                color:inherit;
+                text-decoration:none
+            }
+
+            :focus-visible{
+
+                outline:3px solid var(--amber);
+                outline-offset:3px
+            }
+
+            .progress{
+
+                position:fixed;
+                top:0;
+                left:0;
+                height:3px;
+                width:0;
+                background:linear-gradient(90deg,var(--green),var(--sky),var(--amber));
+                z-index:120
+            }
+
+            /* SIDEBAR: hidden by default. Opens on hover at left edge, or with the menu button (pin). */
+
+.edge{
+
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:18px;
+                z-index:80
+            }
+
+            .edge::after{
+
+                content:"";
+                position:absolute;
+                left:0;
+                top:50%;
+                width:4px;
+                height:90px;
+                transform:translateY(-50%);
+                border-radius:0 4px 4px 0;
+                background:linear-gradient(var(--green),var(--amber));
+                animation:hint 2.4s ease-in-out 1.2s 3
+            }
+
+            @keyframes hint{
+
+                50%{
+
+                    width:12px
+                }
+            }
+
+            .sidebar{
+
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:var(--side);
+                z-index:90;
+                display:flex;
+                flex-direction:column;
+                padding:18px 14px;
+                background:linear-gradient(180deg,#0a2d52,#06192d);
+                border-right:1px solid var(--line);
+                transform:translateX(-102%);
+                transition:transform .35s cubic-bezier(.2,.8,.2,1);
+                box-shadow:none
+            }
+
+            .sidebar.show,.edge:hover+.sidebar,.sidebar:hover{
+
+                transform:none;
+                box-shadow:24px 0 60px rgba(0,0,0,.45)
+            }
+
+            .s-brand{
+
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:2px 6px 18px;
+                border-bottom:1px solid var(--line);
+                margin-bottom:12px
+            }
+
+            .s-brand img{
+
+                height:52px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+
+            .s-brand span{
+
+                font:800 1.3rem var(--display)
+            }
+
+            .s-nav{
+
+                list-style:none;
+                display:grid;
+                gap:3px;
+                flex:1;
+                align-content:start;
+                overflow:auto
+            }
+
+            .s-nav a{
+
+                display:flex;
+                align-items:center;
+                gap:13px;
+                padding:11px 14px;
+                border-radius:12px;
+                color:var(--muted);
+                font-weight:500;
+                transition:background* .2s,color .2s,transform .2s
+            }
+
+            .s-nav a:hover{
+
+                background:rgba(255,255,255,.08);
+                color:#fff;
+                transform:translateX(4px)
+            }
+
+            .s-nav a.active{
+
+                background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));
+                color:#fff;
+                border:1px solid rgba(0,168,150,.5)
+            }
+
+            .s-nav .ic{
+
+                width:22px;
+                text-align:center
+            }
+
+            .s-foot{
+
+                border-top:1px solid var(--line);
+                padding-top:10px;
+                list-style:none;
+                display:grid;
+                gap:3px
+            }
+
+            .s-foot a{
+
+                display:flex;
+                align-items:center;
+                gap:13px;
+                padding:10px 14px;
+                border-radius:12px;
+                color:var(--muted)
+            }
+
+            .s-foot a:hover{
+
+                background:rgba(255,255,255,.08);
+                color:#fff
+            }
+
+            .scrim{
+
+                position:fixed;
+                inset:0;
+                background:rgba(3,12,22,.55);
+                backdrop-filter:blur(3px);
+                z-index:70;
+                opacity:0;
+                pointer-events:none;
+                transition:opacity .3s
+            }
+
+            .scrim.show{
+
+                opacity:1;
+                pointer-events:auto
+            }
+
+            /* TOP BAR */
+
+.top{
+
+                position:fixed;
+                top:0;
+                left:0;
+                right:0;
+                z-index:80;
+                display:flex;
+                align-items:center;
+                gap:14px;
+                padding:12px 4vw;
+                transition:background* .3s,backdrop-filter .3s
+            }
+
+            .top.solid{
+
+                background:var(--glass);
+                backdrop-filter:blur(14px);
+                border-bottom:1px solid var(--line)
+            }
+
+            .menu-btn{
+
+                width:46px;
+                height:46px;
+                border-radius:14px;
+                border:1px solid var(--line);
+                background:rgba(255,255,255,.08);
+                color:#fff;
+                cursor:pointer;
+                display:grid;
+                place-items:center;
+                transition:background* .2s
+            }
+
+            .menu-btn:hover{
+
+                background:var(--teal)
+            }
+
+            .menu-btn svg{
+
+                width:22px;
+                height:22px
+            }
+
+            .menu-btn line{
+
+                transition:transform .3s,opacity .3s;
+                transform-origin:center
+            }
+
+            .menu-btn.open .l1{
+
+                transform:translateY(6px) rotate(45deg)
+            }
+
+            .menu-btn.open .l2{
+
+                opacity:0
+            }
+
+            .menu-btn.open .l3{
+
+                transform:translateY(-6px) rotate(-45deg)
+            }
+
+            .top .logo{
+
+                height:46px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+
+            .crumb{
+
+                margin-left:auto;
+                font-size:.85rem;
+                color:var(--muted)
+            }
+
+            .crumb b{
+
+                color:#fff
+            }
+
+            /* MAIN */
+
+main{
+
+                max-width:1180px;
+                margin:0 auto;
+                padding:120px 5vw 90px
+            }
+
+            .intro{
+
+                text-align:center;
+                max-width:820px;
+                margin:0 auto 54px
+            }
+
+            .intro h1{
+
+                font:800 clamp(2.1rem,5vw,3.8rem)/1.06 var(--display);
+                letter-spacing:-.025em
+            }
+
+            .intro h1 em{
+
+                font-style:normal;
+                background:linear-gradient(100deg,var(--green),var(--sky));
+                -webkit-background-clip:text;
+                background-clip:text;
+                color:transparent
+            }
+
+            .intro p{
+
+                margin-top:14px;
+                color:var(--muted);
+                font-size:1.12rem
+            }
+
+            .pillars{
+
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:0;
+                margin-bottom:80px;
+                border:1px solid var(--line);
+                border-radius:22px;
+                background:var(--glass);
+                backdrop-filter:blur(12px);
+                overflow:hidden
+            }
+
+            .pillars article{
+
+                padding:26px;
+                display:flex;
+                gap:16px;
+                border-right:1px solid var(--line);
+                transition:background* .3s
+            }
+
+            .pillars article:last-child{
+
+                border:0
+            }
+
+            .pillars article:hover{
+
+                background:rgba(0,168,150,.14)
+            }
+
+            .pillars .ic{
+
+                flex:none;
+                width:48px;
+                height:48px;
+                border-radius:14px;
+                display:grid;
+                place-items:center;
+                font-size:1.4rem;
+                background:linear-gradient(135deg,var(--deep),var(--teal))
+            }
+
+            .pillars h3{
+
+                font:700 1.08rem var(--display);
+                margin-bottom:2px
+            }
+
+            .pillars p{
+
+                font-size:.9rem;
+                color:var(--muted);
+                line-height:1.5
+            }
+
+            /* STEPS */
+
+.steps{
+
+                position:relative;
+                display:grid;
+                gap:34px
+            }
+
+            .steps::before{
+
+                content:"";
+                position:absolute;
+                left:50%;
+                top:20px;
+                bottom:20px;
+                width:2px;
+                background:linear-gradient(var(--green),var(--sky),var(--amber));
+                opacity:.35;
+                transform:translateX(-50%)
+            }
+
+            .step{
+
+                position:relative;
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:56px;
+                align-items:center;
+                padding:26px;
+                border-radius:26px;
+                border:1px solid transparent;
+                opacity:.4;
+                transform:scale(.97);
+                transition:opacity .5s,transform .5s,background* .5s,border-color .5s
+            }
+
+            .step.on{
+
+                opacity:1;
+                transform:none;
+                background:rgba(255,255,255,.04);
+                border-color:var(--line)
+            }
+
+            .step:nth-child(even) .media{
+
+                order:2
+            }
+
+            .num{
+
+                position:absolute;
+                left:50%;
+                top:50%;
+                width:54px;
+                height:54px;
+                transform:translate(-50%,-50%);
+                border-radius:50%;
+                display:grid;
+                place-items:center;
+                font:800 1.4rem var(--display);
+                background:var(--deep);
+                border:2px solid var(--line);
+                z-index:2;
+                transition:all .5s
+            }
+
+            .step.on .num{
+
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                border-color:var(--amber);
+                box-shadow:0 0 0 9px rgba(0,168,150,.18)
+            }
+
+            /* IMAGE SLOTS: leave src="" for now. Add your picture path later, e.g. src="images/step1.png" */
+
+.media{
+
+                position:relative;
+                aspect-ratio:16/10;
+                border-radius:20px;
+                overflow:hidden;
+                border:2px dashed rgba(255,255,255,.28);
+                background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 14px,rgba(255,255,255,.07) 14px 28px);
+                display:grid;
+                place-items:center;
+                transition:transform .4s,border-color .3s
+            }
+
+            .step:hover .media{
+
+                transform:translateY(-4px);
+                border-color:var(--teal)
+            }
+
+            .media::before{
+
+                content:attr(data-label);
+                position:absolute;
+                color:var(--muted);
+                font-size:.9rem;
+                text-align:center;
+                padding:0 16px;
+                line-height:1.4
+            }
+
+            .media::after{
+
+                content:"🖼";
+                position:absolute;
+                top:calc(50% - 46px);
+                font-size:1.8rem;
+                opacity:.7
+            }
+
+            .media img{
+
+                position:absolute;
+                inset:0;
+                width:100%;
+                height:100%;
+                object-fit:contain;
+                z-index:1
+            }
+
+            .media img[src=""],.media img:not([src]){
+
+                display:none
+            }
+
+            .media:has(img[src]:not([src=""]))::before,.media:has(img[src]:not([src=""]))::after{
+
+                display:none
+            }
+
+            .media:has(img[src]:not([src=""])) {
+                border: none;
+                background: transparent;
+            }
+
+            .copy h2{
+
+                font:700 clamp(1.5rem,2.6vw,2.1rem)/1.15 var(--display);
+                margin-bottom:10px
+            }
+
+            .copy p{
+
+                color:var(--muted);
+                max-width:48ch;
+                margin-bottom:18px
+            }
+
+            .chips{
+
+                display:flex;
+                gap:10px;
+                flex-wrap:wrap
+            }
+
+            .chips a{
+
+                display:inline-flex;
+                align-items:center;
+                gap:8px;
+                padding:9px 16px;
+                border-radius:99px;
+                font-weight:500;
+                font-size:.88rem;
+                background:rgba(0,168,150,.16);
+                border:1px solid rgba(0,168,150,.45);
+                transition:transform .2s,background* .2s
+            }
+
+            .chips a:hover{
+
+                transform:translateY(-2px);
+                background:rgba(0,168,150,.34)
+            }
+
+            /* CTA */
+
+.cta{
+
+                margin-top:90px;
+                text-align:center;
+                padding:60px 5vw;
+                border-radius:28px;
+                border:1px solid var(--line);
+                background:linear-gradient(135deg,rgba(0,168,150,.25),rgba(10,49,88,.6))
+            }
+
+            .cta img{
+
+                height:80px;
+                background:#fff;
+                border-radius:14px;
+                padding:5px;
+                margin-bottom:18px
+            }
+
+            .cta h2{
+
+                font:800 clamp(1.7rem,3.4vw,2.6rem)/1.1 var(--display);
+                margin-bottom:10px
+            }
+
+            .cta p{
+
+                color:var(--muted);
+                margin-bottom:26px
+            }
+
+            .btn{
+
+                display:inline-flex;
+                padding:15px 32px;
+                border-radius:99px;
+                font:700 1rem var(--body);
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                color:#fff;
+                box-shadow:0 8px 24px rgba(0,168,150,.35);
+                transition:transform .2s,box-shadow .2s
+            }
+
+            .btn:hover{
+
+                transform:translateY(-2px);
+                box-shadow:0 12px 30px rgba(0,168,150,.5)
+            }
+
+            footer{
+
+                padding:26px 5vw;
+                text-align:center;
+                font-size:.85rem;
+                color:var(--muted);
+                background:#041321
+            }
+
+            @media(max-width:860px){
+
+                .pillars{
+
+                    grid-template-columns:1fr
+                }
+
+                .pillars article{
+
+                    border-right:0;
+                    border-bottom:1px solid var(--line)
+                }
+
+                .steps::before{
+
+                    left:27px
+                }
+
+                .step{
+
+                    grid-template-columns:1fr;
+                    gap:20px;
+                    padding:20px 20px 20px 70px
+                }
+
+                .step:nth-child(even) .media{
+
+                    order:0
+                }
+
+                .num{
+
+                    left:27px;
+                    top:44px
+                }
+
+                .edge{
+
+                    display:none
+                }
+
+                .crumb{
+
+                    display:none
+                }
+            }
+
+            @media(prefers-reduced-motion:reduce){
+
+                *{
+
+                    animation:none!important;
+                    transition:none!important
+                }
+
+                html{
+
+                    scroll-behavior:auto
+                }
+            }
+
+            .step:nth-child(6) {
+                opacity: 1 !important;
+            }
+
+            .step:nth-child(5) {
+                opacity: 1 !important;
+            }
+            .step:nth-child(4) {
+                opacity: 1 !important;
+            }
+            .step:nth-child(3) {
+                opacity: 1 !important;
+            }
+            .step:nth-child(2) {
+                opacity: 1 !important;
+            }
+            .step:nth-child(1) {
+                opacity: 1 !important;
+            }
+            
+
+        </style>
+
+
+    </head>
+
+    <body>
+        <div class="progress" id="progress">
+        </div>
+        <div class="edge" aria-hidden="true">
+        </div>
+        <aside class="sidebar" id="sidebar" aria-label="Main menu">
+            <div class="s-brand">
+                <img src="static/images/logoKZ.png" alt="K&amp;Z logo">
+                <span>
+                    K&amp;Z
+                </span>
+            </div>
+            <ul class="s-nav">
+                <li>
+                    <a href="/">
+                        <span class="ic">
+                            🏠
+                        </span>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active" aria-current="page">
+                        <span class="ic">
+                            ℹ️
+                        </span>
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile">
+                        <span class="ic">
+                            👤
+                        </span>
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="/career-quiz">
+                        <span class="ic">
+                            📝
+                        </span>
+                        Career Quiz
+                    </a>
+                </li>
+                <li>
+                    <a href="/futuresk">
+                        <span class="ic">
+                            🔮
+                        </span>
+                        Future Skills
+                    </a>
+                </li>
+                <li>
+                    <a href="/careerde">
+                        <span class="ic">
+                            🎯
+                        </span>
+                        Career Matches
+                    </a>
+                </li>
+                <li>
+                    <a href="/reskilling">
+                        <span class="ic">
+                            🛠
+                        </span>
+                        Reskilling Plan
+                    </a>
+                </li>
+                <li>
+                    <a href="/sdg">
+                        <span class="ic">
+                            🌏
+                        </span>
+                        SDG Impact
+                    </a>
+                </li>
+                <li>
+                    <a href="/scenarios">
+                        <span class="ic">
+                            🎛
+                        </span>
+                        Scenario Simulator
+                    </a>
+                </li>
+            </ul>
+            <ul class="s-foot">
+                <li>
+                    <a href="/settings">
+                        <span class="ic">
+                            ⚙️
+                        </span>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <span class="ic">
+                            🚪
+                        </span>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="scrim" id="scrim">
+        </div>
+        <header class="top" id="top">
+            <button
+                class="menu-btn"
+                id="menuBtn"
+                aria-label="Open menu"
+                aria-expanded="false"
+            >
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <line class="l1" x1="4" y1="6" x2="20" y2="6"/>
+                    <line class="l2" x1="4" y1="12" x2="20" y2="12"/>
+                    <line class="l3" x1="4" y1="18" x2="20" y2="18"/>
+                </svg>
+            </button>
+            <a href="#">
+                <img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z">
+            </a>
+            <div class="crumb">
+                K&amp;Z /
+                <b>
+                    About Us
+                </b>
+            </div>
+        </header>
+
+        <main>
+            <div class="intro">
+                <h1>
+                    Your future starts with
+                    <em>
+                        understanding your potential.
+                    </em>
+                </h1>
+                <p>
+                    One connected career journey, from understanding your skills to building a future-ready career in Malaysia.
+                </p>
+            </div>
+            <div class="pillars">
+                <article>
+                    <div class="ic">
+                        🇲🇾
+                    </div>
+                    <div>
+                        <h3>
+                            Malaysia-first insights
+                        </h3>
+                        <p>
+                            Built for Malaysia's unique job market, skills demand and local opportunities.
+                        </p>
+                    </div>
+                </article>
+                <article>
+                    <div class="ic">
+                        🧠
+                    </div>
+                    <div>
+                        <h3>
+                            Explainable AI recommendations
+                        </h3>
+                        <p>
+                            Clear reasons, data-backed insights and transparent matching.
+                        </p>
+                    </div>
+                </article>
+                <article>
+                    <div class="ic">
+                        🌱
+                    </div>
+                    <div>
+                        <h3>
+                            Skills for a sustainable future
+                        </h3>
+                        <p>
+                            Helping you build a meaningful career that contributes to a better Malaysia.
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="steps" id="steps">
+
+                <section class="step">
+                    <div class="num">
+                        1
+                    </div>
+                    <div class="media" data-label="Image 1: Skills Profile Intake">
+                        <img src="static/images/aimage1.jpeg" alt="Skills Profile Intake preview">
+                    </div>
+                    <div class="copy">
+                        <h2>
+                            Skills Profile Intake
+                        </h2>
+                        <p>
+                            Upload your CV or enter your details to map your skills, experience and potential.
+                        </p>
+                        <div class="chips">
+                            <a href="#">
+                                📄 Resume analysis
+                            </a>
+                            <a href="#">
+                                👤 Skills profile
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="step">
+                    <div class="num">
+                        2
+                    </div>
+                    <div class="media" data-label="Image 2: AI-Trend Signal Layer">
+                        <img src="static/images/aimage2.jpeg" alt="Job market trends preview">
+                    </div>
+                    <div class="copy">
+                        <h2>
+                            AI-Trend Signal Layer
+                        </h2>
+                        <p>
+                            Connect career decisions to changing job-market signals, emerging roles and evolving skills, not static lists.
+                        </p>
+                        <div class="chips">
+                            <a href="#">
+                                🗄 Live data sources
+                            </a>
+                            <a href="#">
+                                📈 Dated insights
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="step">
+                    <div class="num">
+                        3
+                    </div>
+                    <div class="media" data-label="Image 3: Future-Role Matching">
+                        <img src="static/images/aimage3.jpeg" alt="Career matches preview">
+                    </div>
+                    <div class="copy">
+                        <h2>
+                            Future-Role Matching
+                        </h2>
+                        <p>
+                            Discover ranked career paths with clear reasons for each match and a practical view of the skills you still need.
+                        </p>
+                        <div class="chips">
+                            <a href="#">
+                                🔎 Explainable matches
+                            </a>
+                            <a href="#">
+                                🧩 Skills gap
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="step">
+                    <div class="num">
+                        4
+                    </div>
+                    <div class="media" data-label="Image 4: Personalised Reskilling Pathway">
+                        <img src="static/images/aimage4.png" alt="Reskilling pathway preview">
+                    </div>
+                    <div class="copy">
+                        <h2>
+                            Personalised Reskilling Pathway
+                        </h2>
+                        <p>
+                            Turn your ambition into an achievable learning plan with time estimates and free or low-cost learning resources.
+                        </p>
+                        <div class="chips">
+                            <a href="#">
+                                🪜 Step-by-step plan
+                            </a>
+                            <a href="#">
+                                💰 Budget-friendly learning
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="step">
+                    <div class="num">
+                        5
+                    </div>
+                    <div class="media" data-label="Image 5: SDG Impact Mapping">
+                        <img src="static/images/aimage5.png" alt="SDG impact preview">
+                    </div>
+                    <div class="copy">
+                        <h2>
+                            SDG Impact Mapping
+                        </h2>
+                        <p>
+                            See how your skills and future role can contribute to sustainability and to the UN Sustainable Development Goals.
+                        </p>
+                        <div class="chips">
+                            <a href="#">
+                                🌿 Career with impact
+                            </a>
+                            <a href="#">
+                                🎯 SDG alignment
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="step">
+                    <div class="num">
+                        6
+                    </div>
+                    <div class="media" data-label="Image 6: Scenario Simulator">
+                        <img src="static/images/aimage6.png" alt="Scenario simulator preview">
+                    </div>
+                    <div class="copy">
+                        <h2>
+                            Scenario Simulator
+                        </h2>
+                        <p>
+                            Explore more than one possible future and prepare for different changes in demand, because forecasts are estimates, not guarantees.
+                        </p>
+                        <div class="chips">
+                            <a href="#">
+                                ⚖️ Compare futures
+                            </a>
+                            <a href="#">
+                                🛡 Plan with uncertainty
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="cta">
+                <img src="static/images/logoKZ.png" alt="K&amp;Z">
+                <h2>
+                    Ready to see your own path?
+                </h2>
+                <p>
+                    Start with your skills today and we will map the rest.
+                </p>
+                <a href="#" class="btn">
+                    Start Your Journey
+                </a>
+            </div>
+
+        </main>
+
+        <footer>
+            © 2026 K&amp;Z. People × AI × Sustainable Tomorrow.
+        </footer>
+        <script>
+
+            const $=s=>document.querySelector(s);
+
+            const side=$('#sidebar'), btn=$('#menuBtn'), scrim=$('#scrim');
+
+            /* Menu button pins the sidebar open; hovering the left edge also shows it. */
+
+            function setMenu(open){
+
+                side.classList.toggle('show',open);scrim.classList.toggle('show',open);
+
+                btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);
+
+                btn.setAttribute('aria-label',open?'Close menu':'Open menu');
+
+            }
+
+            btn.onclick=()=>setMenu(!side.classList.contains('show'));
+
+            scrim.onclick=()=>setMenu(false);
+
+            addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+
+            /* Top bar + progress */
+
+            const topbar=$('#top'),prog=$('#progress');
+
+            function onScroll(){
+
+                const h=document.documentElement.scrollHeight-innerHeight;
+
+                prog.style.width=(scrollY/h*100)+'%';
+
+                top.classList.toggle('solid',scrollY>30);
+
+            }
+
+            addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+            /* Steps light up as they reach the middle of the screen */
+
+            const steps=[...document.querySelectorAll('.step')];
+
+            const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('on',e.isIntersecting)),{rootMargin:'-30% 0px -30% 0px'});
+
+            steps.forEach(s=>io.observe(s));
+
+        </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,6 @@
+
+runpod
+torch
+transformers
+safetensors
+scikit-learn==1.8.0

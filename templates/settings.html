@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings | K&amp;Z</title>
+<link rel="icon" href="static/images/logoKZ.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#08233f;--deep:#0a3158;--teal:#00a896;--green:#12b57b;--sky:#19b4d6;--amber:#f6b02c;--ink:#eaf6f8;--muted:#a9c3cf;--glass:rgba(8,35,63,.6);--line:rgba(255,255,255,.14);--display:'Bricolage Grotesque',system-ui,sans-serif;--body:'DM Sans',system-ui,sans-serif;--side:268px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--navy);color:var(--ink);line-height:1.6;overflow-x:hidden;background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 60%,rgba(25,180,214,.12),transparent)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),var(--sky),var(--amber));z-index:120}
+.edge{position:fixed;left:0;top:0;bottom:0;width:18px;z-index:80}
+.edge::after{content:"";position:absolute;left:0;top:50%;width:4px;height:90px;transform:translateY(-50%);border-radius:0 4px 4px 0;background:linear-gradient(var(--green),var(--amber));animation:hint 2.4s ease-in-out 1.2s 3}
+@keyframes hint{50%{width:12px}}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:90;display:flex;flex-direction:column;padding:18px 14px;background:linear-gradient(180deg,#0a2d52,#06192d);border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sidebar.show,.edge:hover+.sidebar,.sidebar:hover{transform:none;box-shadow:24px 0 60px rgba(0,0,0,.45)}
+.s-brand{display:flex;align-items:center;gap:10px;padding:2px 6px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.s-brand img{height:52px;background:#fff;border-radius:10px;padding:3px}
+.s-brand span{font:800 1.3rem var(--display)}
+.s-nav,.s-foot{list-style:none;display:grid;gap:3px}
+.s-nav{flex:1;align-content:start;overflow:auto}
+.s-foot{border-top:1px solid var(--line);padding-top:10px}
+.s-nav a,.s-foot a{display:flex;align-items:center;gap:13px;padding:11px 14px;border-radius:12px;color:var(--muted);font-weight:500;transition:background .2s,color .2s,transform .2s}
+.s-nav a:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(4px)}
+.s-foot a:hover{background:rgba(255,255,255,.08);color:#fff}
+.s-nav a.active,.s-foot a.active{background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));color:#fff;border:1px solid rgba(0,168,150,.5)}
+.ic{width:22px;text-align:center}
+.scrim{position:fixed;inset:0;background:rgba(3,12,22,.55);backdrop-filter:blur(3px);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.show{opacity:1;pointer-events:auto}
+.top{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:14px;padding:12px 4vw;transition:background .3s}
+.top.solid{background:var(--glass);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.menu-btn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+.menu-btn:hover{background:var(--teal)}
+.menu-btn svg{width:22px;height:22px}
+.menu-btn line{transition:transform .3s,opacity .3s;transform-origin:center}
+.menu-btn.open .l1{transform:translateY(6px) rotate(45deg)}
+.menu-btn.open .l2{opacity:0}
+.menu-btn.open .l3{transform:translateY(-6px) rotate(-45deg)}
+.top .logo{height:46px;background:#fff;border-radius:10px;padding:3px}
+.crumb{margin-left:auto;font-size:.85rem;color:var(--muted)}
+.crumb b{color:#fff}
+/* PAGE */
+main{max-width:1100px;margin:0 auto;padding:120px 5vw 90px}
+.panel{border:1px solid var(--line);border-radius:22px;background:var(--glass);backdrop-filter:blur(12px);padding:26px}
+.hero{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:center;margin-bottom:22px}
+.avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--teal);background:var(--deep);display:grid;place-items:center;font:800 2rem var(--display)}
+.hero h1{font:800 clamp(1.7rem,3.6vw,2.6rem)/1.1 var(--display);letter-spacing:-.02em}
+.hero p{color:var(--muted);margin-top:4px}
+.ring{position:relative;width:132px;height:132px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:11}
+.ring .bg{stroke:rgba(255,255,255,.12)}
+.ring .fg{stroke:url(#g);stroke-linecap:round;transition:stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:800 1.9rem var(--display)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+h2{font:700 1.2rem var(--display);margin-bottom:4px}
+.sub{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.next{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;margin-bottom:14px;background:linear-gradient(135deg,rgba(0,168,150,.3),rgba(25,180,214,.15));border:1px solid rgba(0,168,150,.5)}
+.stp{list-style:none;display:grid;gap:8px}
+.stp li{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.stp .dot{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);font-size:.8rem}
+.stp li.done .dot{background:linear-gradient(135deg,var(--teal),var(--green));border-color:var(--amber)}
+.stp li.done span.l{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.3)}
+.stp span.l{flex:1}
+.stp a{font-size:.85rem;color:var(--sky);font-weight:600}
+form{display:grid;gap:16px}
+label.f{display:grid;gap:6px;font-size:.88rem;color:var(--muted)}
+input[type=text],select{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:#0a2d52;color:#fff;font:500 1rem var(--body)}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.hint{font-size:.8rem;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:99px;border:0;cursor:pointer;font:700 .95rem var(--body);color:#fff;background:linear-gradient(135deg,var(--teal),var(--green));box-shadow:0 8px 24px rgba(0,168,150,.3);transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:rgba(255,255,255,.08);box-shadow:none;border:1px solid var(--line)}
+.btn.danger{background:rgba(255,90,90,.15);border:1px solid rgba(255,90,90,.5);box-shadow:none;color:#ffb0b0}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-of-type{border:0}
+.row small{display:block;color:var(--muted)}
+.data{margin-top:22px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;padding:12px 22px;border-radius:99px;background:var(--green);color:#fff;font-weight:600;transition:all .3s;z-index:130}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{padding:26px 5vw;text-align:center;font-size:.85rem;color:var(--muted);background:#041321}
+@media(max-width:860px){.cols{grid-template-columns:1fr}.hero{grid-template-columns:auto 1fr}.ring{grid-column:1/-1;justify-self:center}.edge,.crumb{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="edge" aria-hidden="true"></div>
+<aside class="sidebar" id="sidebar" aria-label="Main menu">
+  <div class="s-brand"><img src="static/images/logoKZ.png" alt="K&amp;Z logo"><span>K&amp;Z</span></div>
+  <ul class="s-nav">
+    <li><a href="/home"><span class="ic">🏠</span>Home</a></li>
+    <li><a href="/about"><span class="ic">ℹ️</span>About Us</a></li>
+    <li><a href="/profile"><span class="ic">👤</span>My Profile</a></li>
+    <li><a href="/career-quiz"><span class="ic">📝</span>Career Quiz</a></li>
+    <li><a href="/futuresk"><span class="ic">🔮</span>Future Skills</a></li>
+    <li><a href="/careerde"><span class="ic">🎯</span>Career Matches</a></li>
+    <li><a href="/reskilling"><span class="ic">🛠</span>Reskilling Plan</a></li>
+    <li><a href="/sdg"><span class="ic">🌏</span>SDG Impact</a></li>
+    <li><a href="/scenarios"><span class="ic">🎛</span>Scenario Simulator</a></li>
+  </ul>
+  <ul class="s-foot">
+    <li><a href="#" class="active" aria-current="page"><span class="ic">⚙️</span>Settings</a></li>
+    <li><a href="/logout"><span class="ic">🚪</span>Logout</a></li>
+  </ul>
+</aside>
+<div class="scrim" id="scrim"></div>
+<header class="top" id="top">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line class="l1" x1="4" y1="6" x2="20" y2="6"/><line class="l2" x1="4" y1="12" x2="20" y2="12"/><line class="l3" x1="4" y1="18" x2="20" y2="18"/></svg>
+  </button>
+  <a href="/"><img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z"></a>
+  <div class="crumb">K&amp;Z / <b>Settings</b></div>
+</header>
+
+<main>
+  <section class="panel hero" id="hero"><p>Loading your settings…</p></section>
+
+  <div class="cols">
+    <section class="panel">
+      <h2>Your journey</h2>
+      <p class="sub">Five steps from your CV to a plan with impact.</p>
+      <div id="next"></div>
+      <ul class="stp" id="steps"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Your profile</h2>
+      <p class="sub">Choose how we address you across K&amp;Z.</p>
+      <form id="form">
+        <label class="f">Display name
+          <input type="text" id="name" maxlength="60" placeholder="What should we call you?">
+        </label>
+        <label class="f">Email (from your Google account)
+          <input type="text" id="email" disabled>
+        </label>
+        <label class="f">Preferred language
+          <select id="lang">
+            <option value="en">English</option>
+            <option value="ms">Bahasa Malaysia</option>
+            <option value="zh">中文</option>
+          </select>
+          <span class="hint">Saved to your profile. Pages will switch as translations arrive.</span>
+        </label>
+        <label class="f">Learning time per week: <b id="hrsOut">5</b> hours
+          <input type="range" id="hrs" min="1" max="15" step="1" value="5">
+        </label>
+        <div><button class="btn" type="submit">Save changes</button></div>
+      </form>
+    </section>
+  </div>
+
+  <section class="panel data">
+    <h2>Your data</h2>
+    <p class="sub">You are in control. Everything we keep about you is listed here, and you can remove any of it.</p>
+    <div id="rows"></div>
+    <div class="acts">
+      <a class="btn ghost" href="/api/settings/export" download>Download my data</a>
+      <button class="btn danger" id="delAll" type="button">Delete everything</button>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 K&amp;Z. People × AI × Sustainable Tomorrow.</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim'),topbar=$('#top'),prog=$('#progress');
+function setMenu(o){side.classList.toggle('show',o);scrim.classList.toggle('show',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu')}
+btn.onclick=()=>setMenu(!side.classList.contains('show'));
+scrim.onclick=()=>setMenu(false);
+addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+function onScroll(){const h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%';topbar.classList.toggle('solid',scrollY>30)}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(t,bad){const el=$('#toast');el.textContent=t;el.style.background=bad?'#c0392b':'';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+
+const DATA_ROWS=[
+  ['resume','CV and analysis','The file you uploaded and its results.'],
+  ['quiz','Career quiz results','Your answers, interest scores and matches.'],
+  ['plan','Saved careers','Careers and skill gaps in your plan.'],
+  ['reskilling','Reskilling plans','Learning plans we generated for you.'],
+  ['sdg','SDG impact results','Cached SDG analyses for your career.']];
+let S=null;
+
+function render(){
+  const u=S.user,p=S.prefs,name=p.display_name||u.name||'there';
+  const C=2*Math.PI*54,off=C*(1-S.percent/100);
+  const next=S.steps.find(s=>!s.done);
+  $('#hero').innerHTML=`${u.picture?`<img class="avatar" src="${esc(u.picture)}" alt="" referrerpolicy="no-referrer">`:`<div class="avatar">${esc(name[0]||'?').toUpperCase()}</div>`}
+  <div><h1>Hi, ${esc(name)}</h1><p>${S.percent===100?'Your whole journey is complete. Keep your plan fresh as the market changes.':`You are ${S.percent}% of the way through your career journey.`}</p></div>
+  <div class="ring" role="img" aria-label="${S.percent} percent complete"><svg viewBox="0 0 132 132"><defs><linearGradient id="g"><stop offset="0" stop-color="#12b57b"/><stop offset=".6" stop-color="#19b4d6"/><stop offset="1" stop-color="#f6b02c"/></linearGradient></defs><circle class="bg" cx="66" cy="66" r="54"/><circle class="fg" cx="66" cy="66" r="54" stroke-dasharray="${C}" stroke-dashoffset="${C}" id="fg"/></svg><b>${S.percent}%</b></div>`;
+  requestAnimationFrame(()=>{const f=$('#fg');if(f)f.style.strokeDashoffset=off});
+  $('#next').innerHTML=next?`<div class="next"><span>Next up: <b>${esc(next.label)}</b></span><a class="btn" href="${esc(next.href)}">Go</a></div>`:'';
+  $('#steps').innerHTML=S.steps.map((s,i)=>`<li class="${s.done?'done':''}"><span class="dot">${s.done?'✓':i+1}</span><span class="l">${esc(s.label)}</span><a href="${esc(s.href)}">${s.done?'Review':'Start'}</a></li>`).join('');
+  $('#name').value=p.display_name||'';$('#email').value=u.email||'';$('#lang').value=p.language;$('#hrs').value=p.weekly_hours;$('#hrsOut').textContent=p.weekly_hours;
+  const has={};S.steps.forEach(s=>has[s.key]=s.done);
+  $('#rows').innerHTML=DATA_ROWS.map(([k,t,d])=>`<div class="row"><div><b>${t}</b><small>${has[k]?d:'Nothing saved yet.'}</small></div><button class="btn ghost" data-k="${k}" ${has[k]?'':'disabled'}>Delete</button></div>`).join('');
+}
+async function load(){
+  const r=await fetch('/api/settings');
+  if(r.status===401){location.href='/login';return}
+  S=await r.json();render();
+}
+$('#hrs').oninput=e=>$('#hrsOut').textContent=e.target.value;
+$('#form').onsubmit=async e=>{e.preventDefault();
+  const r=await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({display_name:$('#name').value,language:$('#lang').value,weekly_hours:+$('#hrs').value})});
+  if(r.ok){toast('Saved');load()}else toast('Could not save. Check your entries.',true)};
+async function del(what,msg){
+  if(!confirm(msg))return;
+  const r=await fetch('/api/settings/data?what='+what,{method:'DELETE'});
+  if(r.ok){toast('Deleted');load()}else toast('Could not delete.',true)}
+$('#rows').onclick=e=>{const b=e.target.closest('button[data-k]');if(b)del(b.dataset.k,'Delete this data? This cannot be undone.')};
+$('#delAll').onclick=()=>del('all','Delete ALL your saved data, including your profile settings? This cannot be undone.');
+load();
+</script>
+</body>
+</html>

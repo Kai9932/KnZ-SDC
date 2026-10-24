@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenario Simulator | K&amp;Z</title>
+<link rel="icon" href="static/images/logoKZ.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#08233f;--deep:#0a3158;--teal:#00a896;--green:#12b57b;--sky:#19b4d6;--amber:#f6b02c;--ink:#eaf6f8;--muted:#a9c3cf;--glass:rgba(8,35,63,.6);--line:rgba(255,255,255,.14);--display:'Bricolage Grotesque',system-ui,sans-serif;--body:'DM Sans',system-ui,sans-serif;--side:268px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--navy);color:var(--ink);line-height:1.6;overflow-x:hidden;background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 60%,rgba(25,180,214,.12),transparent)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),var(--sky),var(--amber));z-index:120}
+/* SIDEBAR (same as About Us) */
+.edge{position:fixed;left:0;top:0;bottom:0;width:18px;z-index:80}
+.edge::after{content:"";position:absolute;left:0;top:50%;width:4px;height:90px;transform:translateY(-50%);border-radius:0 4px 4px 0;background:linear-gradient(var(--green),var(--amber));animation:hint 2.4s ease-in-out 1.2s 3}
+@keyframes hint{50%{width:12px}}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:90;display:flex;flex-direction:column;padding:18px 14px;background:linear-gradient(180deg,#0a2d52,#06192d);border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sidebar.show,.edge:hover+.sidebar,.sidebar:hover{transform:none;box-shadow:24px 0 60px rgba(0,0,0,.45)}
+.s-brand{display:flex;align-items:center;gap:10px;padding:2px 6px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.s-brand img{height:52px;background:#fff;border-radius:10px;padding:3px}
+.s-brand span{font:800 1.3rem var(--display)}
+.s-nav,.s-foot{list-style:none;display:grid;gap:3px}
+.s-nav{flex:1;align-content:start;overflow:auto}
+.s-foot{border-top:1px solid var(--line);padding-top:10px}
+.s-nav a,.s-foot a{display:flex;align-items:center;gap:13px;padding:11px 14px;border-radius:12px;color:var(--muted);font-weight:500;transition:background .2s,color .2s,transform .2s}
+.s-nav a:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(4px)}
+.s-foot a:hover{background:rgba(255,255,255,.08);color:#fff}
+.s-nav a.active{background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));color:#fff;border:1px solid rgba(0,168,150,.5)}
+.ic{width:22px;text-align:center}
+.scrim{position:fixed;inset:0;background:rgba(3,12,22,.55);backdrop-filter:blur(3px);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.show{opacity:1;pointer-events:auto}
+/* TOP BAR */
+.top{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:14px;padding:12px 4vw;transition:background .3s}
+.top.solid{background:var(--glass);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.menu-btn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+.menu-btn:hover{background:var(--teal)}
+.menu-btn svg{width:22px;height:22px}
+.menu-btn line{transition:transform .3s,opacity .3s;transform-origin:center}
+.menu-btn.open .l1{transform:translateY(6px) rotate(45deg)}
+.menu-btn.open .l2{opacity:0}
+.menu-btn.open .l3{transform:translateY(-6px) rotate(-45deg)}
+.top .logo{height:46px;background:#fff;border-radius:10px;padding:3px}
+.crumb{margin-left:auto;font-size:.85rem;color:var(--muted)}
+.crumb b{color:#fff}
+/* PAGE */
+main{max-width:1180px;margin:0 auto;padding:120px 5vw 90px}
+.intro{max-width:760px;margin:0 0 34px}
+.intro h1{font:800 clamp(2rem,4.4vw,3.4rem)/1.08 var(--display);letter-spacing:-.025em}
+.intro p{margin-top:12px;color:var(--muted);font-size:1.08rem}
+.panel{border:1px solid var(--line);border-radius:22px;background:var(--glass);backdrop-filter:blur(12px);padding:26px}
+.bar{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:space-between;margin-bottom:18px}
+label.f{display:grid;gap:6px;font-size:.85rem;color:var(--muted)}
+select{min-width:300px;max-width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:#0a2d52;color:#fff;font:500 1rem var(--body)}
+.tabs{display:flex;gap:6px;padding:5px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.tabs button{padding:9px 20px;border-radius:99px;border:0;background:none;color:var(--muted);font:600 .92rem var(--body);cursor:pointer;transition:background .2s,color .2s}
+.tabs button:hover{color:#fff}
+.tabs button.on{background:linear-gradient(135deg,var(--teal),var(--green));color:#fff}
+.grid{display:grid;grid-template-columns:1.9fr 1fr;gap:22px;align-items:start}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font:12px var(--body)}
+.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:7px}
+.cards{display:grid;gap:14px}
+.card{padding:18px 20px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.04);transition:opacity .3s}
+.card.dim{opacity:.4}
+.card h3{font:700 1rem var(--display);color:var(--muted)}
+.card .big{font:800 2.2rem/1.1 var(--display);margin:4px 0}
+.card small{color:var(--muted)}
+.mod{color:#5aa9ff}.fast{color:var(--amber)}.up{color:var(--green)}.down{color:#ff7a7a}
+h2.sec{font:700 1.25rem var(--display);margin:30px 0 10px}
+.take{list-style:none;display:grid;gap:10px}
+.take li{padding:13px 16px;border-radius:14px;border-left:3px solid var(--teal);background:rgba(0,168,150,.1)}
+.by{margin-top:8px;font-size:.8rem;color:var(--muted)}
+.note{margin-top:26px;padding:16px 20px;border-radius:16px;border:1px solid rgba(246,176,44,.5);background:rgba(246,176,44,.08);font-size:.92rem}
+.note b{color:var(--amber)}
+.me{margin-bottom:18px;padding:14px 18px;border-radius:16px;border:1px solid rgba(0,168,150,.5);background:rgba(0,168,150,.12)}
+.how{margin-top:12px;font-size:.85rem;color:var(--muted)}
+.state{padding:40px;text-align:center;color:var(--muted)}
+footer{padding:26px 5vw;text-align:center;font-size:.85rem;color:var(--muted);background:#041321}
+@media(max-width:860px){.grid{grid-template-columns:1fr}.edge,.crumb{display:none}select{min-width:0;width:100%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="edge" aria-hidden="true"></div>
+<aside class="sidebar" id="sidebar" aria-label="Main menu">
+  <div class="s-brand"><img src="static/images/logoKZ.png" alt="K&amp;Z logo"><span>K&amp;Z</span></div>
+  <ul class="s-nav">
+    <li><a href="/"><span class="ic">🏠</span>Home</a></li>
+    <li><a href="/about"><span class="ic">ℹ️</span>About Us</a></li>
+    <li><a href="/profile"><span class="ic">👤</span>My Profile</a></li>
+    <li><a href="/career-quiz"><span class="ic">📝</span>Career Quiz</a></li>
+    <li><a href="/futuresk"><span class="ic">🔮</span>Future Skills</a></li>
+    <li><a href="/careerde"><span class="ic">🎯</span>Career Matches</a></li>
+    <li><a href="/reskilling"><span class="ic">🛠</span>Reskilling Plan</a></li>
+    <li><a href="/sdg"><span class="ic">🌏</span>SDG Impact</a></li>
+    <li><a href="/scenarios" class="active" aria-current="page"><span class="ic">🎛</span>Scenario Simulator</a></li>
+  </ul>
+  <ul class="s-foot">
+    <li><a href="/settings"><span class="ic">⚙️</span>Settings</a></li>
+    <li><a href="/logout"><span class="ic">🚪</span>Logout</a></li>
+  </ul>
+</aside>
+<div class="scrim" id="scrim"></div>
+<header class="top" id="top">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line class="l1" x1="4" y1="6" x2="20" y2="6"/><line class="l2" x1="4" y1="12" x2="20" y2="12"/><line class="l3" x1="4" y1="18" x2="20" y2="18"/></svg>
+  </button>
+  <a href="/"><img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z"></a>
+  <div class="crumb">K&amp;Z / <b>Scenario Simulator</b></div>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Future scenarios for Malaysian jobs</h1>
+    <p>Compare a moderate and a fast AI disruption for an occupation group. These are estimates, not guarantees.</p>
+  </div>
+
+  <div class="me" id="me" hidden></div>
+  <div class="panel">
+    <div class="bar">
+      <label class="f">Occupation group
+        <select id="occ" aria-label="Occupation group"></select>
+      </label>
+      <div class="tabs" id="tabs" role="tablist">
+        <button class="on" data-v="both" role="tab">Compare both</button>
+        <button data-v="moderate" role="tab">Moderate AI</button>
+        <button data-v="fast" role="tab">Fast AI</button>
+      </div>
+    </div>
+    <div id="body"><div class="state">Loading scenarios…</div></div>
+  </div>
+
+  <h2 class="sec">Key takeaways</h2>
+  <ul class="take" id="take"><li>Choose an occupation to see takeaways.</li></ul>
+  <p class="by" id="by"></p>
+
+  <div class="note"><b>Read this as a range, not a prediction.</b> The future depends on policy, technology and choices we cannot see yet. Use these scenarios to prepare for several outcomes and check them with a career adviser before deciding.</div>
+  <p class="how" id="how"></p>
+</main>
+
+<footer>© 2026 K&amp;Z. People × AI × Sustainable Tomorrow.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim'),topbar=$('#top'),prog=$('#progress');
+function setMenu(o){side.classList.toggle('show',o);scrim.classList.toggle('show',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu')}
+btn.onclick=()=>setMenu(!side.classList.contains('show'));
+scrim.onclick=()=>setMenu(false);
+addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+function onScroll(){const h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%';topbar.classList.toggle('solid',scrollY>30)}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+let DATA=null,view='both',ME=null;
+const rm=v=>'RM '+Math.round(v).toLocaleString();
+const pct=v=>(v>0?'+':'')+v+'%';
+const cls=v=>v>=0?'up':'down';
+const COL={moderate:'#5aa9ff',fast:'#f6b02c'};
+
+function chart(o){
+  const W=760,H=360,L=64,R=18,T=16,B=36;
+  const hist=o.history.slice(-8);
+  const sc=['moderate','fast'].filter(k=>view==='both'||view===k);
+  const all=hist.map(h=>h.median);
+  ['moderate','fast'].forEach(k=>o.scenarios[k].points.forEach(p=>all.push(p.lo,p.hi)));
+  const y0=Math.min(...all)*.95,y1=Math.max(...all)*1.03;
+  const x0=hist[0].year,x1=o.scenarios.fast.points.at(-1).year;
+  const X=y=>L+(y-x0)/(x1-x0)*(W-L-R),Y=v=>T+(1-(v-y0)/(y1-y0))*(H-T-B);
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Wage forecast chart for ${o.name}">`;
+  for(let i=0;i<=4;i++){const v=y0+(y1-y0)*i/4;s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(255,255,255,.1)"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end">${Math.round(v).toLocaleString()}</text>`}
+  for(let y=x0;y<=x1;y++)if((y-x0)%2===0)s+=`<text x="${X(y)}" y="${H-12}" text-anchor="middle">${y}</text>`;
+  const ly=hist.at(-1);
+  sc.forEach(k=>{
+    const p=o.scenarios[k].points,c=COL[k];
+    const up=[[ly.year,ly.median],...p.map(q=>[q.year,q.hi])],dn=[[ly.year,ly.median],...p.map(q=>[q.year,q.lo])].reverse();
+    s+=`<polygon points="${[...up,...dn].map(a=>X(a[0])+','+Y(a[1])).join(' ')}" fill="${c}" opacity=".16"/>`;
+    s+=`<polyline fill="none" stroke="${c}" stroke-width="3" stroke-dasharray="7 5" points="${[[ly.year,ly.median],...p.map(q=>[q.year,q.mid])].map(a=>X(a[0])+','+Y(a[1])).join(' ')}"/>`;
+  });
+  s+=`<polyline fill="none" stroke="#fff" stroke-width="3" points="${hist.map(h=>X(h.year)+','+Y(h.median)).join(' ')}"/>`;
+  s+=`<line x1="${X(ly.year)}" x2="${X(ly.year)}" y1="${T}" y2="${H-B}" stroke="rgba(255,255,255,.3)" stroke-dasharray="3 4"/><text x="${X(ly.year)+6}" y="${T+12}">Latest data ${ly.year}</text>`;
+  return s+'</svg>';
+}
+
+function render(){
+  const o=DATA.occupations.find(x=>x.name===$('#occ').value);
+  const m=o.scenarios.moderate,f=o.scenarios.fast;
+  const card=(k,t,sc)=>`<div class="card ${view!=='both'&&view!==k?'dim':''}"><h3>${t}</h3><div class="big ${cls(sc.change_pct)}">${pct(sc.change_pct)}</div><small>${rm(sc.points.at(-1).mid)} by ${sc.points.at(-1).year} (range ${rm(sc.points.at(-1).lo)} to ${rm(sc.points.at(-1).hi)})</small></div>`;
+  $('#body').innerHTML=`<div class="grid"><div>${chart(o)}<div class="legend"><span><i style="border-color:#fff"></i>Actual median wage</span><span><i style="border-color:${COL.moderate};border-top-style:dashed"></i>Moderate AI</span><span><i style="border-color:${COL.fast};border-top-style:dashed"></i>Fast AI</span><span>Shaded = uncertainty range</span></div></div>
+  <div class="cards">${card('moderate','Moderate AI disruption, 5-year change',m)}${card('fast','Fast AI disruption, 5-year change',f)}<div class="card"><h3>Past trend</h3><div class="big">${pct(o.hist_growth_pct)}<small> / year</small></div><small>${o.exposure?`AI exposure, estimated by ${o.exposure.by}: can automate ${o.exposure.automation}/100, can augment ${o.exposure.augmentation}/100. ${o.exposure.why}`:'AI exposure is not available yet (set DEEPSEEK_API_KEY), so both scenarios show the plain data trend.'}</small></div>${o.backtest_mape_pct!=null?`<div class="card"><h3>Model check</h3><small>Tested on the last 2 years it did not see, this trend was off by about ${o.backtest_mape_pct}% on average.</small></div>`:''}</div></div>`;
+}
+
+let insightReq=0;
+async function insight(){
+  const id=++insightReq,name=$('#occ').value;
+  $('#take').innerHTML='<li>Writing takeaways…</li>';$('#by').textContent='';
+  try{
+    const r=await fetch('/api/scenarios/insight?occupation='+encodeURIComponent(name)+(ME?'&personal=1':''));
+    const d=await r.json();if(id!==insightReq)return;
+    $('#take').innerHTML=(d.takeaways||[]).map(t=>`<li></li>`).join('');
+    [...$('#take').children].forEach((li,i)=>li.textContent=d.takeaways[i]);
+    $('#by').textContent='Written by: '+d.by+'. It only uses the numbers on this page.';
+  }catch(e){if(id===insightReq)$('#take').innerHTML='<li>Takeaways are unavailable right now.</li>'}
+}
+
+$('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  [...$('#tabs').children].forEach(x=>x.classList.toggle('on',x===b));view=b.dataset.v;render()};
+$('#occ').onchange=()=>{render();insight()};
+
+(async()=>{
+  try{
+    const r=await fetch('/api/scenarios');if(!r.ok)throw 0;
+    DATA=await r.json();
+    $('#occ').innerHTML=DATA.occupations.map(o=>`<option></option>`).join('');
+    [...$('#occ').options].forEach((op,i)=>{op.value=op.textContent=DATA.occupations[i].name});
+    $('#how').textContent=`Source: ${DATA.source}, latest year ${DATA.latest_year}. ${DATA.method}`;
+    try{const m=await(await fetch('/api/scenarios/me')).json();
+      if(m.occupation&&DATA.occupations.some(x=>x.name===m.occupation)){
+        ME=m;$('#occ').value=m.occupation;const b=$('#me');b.hidden=false;b.textContent='';
+        const t=document.createElement('b');t.textContent=m.career;
+        b.append('Personalised for your career: ',t,' (matched to "'+m.occupation+'"). '+(m.skills.length?'Skills you are building: '+m.skills.join(', ')+'.':''));}
+    }catch(e){}
+    render();insight();
+  }catch(e){$('#body').innerHTML='<div class="state">Could not load scenario data. Check that data/wages_occupation.csv exists.</div>'}
+})();
+</script>
+</body>
+</html>

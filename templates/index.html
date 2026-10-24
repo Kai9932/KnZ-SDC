@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>K&amp;Z | Your Skills Today, A Better Tomorrow</title>
+
+    <link rel="icon" href="static/images/logoKZ.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+        --navy:#08233f;
+        --deep:#0a3158;
+        --teal:#00a896;
+        --green:#12b57b;
+        --sky:#19b4d6;
+        --amber:#f6b02c;
+        --ink:#eaf6f8;
+        --muted:#a9c3cf;
+        --glass:rgba(8,35,63,.55);
+        --line:rgba(255,255,255,.16);
+        --display:'Bricolage Grotesque',system-ui,sans-serif;
+        --body:'DM Sans',system-ui,sans-serif;
+        }
+        * {
+        box-sizing:border-box;
+        margin:0;
+        padding:0}
+        html {
+        scroll-behavior:smooth}
+        body {
+        font-family:var(--body);
+        background:var(--navy);
+        color:var(--ink);
+        line-height:1.6;
+        overflow-x:hidden}
+        a {
+        color:inherit;
+        text-decoration:none}
+        :focus-visible {
+        outline:3px solid var(--amber);
+        outline-offset:3px}
+        .progress {
+        position:fixed;
+        top:0;
+        left:0;
+        height:3px;
+        width:0;
+        background:linear-gradient(90deg,var(--green),var(--sky),var(--amber));
+        z-index:100}
+        /* NAV */
+        nav {
+        position:fixed;
+        inset:0 0 auto 0;
+        z-index:50;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:24px;
+        padding:12px 5vw;
+        transition:background .3s,backdrop-filter .3s,padding .3s}
+        nav.solid {
+        background:var(--glass);
+        backdrop-filter:blur(14px);
+        padding:8px 5vw;
+        border-bottom:1px solid var(--line)}
+        .brand {
+        display:flex;
+        align-items:center;
+        gap:10px}
+        .brand img {
+        height:54px;
+        width:auto;
+        border-radius:10px;
+        background:#fff;
+        padding:3px;
+        transition:height .3s}
+        nav.solid .brand img {
+        height:44px}
+        .menu {
+        display:flex;
+        gap:6px;
+        list-style:none}
+        .menu a {
+        display:block;
+        padding:8px 14px;
+        border-radius:99px;
+        font-weight:500;
+        font-size:.95rem;
+        color:var(--muted);
+        position:relative;
+        transition:color .2s,background .2s}
+        .menu a:hover,.menu a.active {
+        color:#fff;
+        background:rgba(255,255,255,.1)}
+        .menu a.active::after {
+        content:"";
+        position:absolute;
+        left:50%;
+        bottom:2px;
+        width:18px;
+        height:3px;
+        border-radius:3px;
+        background:var(--amber);
+        transform:translateX(-50%)}
+        .actions {
+        display:flex;
+        align-items:center;
+        gap:10px}
+        .lang {
+        background:none;
+        border:1px solid var(--line);
+        color:var(--ink);
+        border-radius:99px;
+        padding:7px 14px;
+        font:inherit;
+        font-size:.85rem;
+        cursor:pointer}
+        .btn {
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        padding:11px 22px;
+        border-radius:99px;
+        font:700 .95rem var(--body);
+        border:1.5px solid transparent;
+        cursor:pointer;
+        transition:transform .2s,box-shadow .2s,background .2s}
+        .btn:hover {
+        transform:translateY(-2px)}
+        .btn.primary {
+        background:linear-gradient(135deg,var(--teal),var(--green));
+        color:#fff;
+        box-shadow:0 8px 24px rgba(0,168,150,.35)}
+        .btn.primary:hover {
+        box-shadow:0 12px 30px rgba(0,168,150,.5)}
+        .btn.light {
+        background:#fff;
+        color:var(--navy)}
+        .btn.ghost {
+        background:rgba(255,255,255,.08);
+        border-color:var(--line);
+        color:#fff;
+        backdrop-filter:blur(6px)}
+        .btn.ghost:hover {
+        background:rgba(255,255,255,.18)}
+        .burger {
+        display:none;
+        background:none;
+        border:0;
+        color:#fff;
+        font-size:1.6rem;
+        cursor:pointer}
+        /* HERO */
+        .hero {
+        position:relative;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        padding:130px 5vw 150px;
+        overflow:hidden;
+        isolation:isolate}
+        .hero-bg {
+        position:absolute;
+        inset:-6% 0;
+        background:url(static/images/background.png) 62% center/cover no-repeat;
+        z-index:-2;
+        will-change:transform}
+        .hero::before {
+        content:"";
+        position:absolute;
+        inset:0;
+        z-index:-1;
+        background:linear-gradient(95deg,rgba(8,35,63,.92) 8%,rgba(8,35,63,.55) 48%,rgba(8,35,63,.05) 85%),linear-gradient(0deg,var(--navy) 0,transparent 30%)}
+        .hero-copy {
+        max-width:600px}
+        h1 {
+        font:800 clamp(2.6rem,6.4vw,5.2rem)/1.02 var(--display);
+        letter-spacing:-.025em}
+        h1 .swap {
+        display:block;
+        color:var(--amber);
+        min-height:1.05em;
+        white-space:nowrap}
+        .cursor {
+        display:inline-block;
+        width:.07em;
+        height:.85em;
+        background:var(--amber);
+        margin-left:.06em;
+        vertical-align:-.05em;
+        animation:blink 1s steps(2) infinite}
+        @keyframes blink {
+        50% {
+        opacity:0}
+        }
+        .lead {
+        margin:22px 0 24px;
+        font-size:1.15rem;
+        color:var(--muted);
+        max-width:46ch}
+        .ticks {
+        list-style:none;
+        display:grid;
+        gap:10px;
+        margin-bottom:32px}
+        .ticks li {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        font-weight:500}
+        .ticks i {
+        display:grid;
+        place-items:center;
+        width:30px;
+        height:30px;
+        border-radius:9px;
+        background:rgba(0,168,150,.25);
+        border:1px solid rgba(0,168,150,.5);
+        font-style:normal;
+        font-size:.9rem}
+        .cta {
+        display:flex;
+        gap:14px;
+        flex-wrap:wrap}
+        .cta .btn {
+        padding:15px 28px;
+        font-size:1.02rem}
+        .play-dot {
+        width:26px;
+        height:26px;
+        border-radius:50%;
+        background:var(--amber);
+        color:var(--navy);
+        display:grid;
+        place-items:center;
+        font-size:.7rem;
+        animation:pulse 2s infinite}
+        @keyframes pulse {
+        0% {
+        box-shadow:0 0 0 0 rgba(246,176,44,.6)}
+        100% {
+        box-shadow:0 0 0 14px rgba(246,176,44,0)}
+        }
+        .tag {
+        position:absolute;
+        right:5vw;
+        bottom:210px;
+        font:700 clamp(1.1rem,2.2vw,1.7rem)/1.25 var(--display);
+        text-align:right;
+        text-shadow:0 2px 20px rgba(0,0,0,.5);
+        max-width:12ch}
+        .scroll-cue {
+        position:absolute;
+        left:50%;
+        bottom:150px;
+        transform:translateX(-50%);
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:8px;
+        font-size:.78rem;
+        color:var(--muted)}
+        .scroll-cue span {
+        width:22px;
+        height:36px;
+        border:2px solid var(--muted);
+        border-radius:12px;
+        position:relative}
+        .scroll-cue span::after {
+        content:"";
+        position:absolute;
+        left:50%;
+        top:6px;
+        width:4px;
+        height:7px;
+        border-radius:2px;
+        background:var(--amber);
+        transform:translateX(-50%);
+        animation:wheel 1.6s infinite}
+        @keyframes wheel {
+        0% {
+        opacity:1;
+        transform:translate(-50%,0)}
+        100% {
+        opacity:0;
+        transform:translate(-50%,12px)}
+        }
+        /* FEATURE STRIP */
+        .strip {
+        position:relative;
+        z-index:5;
+        margin:-110px 5vw 0;
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        background:var(--glass);
+        backdrop-filter:blur(16px);
+        border:1px solid var(--line);
+        border-radius:22px;
+        overflow:hidden}
+        .strip article {
+        padding:26px 24px;
+        display:flex;
+        gap:16px;
+        align-items:flex-start;
+        border-right:1px solid var(--line);
+        transition:background .3s}
+        .strip article:last-child {
+        border:0}
+        .strip article:hover {
+        background:rgba(0,168,150,.15)}
+        .strip .ic {
+        flex:none;
+        width:46px;
+        height:46px;
+        border-radius:14px;
+        display:grid;
+        place-items:center;
+        font-size:1.3rem;
+        background:linear-gradient(135deg,var(--deep),var(--teal))}
+        .strip h3 {
+        font:700 1.02rem var(--display)}
+        .strip p {
+        font-size:.88rem;
+        color:var(--muted);
+        line-height:1.45}
+        section {
+        padding:120px 5vw}
+        .sec-head {
+        max-width:720px;
+        margin-bottom:56px}
+        h2 {
+        font:800 clamp(2rem,4.2vw,3.4rem)/1.08 var(--display);
+        letter-spacing:-.02em}
+        .sec-head p {
+        margin-top:14px;
+        color:var(--muted);
+        font-size:1.08rem}
+        /* VIDEO */
+        .video-sec {
+        background:radial-gradient(900px 500px at 80% 0,rgba(0,168,150,.22),transparent),var(--navy)}
+        .stage {
+        max-width:1100px;
+        margin:0 auto;
+        border-radius:28px;
+        overflow:hidden;
+        position:relative;
+        border:1px solid var(--line);
+        box-shadow:0 40px 90px rgba(0,0,0,.5);
+        transform:scale(.86);
+        opacity:.6;
+        transition:transform .15s linear,opacity .15s linear;
+        aspect-ratio:16/9;
+        background:#000}
+        .stage video {
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block}
+        .stage .controls {
+        position:absolute;
+        right:16px;
+        bottom:16px;
+        display:flex;
+        gap:8px}
+        .stage .controls button {
+        background:rgba(8,35,63,.7);
+        backdrop-filter:blur(8px);
+        border:1px solid var(--line);
+        color:#fff;
+        border-radius:99px;
+        padding:8px 16px;
+        font:500 .85rem var(--body);
+        cursor:pointer}
+        .stage .controls button:hover {
+        background:var(--teal)}
+        .stage .live {
+        position:absolute;
+        left:16px;
+        top:16px;
+        display:flex;
+        align-items:center;
+        gap:8px;
+        font-size:.8rem;
+        background:rgba(8,35,63,.7);
+        padding:6px 12px;
+        border-radius:99px;
+        border:1px solid var(--line)}
+        .stage .live::before {
+        content:"";
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:var(--amber);
+        animation:pulse 2s infinite}
+        /* JOURNEY */
+        .journey {
+        position:relative;
+        background:linear-gradient(180deg,var(--navy),#06192d)}
+        .path-wrap {
+        position:relative;
+        max-width:900px;
+        margin:0 auto;
+        padding-left:70px}
+        .path-wrap svg {
+        position:absolute;
+        left:0;
+        top:0;
+        width:60px;
+        height:100%}
+        .step {
+        position:relative;
+        padding:0 0 70px;
+        opacity:.35;
+        transform:translateX(14px);
+        transition:opacity .5s,transform .5s}
+        .step.on {
+        opacity:1;
+        transform:none}
+        .step:last-child {
+        padding-bottom:0}
+        .step .node {
+        position:absolute;
+        left:-70px;
+        top:0;
+        width:60px;
+        height:60px;
+        border-radius:50%;
+        display:grid;
+        place-items:center;
+        font-size:1.5rem;
+        background:var(--deep);
+        border:2px solid var(--line);
+        transition:background .4s,border-color .4s,box-shadow .4s}
+        .step.on .node {
+        background:linear-gradient(135deg,var(--teal),var(--green));
+        border-color:var(--amber);
+        box-shadow:0 0 0 8px rgba(0,168,150,.18)}
+        .step h3 {
+        font:700 1.5rem var(--display);
+        margin-bottom:6px}
+        .step p {
+        color:var(--muted);
+        max-width:56ch}
+        .chips {
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        margin-top:14px}
+        .chips span {
+        font-size:.82rem;
+        padding:5px 12px;
+        border-radius:99px;
+        border:1px solid var(--line);
+        background:rgba(255,255,255,.05)}
+        /* STATS + SDG */
+        .stats {
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:20px;
+        max-width:1100px;
+        margin:0 auto 70px;
+        text-align:center}
+        .stats b {
+        display:block;
+        font:800 clamp(2.2rem,5vw,3.8rem)/1 var(--display);
+        background:linear-gradient(135deg,var(--green),var(--sky));
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent}
+        .stats span {
+        color:var(--muted);
+        font-size:.95rem}
+        .sdg {
+        background:#06192d}
+        .sdg-grid {
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(72px,1fr));
+        gap:10px;
+        max-width:1100px;
+        margin:0 auto}
+        .sdg-grid button {
+        aspect-ratio:1;
+        border:0;
+        border-radius:14px;
+        font:800 1.4rem var(--display);
+        color:#fff;
+        cursor:pointer;
+        transition:transform .25s,box-shadow .25s;
+        position:relative}
+        .sdg-grid button:hover,.sdg-grid button:focus-visible {
+        transform:translateY(-6px) scale(1.08);
+        box-shadow:0 14px 28px rgba(0,0,0,.45)}
+        .sdg-info {
+        max-width:1100px;
+        margin:26px auto 0;
+        min-height:60px;
+        text-align:center;
+        color:var(--muted);
+        font-size:1.05rem}
+        .sdg-info b {
+        color:#fff}
+        /* CTA */
+        .final {
+        position:relative;
+        text-align:center;
+        overflow:hidden;
+        isolation:isolate}
+        .final::before {
+        content:"";
+        position:absolute;
+        inset:0;
+        background:url(static/images/background.png) center/cover;
+        filter:saturate(1.1);
+        z-index:-2}
+        .final::after {
+        content:"";
+        position:absolute;
+        inset:0;
+        background:linear-gradient(180deg,#06192d,rgba(8,35,63,.72) 40%,rgba(8,35,63,.88));
+        z-index:-1}
+        .final h2 {
+        max-width:16ch;
+        margin:0 auto 18px}
+        .final p {
+        color:var(--muted);
+        max-width:50ch;
+        margin:0 auto 34px;
+        font-size:1.1rem}
+        .final img {
+        height:90px;
+        margin:0 auto 26px;
+        background:#fff;
+        border-radius:16px;
+        padding:6px}
+        footer {
+        padding:28px 5vw;
+        text-align:center;
+        font-size:.85rem;
+        color:var(--muted);
+        background:#041321}
+        .close {
+        position:absolute;
+        top:12px;
+        right:12px;
+        width:40px;
+        height:40px;
+        border-radius:50%;
+        border:0;
+        background:rgba(8,35,63,.8);
+        color:#fff;
+        font-size:1.3rem;
+        cursor:pointer;
+        z-index:2}
+        .close:hover {
+        background:var(--amber);
+        color:var(--navy)}
+        /* Reveal (one-time, only on hero copy) */
+        .hero-copy>* {
+        animation:rise .8s both}
+        .hero-copy>*:nth-child(2) {
+        animation-delay:.15s}
+        .hero-copy>*:nth-child(3) {
+        animation-delay:.3s}
+        .hero-copy>*:nth-child(4) {
+        animation-delay:.45s}
+        @keyframes rise {
+        from {
+        opacity:0;
+        transform:translateY(24px)}
+        }
+        @media(max-width:960px) {
+        .menu {
+        position:fixed;
+        inset:68px 0 auto 0;
+        flex-direction:column;
+        background:rgba(6,25,45,.97);
+        padding:16px 5vw 24px;
+        display:none;
+        border-bottom:1px solid var(--line)}
+        .menu.open {
+        display:flex}
+        .burger {
+        display:block}
+        .strip {
+        grid-template-columns:1fr 1fr}
+        .strip article:nth-child(2) {
+        border-right:0}
+        .strip article:nth-child(-n+2) {
+        border-bottom:1px solid var(--line)}
+        .stats {
+        grid-template-columns:1fr 1fr}
+        .tag,.scroll-cue,.lang {
+        display:none}
+        }
+        @media(max-width:560px) {
+        .strip {
+        grid-template-columns:1fr;
+        margin-top:-80px}
+        .strip article {
+        border-right:0!important;
+        border-bottom:1px solid var(--line)}
+        .actions .btn.light {
+        display:none}
+        .hero {
+        padding-bottom:120px}
+        .path-wrap {
+        padding-left:56px}
+        .step .node {
+        left:-56px;
+        width:48px;
+        height:48px}
+        }
+        @media(prefers-reduced-motion:reduce) {
+        * {
+        animation:none!important;
+        transition:none!important}
+        html {
+        scroll-behavior:auto}
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="progress" id="progress"></div>
+
+<nav id="nav">
+
+    <a href="#" class="brand" aria-label="K&amp;Z home"><img src="static/images/logoKZ.png" alt="K&amp;Z logo"></a>
+
+<ul class="menu" id="menu">
+
+    <li><a href="#" class="active">Home</a></li>
+
+<li><a href="/about">About</a></li>
+
+<li><a href="/login">Career Tools</a></li>
+
+<li><a href="/login">Future Skills</a></li>
+
+<li><a href="/login">SDGs</a></li>
+
+</ul>
+
+<div class="actions">
+
+    <button class="lang" aria-label="Language">EN ▾</button>
+
+<a href="/login" class="btn ghost">Login</a>
+
+<a href="/login" class="btn light">Get Started</a>
+
+<button class="burger" id="burger" aria-label="Open menu">☰</button>
+
+</div>
+
+</nav>
+
+<header class="hero">
+
+    <div class="hero-bg" id="heroBg"></div>
+
+<div class="hero-copy">
+
+    <h1>Your Skills Today,<span class="swap"><span id="typed"></span><span class="cursor"></span></span></h1>
+
+<p class="lead">AI-powered career guidance for a future-ready, sustainable workforce in Malaysia.</p>
+
+<ul class="ticks">
+
+    <li><i>🔍</i>Explore future job opportunities</li>
+
+<li><i>🎯</i>Get personalised career matches</li>
+
+<li><i>🛠</i>Build your reskilling plan</li>
+
+<li><i>🌏</i>See your impact on the UN SDGs</li>
+
+</ul>
+
+<div class="cta">
+
+    <a href="/login" class="btn primary">Start Your Journey</a>
+
+<button class="btn ghost" id="openDemo"><span class="play-dot">▶</span>Watch Demo</button>
+
+</div>
+
+</div>
+
+<div class="tag">Skills for a brighter, more sustainable Malaysia.</div>
+
+<div class="scroll-cue"><span></span>Scroll</div>
+
+</header>
+
+<div class="strip">
+
+    <article><div class="ic">🤖</div><div><h3>AI Career Guidance</h3><p>Based on real data and future trends.</p></div></article>
+
+<article><div class="ic">📍</div><div><h3>Malaysia Focus</h3><p>Local job market insights and salary reference.</p></div></article>
+
+<article><div class="ic">🌱</div><div><h3>Supports 17 SDGs</h3><p>Build a more inclusive and sustainable future.</p></div></article>
+
+<article><div class="ic">🎓</div><div><h3>For Everyone</h3><p>Graduates, professionals, HR and career centres.</p></div></article>
+
+</div>
+
+<section class="video-sec" id="demo">
+
+    <div class="sec-head">
+
+        <h2>See K&amp;Z in action</h2>
+
+    <p>The demo starts by itself as it scrolls into view. Tap the video for sound.</p>
+
+</div>
+
+<div class="stage" id="stage">
+
+    <video id="autoVid" src="static/video/demo.mp4" muted loop playsinline preload="metadata"></video>
+
+<div class="live">Live demo</div>
+
+<div class="controls">
+
+    <button id="muteBtn">🔇 Sound off</button>
+
+<button id="fullBtn">⛶ Full screen</button>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="journey" id="journey">
+
+    <div class="sec-head">
+
+        <h2>From where you are to where Malaysia is going</h2>
+
+    <p>Scroll down and watch your path light up, step by step.</p>
+
+</div>
+
+<div class="path-wrap" id="pathWrap">
+
+    <svg id="pathSvg" preserveAspectRatio="none" aria-hidden="true">
+
+        <line x1="30" y1="30" x2="30" id="trackLine" stroke="rgba(255,255,255,.15)" stroke-width="4" stroke-linecap="round"/>
+
+        <line x1="30" y1="30" x2="30" id="fillLine" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
+
+        <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12b57b"/><stop offset="1" stop-color="#f6b02c"/></linearGradient></defs>
+
+</svg>
+
+<div class="step"><div class="node">🧭</div><h3>Tell us about you</h3><p>Share your studies, experience and interests. No long forms, just a short chat with the AI.</p></div>
+
+<div class="step"><div class="node">🔮</div><h3>Explore future jobs</h3><p>See which roles are growing in Malaysia and how well your skills match them.</p><div class="chips"><span>Green energy</span><span>Data &amp; AI</span><span>Digital health</span><span>Smart cities</span></div></div>
+
+<div class="step"><div class="node">🛠</div><h3>Build your reskilling plan</h3><p>Get a clear list of skills to learn first, with courses and timelines that fit your life.</p></div>
+
+<div class="step"><div class="node">🌏</div><h3>See your SDG impact</h3><p>Find out how your next career move supports a more sustainable Malaysia.</p></div>
+
+</div>
+
+</section>
+
+<section class="sdg" id="sdg">
+
+    <div class="stats" id="stats">
+
+        <div><b data-to="17">0</b><span>UN SDGs supported</span></div>
+
+<div><b data-to="4">0</b><span>steps to your plan</span></div>
+
+<div><b data-to="100" data-suffix="%">0</b><span>focused on Malaysia</span></div>
+
+<div><b data-to="1">0</b><span>place for your career</span></div>
+
+</div>
+
+<div class="sec-head" style="margin:0 auto 40px;text-align:center"><h2>Hover a goal to see how K&amp;Z helps</h2></div>
+
+<div class="sdg-grid" id="sdgGrid"></div>
+
+<p class="sdg-info" id="sdgInfo">Choose a goal above.</p>
+
+</section>
+
+<section class="final">
+
+    <img src="static/images/logoKZ.png" alt="K&amp;Z">
+
+    <h2>Ready for a better tomorrow?</h2>
+
+<p>Start with what you know today. We will help you map the rest.</p>
+
+<a href="#" class="btn primary" style="padding:16px 34px;font-size:1.05rem">Start Your Journey</a>
+
+</section>
+
+<footer>© 2026 K&amp;Z. People × AI × Sustainable Tomorrow.</footer>
+
+
+<script>
+
+    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+    /* Nav + progress + hero parallax + video scale */
+
+    const nav=$('#nav'), prog=$('#progress'), bg=$('#heroBg'), stage=$('#stage');
+
+    function onScroll(){
+
+    const y=scrollY, h=document.documentElement.scrollHeight-innerHeight;
+
+    prog.style.width=(y/h*100)+'%';
+
+    nav.classList.toggle('solid',y>40);
+
+    if(y<innerHeight*1.2) bg.style.transform=`translateY(${y*.18}px) scale(${1+y/6000})`;
+
+    const r=stage.getBoundingClientRect(), mid=(r.top+r.height/2)/innerHeight;
+
+    const t=Math.max(0,Math.min(1,1-Math.abs(mid-.5)*1.6));
+
+    stage.style.transform=`scale(${.86+.14*t})`; stage.style.opacity=.6+.4*t;
+
+    updatePath();
+
+    }
+
+    addEventListener('scroll',onScroll,{passive:true});
+
+    /* Typing headline */
+
+    const words=['A Better Tomorrow.','A Greener Career.','A Smarter Future.','A Stronger Malaysia.'];
+
+    let wi=0,ci=0,del=false;const typed=$('#typed');
+
+    function type(){
+
+    const w=words[wi];
+
+    typed.textContent=w.slice(0,ci);
+
+    if(!del&&ci<w.length){ci++;setTimeout(type,70)}
+
+    else if(!del){del=true;setTimeout(type,1800)}
+
+    else if(ci>0){ci--;setTimeout(type,35)}
+
+    else{del=false;wi=(wi+1)%words.length;setTimeout(type,300)}
+
+    }
+
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches){typed.textContent=words[0]}else{type()}
+
+    /* Mobile menu */
+
+    $('#burger').onclick=()=>$('#menu').classList.toggle('open');
+
+    /* Scroll-triggered video: autoplay when visible, pause when away */
+
+    const av=$('#autoVid');
+
+    new IntersectionObserver(([e])=>{
+
+    if(e.isIntersecting&&e.intersectionRatio>.5){av.play().catch(()=>{})}else{av.pause()}
+
+    },{threshold:[0,.5,1]}).observe(stage);
+
+    $('#muteBtn').onclick=e=>{av.muted=!av.muted;e.target.textContent=av.muted?'🔇 Sound off':'🔊 Sound on'};
+
+    av.onclick=()=>{av.muted=false;$('#muteBtn').textContent='🔊 Sound on'};
+
+    $('#fullBtn').onclick=()=>{(av.requestFullscreen||av.webkitEnterFullscreen).call(av)};
+
+    /* Watch Demo: scroll to the embedded video instead of opening a modal */
+
+    $('#openDemo').onclick=()=>{
+
+        $('#demo').scrollIntoView({behavior:'smooth',block:'start'});
+
+        // The existing IntersectionObserver will start the video when it enters view.
+
+    };
+
+    /* Journey path */
+
+    const steps=$$('.step'), wrap=$('#pathWrap'), fill=$('#fillLine'), track=$('#trackLine');
+
+    function layoutPath(){
+
+    const last=steps[steps.length-1], end=last.offsetTop+30;
+
+    track.setAttribute('y2',end);fill.setAttribute('y2',end);fill.style.strokeDasharray=end-30;
+
+    }
+
+    function updatePath(){
+
+    const r=wrap.getBoundingClientRect(), total=r.height;
+
+    const p=Math.max(0,Math.min(1,(innerHeight*.6-r.top)/total));
+
+    const len=parseFloat(fill.style.strokeDasharray)||0;
+
+    fill.style.strokeDashoffset=len*(1-p);
+
+    steps.forEach(s=>s.classList.toggle('on',s.getBoundingClientRect().top<innerHeight*.65));
+
+    }
+
+    addEventListener('resize',()=>{layoutPath();updatePath()});
+
+    addEventListener('load',()=>{layoutPath();onScroll()});
+
+    /* Counters */
+
+    new IntersectionObserver((es,o)=>es.forEach(e=>{
+
+    if(!e.isIntersecting)return;o.unobserve(e.target);
+
+    $$('#stats b').forEach(b=>{
+
+    const to=+b.dataset.to,suf=b.dataset.suffix||'',t0=performance.now();
+
+    (function tick(t){const k=Math.min(1,(t-t0)/1400);b.textContent=Math.round(to*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(tick)})(t0);
+
+    });
+
+    }),{threshold:.4}).observe($('#stats'));
+
+    /* SDGs */
+
+    const sdgs=[
+
+    ['No Poverty','#e5243b','Connects people to jobs with fair, stable pay.'],
+
+    ['Zero Hunger','#dda63a','Supports skills for agri-tech and food systems.'],
+
+    ['Good Health','#4c9f38','Shows paths into digital health and care.'],
+
+    ['Quality Education','#c5192d','Turns learning into a clear reskilling plan.'],
+
+    ['Gender Equality','#ff3a21','Opens equal access to future roles.'],
+
+    ['Clean Water','#26bde2','Highlights careers in water and environment.'],
+
+    ['Clean Energy','#fcc30b','Guides you into solar, EV and green energy work.'],
+
+    ['Decent Work','#a21942','Matches you to roles with growth and dignity.'],
+
+    ['Industry & Innovation','#fd6925','Builds skills for AI, data and new industry.'],
+
+    ['Reduced Inequalities','#dd1367','Gives graduates and career switchers equal footing.'],
+
+    ['Sustainable Cities','#fd9d24','Points to smart city and urban planning jobs.'],
+
+    ['Responsible Consumption','#bf8b2e','Prepares you for circular economy careers.'],
+
+    ['Climate Action','#3f7e44','Shows how your job can cut carbon.'],
+
+    ['Life Below Water','#0a97d9','Links you to marine and coastal work.'],
+
+    ['Life on Land','#56c02b','Supports forestry and biodiversity careers.'],
+
+    ['Peace & Justice','#00689d','Builds skills for fair, transparent institutions.'],
+
+    ['Partnerships','#19486a','Brings HR teams and career centres together.']];
+
+    const grid=$('#sdgGrid'),info=$('#sdgInfo');
+
+    sdgs.forEach((s,i)=>{
+
+    const b=document.createElement('button');b.textContent=i+1;b.style.background=s[1];b.setAttribute('aria-label','SDG '+(i+1)+': '+s[0]);
+
+    const show=()=>info.innerHTML='<b>SDG '+(i+1)+': '+s[0]+'.</b> '+s[2];
+
+    b.onmouseenter=show;b.onfocus=show;b.onclick=show;grid.appendChild(b);
+
+    });
+
+</script>
+
+</body>
+
+</html>

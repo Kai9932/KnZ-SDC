@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            Future Skills Radar | K&amp;Z
+        </title>
+        <link rel="icon" href="static/images/logoKZ.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        >
+        <style>
+
+            :root {
+                --navy:#08233f;
+                --deep:#0a3158;
+                --teal:#00a896;
+                --green:#12b57b;
+                --sky:#19b4d6;
+                --amber:#f6b02c;
+                --ink:#eaf6f8;
+                --muted:#a9c3cf;
+                --glass:rgba(8,35,63,.6);
+                --card:rgba(255,255,255,.05);
+                --line:rgba(255,255,255,.14);
+                --display:'Bricolage Grotesque',system-ui,sans-serif;
+                --body:'DM Sans',system-ui,sans-serif;
+                --side:268px;
+            }
+
+            * {
+                box-sizing:border-box;
+                margin:0;
+                padding:0
+            }
+
+            body {
+                font-family:var(--body);
+                background:var(--navy);
+                color:var(--ink);
+                line-height:1.55;
+                overflow-x:hidden;
+                min-height:100vh;
+                background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 70%,rgba(25,180,214,.12),transparent)
+            }
+
+            a {
+                color:inherit;
+                text-decoration:none
+            }
+
+            button,select {
+                font-family:inherit
+            }
+
+            :focus-visible {
+                outline:3px solid var(--amber);
+                outline-offset:3px
+            }
+
+            /* SIDEBAR: appears on hover at the left edge, or with the menu button */
+            .edge {
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:18px;
+                z-index:80
+            }
+
+            .edge::after {
+                content:"";
+                position:absolute;
+                left:0;
+                top:50%;
+                width:4px;
+                height:90px;
+                transform:translateY(-50%);
+                border-radius:0 4px 4px 0;
+                background:linear-gradient(var(--green),var(--amber));
+                animation:hint 2.4s ease-in-out 1.2s 3
+            }
+
+            @keyframes hint {
+                50% {
+                    width:12px
+                }
+
+            }
+
+            .sidebar {
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:var(--side);
+                z-index:90;
+                display:flex;
+                flex-direction:column;
+                padding:18px 14px;
+                background:linear-gradient(180deg,#0a2d52,#06192d);
+                border-right:1px solid var(--line);
+                transform:translateX(-102%);
+                transition:transform .35s cubic-bezier(.2,.8,.2,1)
+            }
+
+            .sidebar.show,.edge:hover+.sidebar,.sidebar:hover {
+                transform:none;
+                box-shadow:24px 0 60px rgba(0,0,0,.45)
+            }
+
+            .s-brand {
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:2px 6px 18px;
+                border-bottom:1px solid var(--line);
+                margin-bottom:12px
+            }
+
+            .s-brand img {
+                height:52px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+
+            .s-brand span {
+                font:800 1.3rem var(--display)
+            }
+
+            .s-nav,.s-foot {
+                list-style:none;
+                display:grid;
+                gap:3px
+            }
+
+            .s-nav {
+                flex:1;
+                align-content:start;
+                overflow:auto
+            }
+
+            .s-foot {
+                border-top:1px solid var(--line);
+                padding-top:10px
+            }
+
+            .s-nav a,.s-foot a {
+                display:flex;
+                align-items:center;
+                gap:13px;
+                padding:11px 14px;
+                border-radius:12px;
+                color:var(--muted);
+                font-weight:500;
+                transition:background .2s,color .2s,transform .2s
+            }
+
+            .s-nav a:hover,.s-foot a:hover {
+                background:rgba(255,255,255,.08);
+                color:#fff
+            }
+
+            .s-nav a:hover {
+                transform:translateX(4px)
+            }
+
+            .s-nav a.active {
+                background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));
+                color:#fff;
+                border:1px solid rgba(0,168,150,.5)
+            }
+
+            .ic {
+                width:22px;
+                text-align:center
+            }
+
+            .scrim {
+                position:fixed;
+                inset:0;
+                background:rgba(3,12,22,.55);
+                backdrop-filter:blur(3px);
+                z-index:70;
+                opacity:0;
+                pointer-events:none;
+                transition:opacity .3s
+            }
+
+            .scrim.show {
+                opacity:1;
+                pointer-events:auto
+            }
+
+            .top {
+                position:fixed;
+                top:0;
+                left:0;
+                right:0;
+                z-index:60;
+                display:flex;
+                align-items:center;
+                gap:14px;
+                padding:12px 4vw;
+                transition:background .3s
+            }
+
+            .top.solid {
+                background:var(--glass);
+                backdrop-filter:blur(14px);
+                border-bottom:1px solid var(--line)
+            }
+
+            .menu-btn {
+                width:46px;
+                height:46px;
+                border-radius:14px;
+                border:1px solid var(--line);
+                background:rgba(255,255,255,.08);
+                color:#fff;
+                cursor:pointer;
+                display:grid;
+                place-items:center;
+                transition:background .2s
+            }
+
+            .menu-btn:hover {
+                background:var(--teal)
+            }
+
+            .menu-btn svg {
+                width:22px;
+                height:22px
+            }
+
+            .menu-btn line {
+                transition:transform .3s,opacity .3s;
+                transform-origin:center
+            }
+
+            .menu-btn.open .l1 {
+                transform:translateY(6px) rotate(45deg)
+            }
+
+            .menu-btn.open .l2 {
+                opacity:0
+            }
+
+            .menu-btn.open .l3 {
+                transform:translateY(-6px) rotate(-45deg)
+            }
+
+            .top .logo {
+                height:46px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+
+            .crumb {
+                margin-left:auto;
+                font-size:.85rem;
+                color:var(--muted)
+            }
+
+            .crumb b {
+                color:#fff
+            }
+
+            /* PAGE */
+            main {
+                max-width:1180px;
+                margin:0 auto;
+                padding:116px 5vw 80px
+            }
+
+            .head {
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                gap:20px;
+                flex-wrap:wrap
+            }
+
+            h1 {
+                font:800 clamp(2rem,4.4vw,3rem)/1.08 var(--display);
+                letter-spacing:-.02em
+            }
+
+            .sub {
+                color:var(--muted);
+                margin:10px 0 26px;
+                max-width:62ch;
+                font-size:1.05rem
+            }
+
+            .country {
+                padding:11px 16px;
+                border-radius:12px;
+                border:1px solid var(--line);
+                background:rgba(0,0,0,.25);
+                color:#fff;
+                font-weight:700;
+                font-size:.95rem;
+                min-width:150px
+            }
+
+            .country option {
+                background:#0a2d52
+            }
+
+            .tabs {
+                position:relative;
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                background:rgba(0,0,0,.22);
+                border-radius:14px;
+                padding:5px;
+                margin-bottom:22px
+            }
+
+            .tabs button {
+                position:relative;
+                z-index:1;
+                border:0;
+                background:none;
+                color:var(--muted);
+                padding:11px 8px;
+                font-weight:700;
+                font-size:.95rem;
+                cursor:pointer;
+                border-radius:10px;
+                transition:color .25s
+            }
+
+            .tabs button.on {
+                color:#fff
+            }
+
+            .pill {
+                position:absolute;
+                top:5px;
+                bottom:5px;
+                left:5px;
+                width:calc((100% - 10px)/3);
+                border-radius:10px;
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                transition:transform .35s cubic-bezier(.2,.8,.2,1)
+            }
+
+            .layout {
+                display:grid;
+                grid-template-columns:1.25fr 1fr;
+                gap:22px;
+                align-items:start
+            }
+
+            .col {
+                display:grid;
+                gap:22px
+            }
+
+            .panel {
+                background:var(--card);
+                border:1px solid var(--line);
+                border-radius:24px;
+                padding:24px;
+                backdrop-filter:blur(10px)
+            }
+
+            .panel h2 {
+                font:800 1.2rem var(--display);
+                margin-bottom:16px
+            }
+
+            /* SKILL TABLE (empty skeleton) */
+            .thead,.row {
+                display:grid;
+                grid-template-columns:1.1fr 1.4fr 70px;
+                gap:16px;
+                align-items:center
+            }
+
+            .thead {
+                color:var(--muted);
+                font-size:.85rem;
+                font-weight:700;
+                padding-bottom:10px;
+                border-bottom:1px solid var(--line)
+            }
+
+            .thead span:last-child {
+                text-align:right
+            }
+
+            .row {
+                padding:11px 0;
+                border-bottom:1px solid rgba(255,255,255,.06)
+            }
+
+            .row:last-child {
+                border:0
+            }
+
+            .ph {
+                display:block;
+                height:12px;
+                border-radius:6px;
+                background:rgba(255,255,255,.1)
+            }
+
+            .row .name {
+                width:80%
+            }
+
+            .row .track {
+                height:14px;
+                border-radius:7px;
+                background:rgba(255,255,255,.07)
+            }
+
+            .row .chg {
+                width:44px;
+                margin-left:auto
+            }
+
+            .hint-line {
+                margin-top:14px;
+                color:var(--muted);
+                font-size:.88rem;
+                text-align:center;
+                padding:12px;
+                border:1.5px dashed var(--line);
+                border-radius:14px
+            }
+
+            /* CHART (empty frame) */
+            .legend {
+                display:flex;
+                justify-content:center;
+                gap:22px;
+                font-size:.82rem;
+                color:var(--muted);
+                margin-bottom:12px
+            }
+
+            .legend i {
+                display:inline-block;
+                width:9px;
+                height:9px;
+                border-radius:50%;
+                margin-right:7px
+            }
+
+            .legend .h i {
+                background:var(--sky)
+            }
+
+            .legend .f i {
+                background:var(--green)
+            }
+
+            .chart {
+                position:relative;
+                height:230px;
+                border-radius:16px;
+                border:1.5px dashed var(--line);
+                background:
+  repeating-linear-gradient(0deg,transparent 0 45px,rgba(255,255,255,.06) 45px 46px),rgba(0,0,0,.15);
+                display:grid;
+                place-items:center;
+                color:var(--muted);
+                font-size:.9rem;
+                text-align:center;
+                padding:0 20px
+            }
+
+            .axis {
+                display:flex;
+                justify-content:space-between;
+                color:rgba(255,255,255,.35);
+                font-size:.75rem;
+                margin-top:8px;
+                padding:0 6px
+            }
+
+            /* DATA SOURCE (empty) */
+            .src {
+                display:flex;
+                align-items:center;
+                gap:14px;
+                padding:12px 0;
+                border-bottom:1px solid rgba(255,255,255,.06)
+            }
+
+            .src:last-of-type {
+                border:0
+            }
+
+            .src .flag {
+                flex:none;
+                width:36px;
+                height:26px;
+                border-radius:6px;
+                background:rgba(255,255,255,.1)
+            }
+
+            .src .lines {
+                flex:1;
+                display:grid;
+                gap:7px
+            }
+
+            .src .lines .ph:first-child {
+                width:70%
+            }
+
+            .src .lines .ph:last-child {
+                width:45%;
+                height:10px
+            }
+
+            .src .ext {
+                flex:none;
+                width:22px;
+                height:22px;
+                border-radius:6px;
+                border:1px solid var(--line);
+                opacity:.5
+            }
+            .src {
+                color:inherit
+            }
+
+            .src .flag {
+                display:grid;
+                place-items:center;
+                font-size:1.15rem
+            }
+
+            .src .lines b {
+                font-size:.95rem
+            }
+
+            .src .lines small {
+                color:var(--muted);
+                font-size:.8rem
+            }
+
+            .src .ext {
+                display:grid;
+                place-items:center;
+                font-size:.85rem;
+                opacity:.8;
+                transition:border-color .2s,background .2s
+            }
+
+            .src:hover .ext {
+                border-color:var(--teal);
+                background:rgba(0,168,150,.2)
+            }
+            footer {
+                padding:26px 5vw;
+                text-align:center;
+                font-size:.85rem;
+                color:var(--muted);
+                background:#041321
+            }
+
+            @media(max-width:900px) {
+                .layout {
+                    grid-template-columns:1fr
+                }
+
+                .crumb,.edge {
+                    display:none
+                }
+
+                .tabs button {
+                    font-size:.82rem
+                }
+
+            }
+
+            @media(prefers-reduced-motion:reduce) {
+                * {
+                    animation:none!important;
+                    transition:none!important
+                }
+
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div class="edge" aria-hidden="true">
+        </div>
+        <aside class="sidebar" id="sidebar" aria-label="Main menu">
+            <div class="s-brand">
+                <img src="static/images/logoKZ.png" alt="K&amp;Z logo">
+                <span>
+                    K&amp;Z
+                </span>
+            </div>
+            <ul class="s-nav">
+                <li>
+                    <a href="/home">
+                        <span class="ic">
+                            🏠
+                        </span>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="/mabout">
+                        <span class="ic">
+                            ℹ️
+                        </span>
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile">
+                        <span class="ic">
+                            👤
+                        </span>
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="/career-quiz">
+                        <span class="ic">
+                            📝
+                        </span>
+                        Career Quiz
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active" aria-current="page">
+                        <span class="ic">
+                            🔮
+                        </span>
+                        Future Skills
+                    </a>
+                </li>
+                <li>
+                    <a href="/careerde">
+                        <span class="ic">
+                            🎯
+                        </span>
+                        Career Matches
+                    </a>
+                </li>
+                <li>
+                    <a href="/reskilling">
+                        <span class="ic">
+                            🛠
+                        </span>
+                        Reskilling Plan
+                    </a>
+                </li>
+                <li>
+                    <a href="/sdg">
+                        <span class="ic">
+                            🌏
+                        </span>
+                        SDG Impact
+                    </a>
+                </li>
+                <li>
+                    <a href="/scenarios">
+                        <span class="ic">
+                            🎛
+                        </span>
+                        Scenario Simulator
+                    </a>
+                </li>
+            </ul>
+            <ul class="s-foot">
+                <li>
+                    <a href="/settings">
+                        <span class="ic">
+                            ⚙️
+                        </span>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <span class="ic">
+                            🚪
+                        </span>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="scrim" id="scrim">
+        </div>
+        <header class="top" id="top">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <line class="l1" x1="4" y1="6" x2="20" y2="6"/>
+                    <line class="l2" x1="4" y1="12" x2="20" y2="12"/>
+                    <line class="l3" x1="4" y1="18" x2="20" y2="18"/>
+                </svg>
+            </button>
+            <a href="#">
+                <img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z">
+            </a>
+            <div class="crumb">
+                K&amp;Z /
+                <b>
+                    Future Skills
+                </b>
+            </div>
+        </header>
+
+        <main>
+            <div class="head">
+                <div>
+                    <h1>
+                        Future Skills Radar
+                    </h1>
+                    <p class="sub">
+                        Explore skills and roles that are rising or declining in Malaysia's job market, based on real data and AI trend analysis.
+                    </p>
+                </div>
+                <select class="country" aria-label="Country">
+                    <option>
+                        Malaysia
+                    </option>
+                </select>
+            </div>
+            <div class="tabs" role="tablist">
+                <span class="pill" id="pill">
+                </span>
+                <button class="on" role="tab" data-tab="0">
+                    Rising Skills
+                </button>
+                <button role="tab" data-tab="1">
+                    Declining Skills
+                </button>
+                <button role="tab" data-tab="2">
+                    Emerging Roles
+                </button>
+            </div>
+            <div class="layout">
+                <section class="panel">
+                    <h2>
+                        Top 10 Rising Skills in Malaysia
+                    </h2>
+                    <div class="thead">
+                        <span>
+                            Skill
+                        </span>
+                        <span>
+                            Growth Trend (Last 3 Years)
+                        </span>
+                        <span>
+                            Change
+                        </span>
+                    </div>
+                    <div id="rows">
+                    </div>
+                    <p class="hint-line">
+                        No data yet. Skill rankings will appear here once the data is connected.
+                    </p>
+                </section>
+
+                <div class="col">
+                    <section class="panel">
+                        <h2>
+                            Trend Example
+                        </h2>
+                        <div class="legend">
+                            <span class="h">
+                                <i>
+                                </i>
+                                Historical
+                            </span>
+                            <span class="f">
+                                <i>
+                                </i>
+                                Forecast (Estimated)
+                            </span>
+                        </div>
+                        <div class="chart">
+                            No chart yet. Select a skill to see its trend once data is available.
+                        </div>
+                        <div class="axis">
+                            <span>
+                                2021
+                            </span>
+                            <span>
+                                2022
+                            </span>
+                            <span>
+                                2023
+                            </span>
+                            <span>
+                                2024
+                            </span>
+                            <span>
+                                2025
+                            </span>
+                            <span>
+                                2026
+                            </span>
+                            <span>
+                                2027
+                            </span>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <h2>Data Source</h2>
+
+                        <a class="src" href="https://open.dosm.gov.my/data-catalogue/wages_occupation" target="_blank" rel="noopener noreferrer">
+                            <span class="flag">🇲🇾</span>
+                            <span class="lines">
+                                <b>Wages by Occupation</b>
+                                <small>DOSM Open Data • Used in the table and chart</small>
+                            </span>
+                            <span class="ext">↗</span>
+                        </a>
+
+                        <a class="src" href="https://open.dosm.gov.my/data-catalogue/wages_skill" target="_blank" rel="noopener noreferrer">
+                            <span class="flag">🇲🇾</span>
+                            <span class="lines">
+                                <b>Wages by Skill Level</b>
+                                <small>DOSM Open Data • Not shown yet</small>
+                            </span>
+                            <span class="ext">↗</span>
+                        </a>
+
+                        <a class="src" href="https://open.dosm.gov.my/data-catalogue/wages_industry" target="_blank" rel="noopener noreferrer">
+                            <span class="flag">🇲🇾</span>
+                            <span class="lines">
+                                <b>Wages by Industry</b>
+                                <small>DOSM Open Data • Not shown yet</small>
+                            </span>
+                            <span class="ext">↗</span>
+                        </a>
+                    </section>
+
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            © 2026 K&amp;Z. People × AI × Sustainable Tomorrow.
+        </footer>
+
+        <script>
+
+            const $=s=>document.querySelector(s);
+
+            /* Sidebar: hover the left edge, or use the menu button */
+            const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim'),topbar=$('#top');
+            function setMenu(o){
+                side.classList.toggle('show',o);scrim.classList.toggle('show',o);
+                btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);
+                btn.setAttribute('aria-label',o?'Close menu':'Open menu');
+            }
+            btn.onclick=()=>setMenu(!side.classList.contains('show'));
+            scrim.onclick=()=>setMenu(false);
+            addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+            addEventListener('scroll',()=>topbar.classList.toggle('solid',scrollY>30),{passive:true});
+
+            /* Tabs + real wage data */
+            const tabBtns=[...document.querySelectorAll('.tabs button')];
+            let wageData=null, currentTab=0, selectedName=null;
+
+            const NICE = {
+            clerical:'Clerical support', craft:'Craft & trades', agriculture:'Agriculture & fishery',
+            operators:'Plant & machine operators', service_sales:'Service & sales', technicians:'Technicians',
+            elementary:'Elementary occupations', professionals:'Professionals', managers:'Managers'
+            };
+            const nice = n => NICE[n] || n;
+
+            function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, c => ({
+                "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+            })[c]);
+            }
+
+            function listForTab(i){
+            const list = [...wageData.occupations];          // already sorted high -> low
+            if (i === 1) list.reverse();                     // slowest growth first
+            return list;
+            }
+
+            function renderRows(){
+            const rowsBox = $('#rows'), hint = $('.hint-line');
+            if (currentTab === 2) {
+                rowsBox.innerHTML = '';
+                hint.textContent = 'Emerging roles need job-posting data, which is not connected yet.';
+                return;
+            }
+            const list = listForTab(currentTab);
+            const maxAbs = Math.max(...list.map(o => Math.abs(o.change_pct)), 1);
+
+            rowsBox.innerHTML = list.map(o => {
+                const w = Math.max(4, Math.abs(o.change_pct) / maxAbs * 100);
+                const sel = o.name === selectedName ? ' style="background:rgba(255,255,255,.05)"' : '';
+                return `<div class="row" data-name="${escapeHtml(o.name)}"${sel}>
+                <span style="font-size:.92rem;cursor:pointer">${escapeHtml(nice(o.name))}</span>
+                <span class="track"><i style="display:block;height:100%;width:${w}%;border-radius:7px;background:linear-gradient(90deg,var(--green),var(--sky))"></i></span>
+                <span style="text-align:right;font-weight:800;font-size:.92rem">${o.change_pct > 0 ? '+' : ''}${o.change_pct}%</span>
+                </div>`;
+            }).join('');
+
+            rowsBox.querySelectorAll('.row').forEach(r => r.onclick = () => {
+                selectedName = r.dataset.name;
+                renderRows(); renderChart();
+            });
+            hint.textContent = 'Based on median monthly wages (DOSM). Click an occupation to see its trend. This shows wage growth, not skill demand.';
+            }
+
+            function renderChart(){
+            const chart = $('.chart'), axis = $('.axis');
+            const occ = wageData.occupations.find(o => o.name === selectedName);
+            if (!occ) return;
+
+            const s = occ.series, W = 320, H = 200, padL = 46, padR = 12, padT = 14, padB = 8;
+            const xs = s.map(p => p.year), ys = s.map(p => p.median);
+            const minX = Math.min(...xs), maxX = Math.max(...xs);
+            const minY = Math.min(...ys) * 0.9, maxY = Math.max(...ys) * 1.05;
+            const X = v => padL + (v - minX) / (maxX - minX) * (W - padL - padR);
+            const Y = v => padT + (1 - (v - minY) / (maxY - minY)) * (H - padT - padB);
+            const pts = s.map(p => X(p.year).toFixed(1) + ',' + Y(p.median).toFixed(1)).join(' ');
+            const last = s[s.length - 1];
+
+            chart.style.padding = '0';
+            chart.style.border = '1.5px solid var(--line)';
+            chart.innerHTML = `
+                <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:100%" role="img"
+                    aria-label="Median monthly wage for ${escapeHtml(nice(occ.name))}, ${minX} to ${maxX}">
+                <text x="${padL - 6}" y="${Y(maxY / 1.05) + 4}" fill="#a9c3cf" font-size="9" text-anchor="end">RM ${Math.round(maxY / 1.05).toLocaleString()}</text>
+                <text x="${padL - 6}" y="${Y(minY / 0.9) + 4}" fill="#a9c3cf" font-size="9" text-anchor="end">RM ${Math.round(minY / 0.9).toLocaleString()}</text>
+                <polyline points="${pts}" fill="none" stroke="#19b4d6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="${X(last.year)}" cy="${Y(last.median)}" r="4" fill="#12b57b"/>
+                <text x="${W - padR}" y="${Y(last.median) - 9}" fill="#fff" font-size="10" font-weight="700" text-anchor="end">RM ${last.median.toLocaleString()}</text>
+                </svg>`;
+
+            const step = Math.ceil((maxX - minX) / 5);
+            const labels = [];
+            for (let y = minX; y <= maxX; y += step) labels.push(y);
+            if (labels[labels.length - 1] !== maxX) labels.push(maxX);
+            axis.innerHTML = labels.map(y => `<span>${y}</span>`).join('');
+
+            document.querySelectorAll('.col .panel h2')[0].textContent =
+                'Median wage: ' + nice(occ.name);
+            }
+
+            tabBtns.forEach(b => b.onclick = () => {
+            const i = +b.dataset.tab;
+            tabBtns.forEach((x, j) => x.classList.toggle('on', j === i));
+            $('#pill').style.transform = `translateX(${i * 100}%)`;
+            currentTab = i;
+            if (!wageData) return;
+            renderRows();
+            });
+            async function loadWageContext() {
+                const chart = $('.chart'), hint = $('.hint-line');
+                try {
+                    const response = await fetch('/api/future-skills/wage-trends');
+                    if (!response.ok) throw new Error('Could not load wage data');
+                    wageData = await response.json();
+
+                    if (!wageData.occupations || !wageData.occupations.length) {
+                        chart.textContent = 'No wage records available.';
+                        return;
+                    }
+
+                    // Be honest about what this data is.
+                    document.querySelector('.layout .panel h2').textContent =
+                        'Fastest-Growing Occupations by Wage';
+                    const heads = document.querySelectorAll('.thead span');
+                    heads[0].textContent = 'Occupation';
+                    heads[1].textContent = `Wage Growth (${wageData.start_year}–${wageData.latest_year})`;
+
+                    document.querySelector('.legend .f').style.display = 'none';   // no forecast model yet
+                    selectedName = wageData.occupations[0].name;
+                    renderRows();
+                    renderChart();
+                } catch (error) {
+                    console.error(error);
+                    chart.textContent = 'Unable to load wage data. Please try again.';
+                    hint.textContent = 'Wage data could not be loaded.';
+                }
+            }
+
+            loadWageContext();
+        </script>
+
+    </body>
+</html>

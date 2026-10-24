@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Profile | K&amp;Z</title>
+<link rel="icon" href="static/images/logoKZ.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#08233f;--deep:#0a3158;--teal:#00a896;--green:#12b57b;--sky:#19b4d6;--amber:#f6b02c;--red:#ff6b6b;
+  --ink:#eaf6f8;--muted:#a9c3cf;--glass:rgba(8,35,63,.6);--card:rgba(255,255,255,.05);--line:rgba(255,255,255,.14);
+  --display:'Bricolage Grotesque',system-ui,sans-serif;--body:'DM Sans',system-ui,sans-serif;--side:268px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:var(--navy);color:var(--ink);line-height:1.55;overflow-x:hidden;min-height:100vh;
+  background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 70%,rgba(25,180,214,.12),transparent)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+
+/* SIDEBAR (hover left edge, or use menu button) */
+.edge{position:fixed;left:0;top:0;bottom:0;width:18px;z-index:80}
+.edge::after{content:"";position:absolute;left:0;top:50%;width:4px;height:90px;transform:translateY(-50%);border-radius:0 4px 4px 0;background:linear-gradient(var(--green),var(--amber));animation:hint 2.4s ease-in-out 1.2s 3}
+@keyframes hint{50%{width:12px}}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:90;display:flex;flex-direction:column;padding:18px 14px;background:linear-gradient(180deg,#0a2d52,#06192d);border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sidebar.show,.edge:hover+.sidebar,.sidebar:hover{transform:none;box-shadow:24px 0 60px rgba(0,0,0,.45)}
+.s-brand{display:flex;align-items:center;gap:10px;padding:2px 6px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.s-brand img{height:52px;background:#fff;border-radius:10px;padding:3px}
+.s-brand span{font:800 1.3rem var(--display)}
+.s-nav,.s-foot{list-style:none;display:grid;gap:3px}
+.s-nav{flex:1;align-content:start;overflow:auto}
+.s-foot{border-top:1px solid var(--line);padding-top:10px}
+.s-nav a,.s-foot a{display:flex;align-items:center;gap:13px;padding:11px 14px;border-radius:12px;color:var(--muted);font-weight:500;transition:background* .2s,color .2s,transform .2s}
+.s-nav a:hover,.s-foot a:hover{background:rgba(255,255,255,.08);color:#fff}
+.s-nav a:hover{transform:translateX(4px)}
+.s-nav a.active{background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));color:#fff;border:1px solid rgba(0,168,150,.5)}
+.ic{width:22px;text-align:center}
+.scrim{position:fixed;inset:0;background:rgba(3,12,22,.55);backdrop-filter:blur(3px);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.show{opacity:1;pointer-events:auto}
+.top{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:14px;padding:12px 4vw;transition:background* .3s}
+.top.solid{background:var(--glass);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.menu-btn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:grid;place-items:center;transition:background* .2s}
+.menu-btn:hover{background:var(--teal)}
+.menu-btn svg{width:22px;height:22px}
+.menu-btn line{transition:transform .3s,opacity .3s;transform-origin:center}
+.menu-btn.open .l1{transform:translateY(6px) rotate(45deg)}
+.menu-btn.open .l2{opacity:0}
+.menu-btn.open .l3{transform:translateY(-6px) rotate(-45deg)}
+.top .logo{height:46px;background:#fff;border-radius:10px;padding:3px}
+.crumb{margin-left:auto;font-size:.85rem;color:var(--muted)}
+.crumb b{color:#fff}
+
+/* PAGE */
+main{max-width:1100px;margin:0 auto;padding:116px 5vw 80px}
+h1{font:800 clamp(2rem,4.4vw,3rem)/1.08 var(--display);letter-spacing:-.02em}
+.sub{color:var(--muted);margin:10px 0 28px;max-width:60ch;font-size:1.05rem}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;backdrop-filter:blur(10px)}
+
+/* TABS */
+.tabs{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:rgba(0,0,0,.22);border-radius:14px;padding:5px;margin-bottom:22px}
+.tabs button{position:relative;z-index:1;border:0;background:none;color:var(--muted);padding:11px 8px;font-weight:700;font-size:.95rem;cursor:pointer;border-radius:10px;transition:color .25s}
+.tabs button.on{color:#fff}
+.tabs .pill{position:absolute;top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/3);border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--green));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.tab-panel{display:none}
+.tab-panel.on{display:block;animation:fade .35s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+
+/* DROP ZONE */
+.drop{position:relative;border:2px dashed rgba(255,255,255,.3);border-radius:20px;padding:46px 20px;text-align:center;transition:border-color .25s,background* .25s,transform .25s;cursor:pointer}
+.drop:hover,.drop.over{border-color:var(--teal);background:rgba(0,168,150,.1)}
+.drop.over{transform:scale(1.01);border-style:solid}
+.drop .cloud{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:rgba(0,168,150,.2);border:1px solid rgba(0,168,150,.5);animation:float 3s ease-in-out infinite}
+.drop .cloud svg{width:30px;height:30px}
+@keyframes float{50%{transform:translateY(-6px)}}
+.drop h3{font:700 1.15rem var(--display)}
+.drop .or{color:var(--muted);margin:6px 0 14px;font-size:.92rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 30px;border-radius:99px;border:0;font:700 .98rem var(--body);background:linear-gradient(135deg,var(--teal),var(--green));color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(0,168,150,.35);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,168,150,.5)}
+.btn.secondary{background:rgba(255,255,255,.1);box-shadow:none;border:1px solid var(--line)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.note{margin-top:16px;color:var(--muted);font-size:.84rem}
+.error{display:none;margin-top:14px;padding:11px 16px;border-radius:12px;background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.5);color:#ffc9c9;font-size:.92rem}
+.error.show{display:block;animation:fade .3s}
+
+/* FILE ROW */
+.file{display:none;align-items:center;gap:14px;margin-top:18px;padding:14px 18px;border-radius:16px;background:rgba(18,181,123,.1);border:1px solid rgba(18,181,123,.45)}
+.file.show{display:flex;animation:fade .35s}
+.file .ficon{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;background:rgba(255,255,255,.1)}
+.file .meta{flex:1;min-width:0}
+.file .name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file .st{font-size:.85rem;color:#8ff0c5}
+.bar{height:4px;border-radius:4px;background:rgba(255,255,255,.15);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--sky));transition:width .12s linear}
+.file .tick{width:30px;height:30px;border-radius:50%;display:none;place-items:center;background:var(--green);font-size:.9rem}
+.file.done .tick{display:grid}
+.file .rm{border:0;background:rgba(255,255,255,.1);color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem}
+.file .rm:hover{background:var(--red)}
+
+/* STATIC TABS (UI only) */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid .full{grid-column:1/-1}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:5px;font-weight:500}
+input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:#fff;font:inherit}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.35)}
+textarea{min-height:90px;resize:vertical}
+.sample{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:22px;border-radius:18px;border:1px solid var(--line);background:rgba(0,0,0,.2)}
+.sample .ficon{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;background:rgba(246,176,44,.18)}
+
+/* ANALYSIS */
+.result{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;margin-top:30px}
+.result h2{font:800 1.5rem var(--display);margin-bottom:14px}
+.analysis{display:grid;grid-template-columns:230px 1fr;gap:20px}
+.score{text-align:center;padding:20px 14px;border-radius:20px;border:1px solid var(--line);background:rgba(0,0,0,.2)}
+.score h4{font-size:.88rem;font-weight:700;margin-bottom:8px}
+.gauge{position:relative;width:150px;height:150px;margin:0 auto}
+.gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge circle{fill:none;stroke-width:12;stroke-linecap:round}
+.gauge .trk{stroke:rgba(255,255,255,.12)}
+.gauge .val{stroke:url(#gg);stroke-dasharray:408;stroke-dashoffset:408;transition:stroke-dashoffset 1s}
+.gauge .num{position:absolute;inset:0;display:grid;place-content:center;font:800 2.6rem/1 var(--display)}
+.gauge .num small{font:500 .8rem var(--body);color:var(--muted)}
+.badge{display:inline-block;margin-top:10px;padding:5px 18px;border-radius:99px;font-weight:700;font-size:.85rem;background:rgba(255,255,255,.1);color:var(--muted)}
+.metrics{list-style:none;display:grid;gap:10px;align-content:start}
+.metrics li{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.2)}
+.metrics .row{display:flex;align-items:center;gap:10px;font-weight:500}
+.metrics .dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.3)}
+.metrics .pct{margin-left:auto;font-weight:800;color:var(--muted)}
+.metrics .bar{margin-top:8px}
+.empty-note{margin-top:14px;padding:12px 16px;border-radius:12px;background:rgba(246,176,44,.1);border:1px solid rgba(246,176,44,.35);color:#ffe2a8;font-size:.9rem}
+.sugg h3{font:700 1.05rem var(--display);margin-bottom:12px}
+.sugg .empty{display:grid;place-items:center;text-align:center;gap:6px;padding:30px 14px;border:1.5px dashed var(--line);border-radius:16px;color:var(--muted);font-size:.9rem}
+.sugg .empty b{font-size:1.8rem}
+.sugg .btn{width:100%;margin-top:14px}
+.panel.sugg{display:flex;flex-direction:column}
+.panel.sugg .empty{flex:1}
+footer{padding:26px 5vw;text-align:center;font-size:.85rem;color:var(--muted);background:#041321}
+@media(max-width:900px){
+  .result{grid-template-columns:1fr}
+  .analysis{grid-template-columns:1fr}
+  .crumb{display:none}
+  .edge{display:none}
+  .sample{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="edge" aria-hidden="true"></div>
+<aside class="sidebar" id="sidebar" aria-label="Main menu">
+  <div class="s-brand"><img src="static/images/logoKZ.png" alt="K&amp;Z logo"><span>K&amp;Z</span></div>
+  <ul class="s-nav">
+    <li><a href="/home"><span class="ic">🏠</span>Home</a></li>
+    <li><a href="/mabout"><span class="ic">ℹ️</span>About Us</a></li>
+    <li><a href="#" class="active" aria-current="page"><span class="ic">👤</span>My Profile</a></li>
+    <li><a href="/career-quiz"><span class="ic">📝</span>Career Quiz</a></li>
+    <li><a href="/futuresk"><span class="ic">🔮</span>Future Skills</a></li>
+    <li><a href="/careerde"><span class="ic">🎯</span>Career Matches</a></li>
+    <li><a href="/reskilling"><span class="ic">🛠</span>Reskilling Plan</a></li>
+    <li><a href="/sdg"><span class="ic">🌏</span>SDG Impact</a></li>
+    <li><a href="/scenarios"><span class="ic">🎛</span>Scenario Simulator</a></li>
+  </ul>
+  <ul class="s-foot">
+    <li><a href="/settings"><span class="ic">⚙️</span>Settings</a></li>
+    <li><a href="/logout"><span class="ic">🚪</span>Logout</a></li>
+  </ul>
+</aside>
+<div class="scrim" id="scrim"></div>
+
+<header class="top" id="top">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line class="l1" x1="4" y1="6" x2="20" y2="6"/><line class="l2" x1="4" y1="12" x2="20" y2="12"/><line class="l3" x1="4" y1="18" x2="20" y2="18"/></svg>
+  </button>
+  <a href="#"><img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z"></a>
+  <div class="crumb">K&amp;Z / <b>My Profile</b></div>
+</header>
+
+<main>
+  <h1>My Profile</h1>
+  <p class="sub">Upload your resume or fill in your details. We'll analyse your skills, experience and give suggestions to make your resume stronger.</p>
+
+  <div class="panel">
+    <div class="tabs" role="tablist">
+      <span class="pill" id="pill"></span>
+      <button class="on" role="tab" data-tab="0">Upload Resume</button>
+      <button role="tab" data-tab="1">Fill in Form</button>
+      <button role="tab" data-tab="2">Use Sample CV</button>
+    </div>
+
+    <!-- UPLOAD (working) -->
+    <div class="tab-panel on" data-panel="0">
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload resume">
+        <div class="cloud">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7ff0d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+        </div>
+        <h3>Drag and drop your resume (PDF, DOCX)</h3>
+        <p class="or">or</p>
+        <button class="btn" id="chooseBtn" type="button">Choose File</button>
+        <p class="note">Max file size 5MB &nbsp;•&nbsp; Your latest resume is saved to your account so you can come back to it. Press ✕ to delete it.</p>
+        <input type="file" id="fileInput" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+      </div>
+      <div class="error" id="error" role="alert"></div>
+      <div class="file" id="file">
+        <div class="ficon">📄</div>
+        <div class="meta">
+          <div class="name" id="fname">my_resume.pdf</div>
+          <div class="st" id="fstatus">Uploading…</div>
+          <div class="bar"><i id="fbar"></i></div>
+        </div>
+        <div class="tick">✓</div>
+        <button class="rm" id="rm" aria-label="Remove file" type="button">✕</button>
+      </div>
+    </div>
+
+    <!-- FILL IN FORM (UI only) -->
+    <div class="tab-panel" data-panel="1">
+      <div class="form-grid">
+        <div><label>Full name</label><input placeholder="e.g. Aisyah Rahman"></div>
+        <div><label>Email</label><input type="email" placeholder="you@example.com"></div>
+        <div><label>Highest education</label>
+          <select><option>Select</option><option>Diploma</option><option>Bachelor's degree</option><option>Master's degree</option><option>Other</option></select>
+        </div>
+        <div><label>Years of experience</label><input placeholder="e.g. 2"></div>
+        <div class="full"><label>Key skills</label><input placeholder="e.g. Python, Excel, Communication"></div>
+        <div class="full"><label>Work experience</label><textarea placeholder="Briefly describe your roles and achievements"></textarea></div>
+        <div class="full"><button class="btn" type="button">Save details</button></div>
+      </div>
+    </div>
+
+    <!-- SAMPLE CV (UI only) -->
+    <div class="tab-panel" data-panel="2">
+      <div class="sample">
+        <div class="ficon">📑</div>
+        <div>
+          <h3 style="font:700 1.1rem var(--display)">Sample CV</h3>
+          <p style="color:var(--muted);font-size:.92rem">Try K&amp;Z with an example resume to see how the analysis will look.</p>
+        </div>
+        <a href="#" class="btn secondary">Use sample</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="result">
+    <section class="panel">
+      <h2>Resume Analysis Result</h2>
+      <div class="analysis">
+        <div class="score">
+          <h4>Resume Quality Score</h4>
+          <div class="gauge">
+            <svg viewBox="0 0 150 150">
+              <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12b57b"/><stop offset="1" stop-color="#19b4d6"/></linearGradient></defs>
+              <circle class="trk" cx="75" cy="75" r="65"/>
+              <circle class="val" id="gaugeVal" cx="75" cy="75" r="65"/>
+            </svg>
+            <div class="num"><span id="score">0</span><small>/100</small></div>
+          </div>
+          <span class="badge">No result yet</span>
+        </div>
+        <ul class="metrics">
+          <li><div class="row"><span class="dot"></span><span class="lbl">Contact Information</span><span class="pct">0%</span></div><div class="bar"><i></i></div></li>
+          <li><div class="row"><span class="dot"></span><span class="lbl">Education</span><span class="pct">0%</span></div><div class="bar"><i></i></div></li>
+          <li><div class="row"><span class="dot"></span><span class="lbl">Work Experience</span><span class="pct">0%</span></div><div class="bar"><i></i></div></li>
+          <li><div class="row"><span class="dot"></span><span class="lbl">Skills</span><span class="pct">0%</span></div><div class="bar"><i></i></div></li>
+          <li><div class="row"><span class="dot"></span><span class="lbl">Projects &amp; Certifications</span><span class="pct">0%</span></div><div class="bar"><i></i></div></li>
+        </ul>
+      </div>
+      <p class="empty-note" id="analysisNote">No analysis yet. Upload a resume to get started. Scores stay at 0% until analysis is available.</p>
+      <a href="#" class="btn" style="margin-top:16px">View Detailed Feedback →</a>
+    </section>
+
+    <aside class="panel sugg">
+      <h3>Key Suggestions</h3>
+      <div class="empty"><b>💡</b>Suggestions will appear here after your resume is analysed.</div>
+      <a href="#" class="btn secondary">See Before &amp; After Example</a>
+    </aside>
+  </div>
+</main>
+
+<footer>© 2026 K&amp;Z. People × AI × Sustainable Tomorrow.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+
+/* Sidebar: hover the left edge, or use the menu button */
+const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim');
+function setMenu(o){side.classList.toggle('show',o);scrim.classList.toggle('show',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o)}
+btn.onclick=()=>setMenu(!side.classList.contains('show'));
+scrim.onclick=()=>setMenu(false);
+addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+addEventListener('scroll',()=>$('#top').classList.toggle('solid',scrollY>30),{passive:true});
+
+/* Tabs */
+const tabBtns=[...document.querySelectorAll('.tabs button')],panels=[...document.querySelectorAll('.tab-panel')];
+tabBtns.forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.tab;
+  tabBtns.forEach((x,j)=>x.classList.toggle('on',j===i));
+  panels.forEach((p,j)=>p.classList.toggle('on',j===i));
+  $('#pill').style.transform=`translateX(${i*100}%)`;
+});
+
+/* Upload from local drive (PDF / DOCX, max 5MB) */
+const MAX=5*1024*1024, drop=$('#drop'), input=$('#fileInput'), err=$('#error'), box=$('#file');
+const fmt=n=>n<1048576?(n/1024).toFixed(0)+' KB':(n/1048576).toFixed(2)+' MB';
+function showError(m){err.textContent=m;err.classList.add('show')}
+
+const CIRC = 2 * Math.PI * 65;
+const METRIC_NAMES = ['contact','education','experience','skills','projects'];
+const DEFAULT_NOTE = $('#analysisNote').textContent;
+const DEFAULT_SUGG = document.querySelector('.sugg .empty').innerHTML;
+
+function renderResult(result){
+  $('#score').textContent = result.quality_score;
+  const g = $('#gaugeVal');
+  g.style.strokeDasharray = CIRC;
+  g.style.strokeDashoffset = CIRC * (1 - result.quality_score / 100);
+  document.querySelector('.score .badge').textContent = 'Section completeness';
+
+  const top = result.top_categories || [];
+  const topText = top.length
+    ? top.map(t => t.category + ' ' + t.confidence + '%').join(' • ')
+    : result.predicted_category + ' ' + result.model_confidence + '%';
+  $('#analysisNote').textContent =
+    'Closest career categories: ' + topText +
+    ' • The score on the left measures section completeness, not overall resume quality.';
+
+  document.querySelectorAll('.metrics li').forEach((item, i) => {
+    const name = METRIC_NAMES[i];
+    if (!name) return;
+    const value = result.metrics[name] ?? 0;
+    item.querySelector('.pct').textContent = value + '%';
+    item.querySelector('.bar i').style.width = value + '%';
+  });
+
+  const sb = document.querySelector('.sugg .empty');
+  sb.replaceChildren();
+  if (result.suggestions.length > 0) {
+    const h = document.createElement('strong');
+    h.textContent = 'Recommended improvements';
+    sb.appendChild(h);
+    result.suggestions.forEach(t => {
+      const p = document.createElement('p');
+      p.textContent = '• ' + t;   // textContent: never interpreted as HTML
+      sb.appendChild(p);
+    });
+  } else {
+    sb.textContent = 'The main resume sections were detected. Review the content for relevance and impact.';
+  }
+}
+
+function resetResult(){
+  $('#score').textContent = '0';
+  $('#gaugeVal').style.strokeDashoffset = CIRC;
+  document.querySelector('.score .badge').textContent = 'No result yet';
+  $('#analysisNote').textContent = DEFAULT_NOTE;
+  document.querySelectorAll('.metrics li').forEach(item => {
+    item.querySelector('.pct').textContent = '0%';
+    item.querySelector('.bar i').style.width = '0%';
+  });
+  document.querySelector('.sugg .empty').innerHTML = DEFAULT_SUGG;
+}
+
+async function handle(f) {
+  err.classList.remove('show');
+  if (!f) return;
+
+  if (!/\.(pdf|docx)$/i.test(f.name)) {
+    showError('Please upload a PDF or DOCX file.');
+    return;
+  }
+  if (f.size > MAX) {
+    showError('File is too large (' + fmt(f.size) + '). Maximum size is 5MB.');
+    return;
+  }
+
+  $('#fname').textContent = f.name;
+  box.classList.remove('done');
+  box.classList.add('show');
+  $('#fstatus').textContent = 'Analysing resume…';
+  $('#fbar').style.width = '25%';
+
+  const formData = new FormData();
+  formData.append('file', f);
+
+  try {
+    const response = await fetch('/api/resume/analyze', { method:'POST', body:formData });
+    let result = {};
+    try { result = await response.json(); } catch (_) {}
+
+    if (!response.ok) throw new Error(result.detail || 'Resume analysis failed.');
+
+    box.classList.add('done');
+    $('#fbar').style.width = '100%';
+    $('#fstatus').textContent = 'Analysis complete • ' + fmt(f.size);
+    renderResult(result);
+  } catch (error) {
+    box.classList.remove('done');
+    $('#fstatus').textContent = 'Analysis failed';
+    $('#fbar').style.width = '0%';
+    showError(error.message || 'Unable to analyse this resume.');
+  }
+}
+
+/* Restore the last saved analysis when the page opens */
+(async function restoreLatest(){
+  try {
+    const r = await fetch('/api/resume/latest');
+    if (!r.ok) return;
+    const { result } = await r.json();
+    if (!result) return;
+
+    $('#fname').textContent = result.filename;
+    box.classList.add('show','done');
+    $('#fbar').style.width = '100%';
+    $('#fstatus').textContent = 'Last analysis • ' +
+      new Date(result.analysed_at).toLocaleString();
+    renderResult(result);
+  } catch (_) { /* stay on the empty state */ }
+})();
+
+$('#chooseBtn').onclick=e=>{e.stopPropagation();input.click()};
+drop.onclick=()=>input.click();
+drop.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}};
+input.onchange=()=>{handle(input.files[0])};
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>handle(e.dataTransfer.files[0]));
+
+$('#rm').onclick=async()=>{
+  input.value='';
+  box.classList.remove('show','done');
+  err.classList.remove('show');
+  resetResult();
+  try { await fetch('/api/resume/latest',{method:'DELETE'}); } catch(_) {}
+};
+</script>
+</body>
+</html>

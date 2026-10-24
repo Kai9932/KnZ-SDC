@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            Career Detail | K&amp;Z
+        </title>
+        <link rel="icon" href="static/images/logoKZ.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+        <style>
+            :root{
+                --navy:#08233f;
+                --deep:#0a3158;
+                --teal:#00a896;
+                --green:#12b57b;
+                --sky:#19b4d6;
+                --amber:#f6b02c;
+                --ink:#eaf6f8;
+                --muted:#a9c3cf;
+                --glass:rgba(8,35,63,.6);
+                --card:rgba(255,255,255,.05);
+                --line:rgba(255,255,255,.14);
+                --display:'Bricolage Grotesque',system-ui,sans-serif;
+                --body:'DM Sans',system-ui,sans-serif;
+                --side:268px;
+            }
+            
+            *{
+                box-sizing:border-box;
+                margin:0;
+                padding:0
+            }
+            
+            body{
+                font-family:var(--body);
+                background:var(--navy);
+                color:var(--ink);
+                line-height:1.55;
+                overflow-x:hidden;
+                min-height:100vh;
+                background-image:radial-gradient(900px 500px at 85% -5%,rgba(0,168,150,.22),transparent),radial-gradient(700px 500px at -5% 70%,rgba(25,180,214,.12),transparent)
+            }
+            
+            a{
+                color:inherit;
+                text-decoration:none
+            }
+            
+            button,select{
+                font-family:inherit
+            }
+            
+            :focus-visible{
+                outline:3px solid var(--amber);
+                outline-offset:3px
+            }
+            
+            /* SIDEBAR (same as other pages) */
+            .edge{
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:18px;
+                z-index:80
+            }
+            
+            .edge::after{
+                content:"";
+                position:absolute;
+                left:0;
+                top:50%;
+                width:4px;
+                height:90px;
+                transform:translateY(-50%);
+                border-radius:0 4px 4px 0;
+                background:linear-gradient(var(--green),var(--amber));
+                animation:hint 2.4s ease-in-out 1.2s 3
+            }
+            
+            @keyframes hint{
+                50%{
+                    width:12px
+                }
+            }
+            
+            .sidebar{
+                position:fixed;
+                left:0;
+                top:0;
+                bottom:0;
+                width:var(--side);
+                z-index:90;
+                display:flex;
+                flex-direction:column;
+                padding:18px 14px;
+                background:linear-gradient(180deg,#0a2d52,#06192d);
+                border-right:1px solid var(--line);
+                transform:translateX(-102%);
+                transition:transform .35s cubic-bezier(.2,.8,.2,1)
+            }
+            
+            .sidebar.show,.edge:hover+.sidebar,.sidebar:hover{
+                transform:none;
+                box-shadow:24px 0 60px rgba(0,0,0,.45)
+            }
+            
+            .s-brand{
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:2px 6px 18px;
+                border-bottom:1px solid var(--line);
+                margin-bottom:12px
+            }
+            
+            .s-brand img{
+                height:52px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+            
+            .s-brand span{
+                font:800 1.3rem var(--display)
+            }
+            
+            .s-nav,.s-foot{
+                list-style:none;
+                display:grid;
+                gap:3px
+            }
+            
+            .s-nav{
+                flex:1;
+                align-content:start;
+                overflow:auto
+            }
+            
+            .s-foot{
+                border-top:1px solid var(--line);
+                padding-top:10px
+            }
+            
+            .s-nav a,.s-foot a{
+                display:flex;
+                align-items:center;
+                gap:13px;
+                padding:11px 14px;
+                border-radius:12px;
+                color:var(--muted);
+                font-weight:500;
+                transition:background .2s,color .2s,transform .2s
+            }
+            
+            .s-nav a:hover,.s-foot a:hover{
+                background:rgba(255,255,255,.08);
+                color:#fff
+            }
+            
+            .s-nav a:hover{
+                transform:translateX(4px)
+            }
+            
+            .s-nav a.active{
+                background:linear-gradient(135deg,rgba(0,168,150,.35),rgba(25,180,214,.2));
+                color:#fff;
+                border:1px solid rgba(0,168,150,.5)
+            }
+            
+            .ic{
+                width:22px;
+                text-align:center
+            }
+            
+            .scrim{
+                position:fixed;
+                inset:0;
+                background:rgba(3,12,22,.55);
+                backdrop-filter:blur(3px);
+                z-index:70;
+                opacity:0;
+                pointer-events:none;
+                transition:opacity .3s
+            }
+            
+            .scrim.show{
+                opacity:1;
+                pointer-events:auto
+            }
+            
+            .top{
+                position:fixed;
+                top:0;
+                left:0;
+                right:0;
+                z-index:60;
+                display:flex;
+                align-items:center;
+                gap:14px;
+                padding:12px 4vw;
+                transition:background .3s
+            }
+            
+            .top.solid{
+                background:var(--glass);
+                backdrop-filter:blur(14px);
+                border-bottom:1px solid var(--line)
+            }
+            
+            .menu-btn{
+                width:46px;
+                height:46px;
+                border-radius:14px;
+                border:1px solid var(--line);
+                background:rgba(255,255,255,.08);
+                color:#fff;
+                cursor:pointer;
+                display:grid;
+                place-items:center;
+                transition:background .2s
+            }
+            
+            .menu-btn:hover{
+                background:var(--teal)
+            }
+            
+            .menu-btn svg{
+                width:22px;
+                height:22px
+            }
+            
+            .menu-btn line{
+                transition:transform .3s,opacity .3s;
+                transform-origin:center
+            }
+            
+            .menu-btn.open .l1{
+                transform:translateY(6px) rotate(45deg)
+            }
+            
+            .menu-btn.open .l2{
+                opacity:0
+            }
+            
+            .menu-btn.open .l3{
+                transform:translateY(-6px) rotate(-45deg)
+            }
+            
+            .top .logo{
+                height:46px;
+                background:#fff;
+                border-radius:10px;
+                padding:3px
+            }
+            
+            .crumb{
+                margin-left:auto;
+                font-size:.85rem;
+                color:var(--muted)
+            }
+            
+            .crumb b{
+                color:#fff
+            }
+            
+            /* PAGE */
+            main{
+                max-width:1180px;
+                margin:0 auto;
+                padding:110px 5vw 80px
+            }
+            
+            .back{
+                display:inline-flex;
+                gap:8px;
+                color:var(--muted);
+                font-size:.9rem;
+                margin-bottom:12px
+            }
+            
+            .back:hover{
+                color:#fff
+            }
+            
+            .head{
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:16px;
+                flex-wrap:wrap;
+                margin-bottom:24px
+            }
+            
+            .title{
+                display:flex;
+                align-items:center;
+                gap:14px;
+                flex-wrap:wrap
+            }
+            
+            h1{
+                font:800 clamp(2rem,4.4vw,3rem)/1.08 var(--display);
+                letter-spacing:-.02em
+            }
+            
+            .badge{
+                padding:5px 14px;
+                border-radius:99px;
+                font-weight:700;
+                font-size:.88rem;
+                border:1.5px dashed var(--line);
+                color:var(--muted)
+            }
+            
+            .save{
+                padding:12px 22px;
+                border-radius:99px;
+                border:0;
+                font-weight:700;
+                color:#fff;
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                box-shadow:0 8px 24px rgba(0,168,150,.3);
+                cursor:pointer;
+                transition:transform .2s
+            }
+            
+            .save:hover{
+                transform:translateY(-2px)
+            }
+            
+            .tabs{
+                position:relative;
+                display:grid;
+                grid-template-columns:repeat(5,1fr);
+                background:rgba(0,0,0,.22);
+                border-radius:14px;
+                padding:5px;
+                margin-bottom:22px
+            }
+            
+            .tabs button{
+                position:relative;
+                z-index:1;
+                border:0;
+                background:none;
+                color:var(--muted);
+                padding:11px 6px;
+                font-weight:700;
+                font-size:.92rem;
+                cursor:pointer;
+                border-radius:10px;
+                transition:color .25s
+            }
+            
+            .tabs button.on{
+                color:#fff
+            }
+            
+            .pill{
+                position:absolute;
+                top:5px;
+                bottom:5px;
+                left:5px;
+                width:calc((100% - 10px)/5);
+                border-radius:10px;
+                background:linear-gradient(135deg,var(--teal),var(--green));
+                transition:transform .35s cubic-bezier(.2,.8,.2,1)
+            }
+            
+            .pane{
+                display:none
+            }
+            
+            .pane.on{
+                display:block
+            }
+            
+            .grid2{
+                display:grid;
+                grid-template-columns:1.4fr 1fr;
+                gap:22px;
+                align-items:start
+            }
+            
+            .col{
+                display:grid;
+                gap:22px
+            }
+            
+            .panel{
+                background:var(--card);
+                border:1px solid var(--line);
+                border-radius:24px;
+                padding:24px;
+                backdrop-filter:blur(10px)
+            }
+            
+            .panel h2{
+                font:800 1.2rem var(--display);
+                margin-bottom:16px
+            }
+            
+            .panel h3{
+                font:700 1rem var(--display);
+                margin-bottom:10px
+            }
+            
+            /* skeleton parts */
+            .ph{
+                display:block;
+                height:12px;
+                border-radius:6px;
+                background:rgba(255,255,255,.1)
+            }
+            
+            .w30{
+                width:30%
+            }
+            
+            .w45{
+                width:45%
+            }
+            
+            .w60{
+                width:60%
+            }
+            
+            .w80{
+                width:80%
+            }
+            
+            .w100{
+                width:100%
+            }
+            
+            .track{
+                height:14px;
+                border-radius:7px;
+                background:rgba(255,255,255,.07)
+            }
+            
+            .dash{
+                border:1.5px dashed var(--line);
+                border-radius:16px;
+                background:rgba(0,0,0,.15);
+                display:grid;
+                place-items:center;
+                color:var(--muted);
+                font-size:.9rem;
+                text-align:center;
+                padding:14px
+            }
+            
+            .note{
+                margin-top:14px;
+                color:var(--muted);
+                font-size:.88rem;
+                text-align:center;
+                padding:12px;
+                border:1.5px dashed var(--line);
+                border-radius:14px
+            }
+            
+            .sel{
+                padding:11px 14px;
+                border-radius:12px;
+                border:1px solid var(--line);
+                background:rgba(0,0,0,.25);
+                color:var(--muted);
+                font-weight:500;
+                width:100%
+            }
+            
+            .sel option{
+                background:#0a2d52
+            }
+            
+            .lbl{
+                font-size:.82rem;
+                color:var(--muted);
+                margin-bottom:6px;
+                display:block
+            }
+            
+            .lines{
+                display:grid;
+                gap:12px
+            }
+            
+            .chk{
+                display:flex;
+                gap:12px;
+                align-items:center
+            }
+            
+            .chk i{
+                flex:none;
+                width:22px;
+                height:22px;
+                border-radius:50%;
+                border:1.5px dashed var(--line)
+            }
+            
+            .chk .ph{
+                flex:1
+            }
+            
+            .img-slot{
+                aspect-ratio:4/3;
+                min-height:220px
+            }
+            
+            .stats{
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:16px
+            }
+            
+            .stat{
+                display:flex;
+                gap:12px;
+                align-items:center;
+                padding:14px;
+                border-radius:16px;
+                background:rgba(0,0,0,.18);
+                border:1px solid var(--line)
+            }
+            
+            .stat i{
+                flex:none;
+                width:40px;
+                height:40px;
+                border-radius:12px;
+                border:1.5px dashed var(--line)
+            }
+            
+            .stat .lines{
+                flex:1;
+                gap:8px
+            }
+            
+            .thead,.row{
+                display:grid;
+                grid-template-columns:1.2fr 1fr 1.2fr 90px;
+                gap:14px;
+                align-items:center
+            }
+            
+            .thead{
+                color:var(--muted);
+                font-size:.85rem;
+                font-weight:700;
+                padding-bottom:10px;
+                border-bottom:1px solid var(--line)
+            }
+            
+            .row{
+                padding:12px 0;
+                border-bottom:1px solid rgba(255,255,255,.06)
+            }
+            
+            .row:last-child{
+                border:0
+            }
+            
+            .row .pill-s{
+                height:24px;
+                border-radius:8px;
+                background:rgba(255,255,255,.08)
+            }
+            
+            .ring{
+                width:150px;
+                height:150px;
+                border-radius:50%;
+                margin:0 auto 14px;
+                border:14px solid rgba(255,255,255,.08);
+                display:grid;
+                place-items:center;
+                color:var(--muted);
+                font-weight:700
+            }
+            
+            .legend-l{
+                display:grid;
+                gap:10px
+            }
+            
+            .legend-l div{
+                display:flex;
+                gap:10px;
+                align-items:center
+            }
+            
+            .legend-l i{
+                width:10px;
+                height:10px;
+                border-radius:50%;
+                background:rgba(255,255,255,.2)
+            }
+            
+            .steps{
+                display:grid;
+                gap:12px
+            }
+            
+            .steps div{
+                display:flex;
+                gap:12px;
+                align-items:center
+            }
+            
+            .steps b{
+                flex:none;
+                width:26px;
+                height:26px;
+                border-radius:50%;
+                display:grid;
+                place-items:center;
+                background:var(--deep);
+                border:1px solid var(--line);
+                font-size:.8rem
+            }
+            
+            .three{
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:14px;
+                margin-bottom:22px
+            }
+            
+            .range{
+                padding:16px;
+                border-radius:16px;
+                background:rgba(0,0,0,.18);
+                border:1px solid var(--line);
+                display:grid;
+                gap:10px
+            }
+            
+            .range small{
+                color:var(--muted);
+                font-weight:700
+            }
+            
+            .chart{
+                height:240px;
+                background:repeating-linear-gradient(0deg,transparent 0 47px,rgba(255,255,255,.06) 47px 48px),rgba(0,0,0,.15)
+            }
+            
+            .axis{
+                display:flex;
+                justify-content:space-between;
+                color:rgba(255,255,255,.35);
+                font-size:.75rem;
+                margin-top:8px;
+                padding:0 6px
+            }
+            
+            .legend{
+                display:flex;
+                justify-content:center;
+                gap:20px;
+                font-size:.82rem;
+                color:var(--muted);
+                margin-bottom:12px
+            }
+            
+            .legend i{
+                display:inline-block;
+                width:9px;
+                height:9px;
+                border-radius:50%;
+                margin-right:6px;
+                background:var(--sky)
+            }
+            
+            .legend span+span i{
+                background:var(--green)
+            }
+            
+            .tiles{
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:12px
+            }
+            
+            .tile{
+                padding:14px;
+                border-radius:14px;
+                background:rgba(0,0,0,.18);
+                border:1px solid var(--line);
+                display:grid;
+                gap:8px
+            }
+            
+            .chips{
+                display:flex;
+                flex-wrap:wrap;
+                gap:8px
+            }
+            
+            .chip{
+                height:28px;
+                border-radius:99px;
+                background:rgba(255,255,255,.08);
+                border:1px dashed var(--line)
+            }
+            
+            .big{
+                display:grid;
+                gap:10px;
+                text-align:center;
+                justify-items:center;
+                margin-bottom:14px
+            }
+            
+            .big .ph{
+                height:22px
+            }
+            
+            .cards{
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:22px
+            }
+            
+            .rcard{
+                display:grid;
+                grid-template-columns:130px 1fr;
+                gap:16px
+            }
+            
+            .rcard .img-slot{
+                aspect-ratio:1;
+                min-height:0;
+                height:130px;
+                padding:0
+            }
+            
+            .rcard .lines{
+                gap:9px
+            }
+            
+            .cmp{
+                margin-top:14px;
+                padding:10px;
+                border-radius:12px;
+                border:1px solid var(--line);
+                background:rgba(255,255,255,.05);
+                color:var(--muted);
+                font-weight:700;
+                text-align:center;
+                grid-column:1/-1
+            }
+            
+            .foot-note{
+                margin-top:22px;
+                color:var(--muted);
+                font-size:.8rem
+            }
+            
+            footer{
+                padding:26px 5vw;
+                text-align:center;
+                font-size:.85rem;
+                color:var(--muted);
+                background:#041321
+            }
+            
+            @media(max-width:900px){
+                .grid2,.cards{
+                    grid-template-columns:1fr
+                }
+                .crumb,.edge{
+                    display:none
+                }
+                .tabs{
+                    overflow-x:auto;
+                    display:flex
+                }
+                .tabs button{
+                    white-space:nowrap;
+                    padding:11px 16px
+                }
+                .pill{
+                    display:none
+                }
+                .tabs button.on{
+                    background:linear-gradient(135deg,var(--teal),var(--green))
+                }
+                .stats,.three,.tiles{
+                    grid-template-columns:1fr
+                }
+                .thead,.row{
+                    grid-template-columns:1fr 1fr 70px
+                }
+                .thead span:nth-child(3),.row>:nth-child(3){
+                    display:none
+                }
+            }
+            
+            @media(prefers-reduced-motion:reduce){
+                *{
+                    animation:none!important;
+                    transition:none!important
+                }
+            }
+
+            .ok{flex:none;width:22px;height:22px;border-radius:50%;background:rgba(18,181,123,.25);color:#8ff0c5;display:grid;place-items:center;font-size:.75rem}
+            .reason{display:flex;gap:12px;align-items:flex-start}
+            .stat i.on{border-style:solid;display:grid;place-items:center;font-style:normal;font-size:1.2rem}
+            .track i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,var(--green),var(--sky))}
+            .chip.t{height:auto;padding:5px 13px;font-size:.85rem;border-style:solid}
+            .st-found{color:#8ff0c5;font-weight:700}.st-missing{color:var(--amber);font-weight:700}.st-unknown{color:var(--muted)}
+            .ring.live{position:relative;border:0;background:conic-gradient(var(--green) calc(var(--p)*1%),rgba(255,255,255,.08) 0)}
+            .ring.live::after{content:"";position:absolute;inset:14px;border-radius:50%;background:#0b2a4a}
+            .ring.live b{position:relative;z-index:1;color:#fff;font-size:1.4rem}
+            .sel[disabled]{opacity:.55;cursor:not-allowed}
+            .cmpbox{margin-top:22px}
+            .cmpbox table{width:100%;border-collapse:collapse;font-size:.92rem}
+            .cmpbox td,.cmpbox th{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+            .cmpbox th{color:var(--muted)}
+            .btn2{padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-weight:700;cursor:pointer}
+        </style>
+
+    </head>
+    <body>
+        <div class="edge" aria-hidden="true">
+        </div>
+        <aside class="sidebar" id="sidebar" aria-label="Main menu">
+            <div class="s-brand">
+                <img src="static/images/logoKZ.png" alt="K&amp;Z logo">
+                <span>
+                    K&amp;Z
+                </span>
+            </div>
+            <ul class="s-nav">
+                <li>
+                    <a href="/home">
+                        <span class="ic">
+                            🏠
+                        </span>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="/mabout">
+                        <span class="ic">
+                            ℹ️
+                        </span>
+                        About Us
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile">
+                        <span class="ic">
+                            👤
+                        </span>
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="/career-quiz">
+                        <span class="ic">
+                            📝
+                        </span>
+                        Career Quiz
+                    </a>
+                </li>
+                <li>
+                    <a href="/futuresk">
+                        <span class="ic">
+                            🔮
+                        </span>
+                        Future Skills
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active" aria-current="page">
+                        <span class="ic">
+                            🎯
+                        </span>
+                        Career Matches
+                    </a>
+                </li>
+                <li>
+                    <a href="/reskilling">
+                        <span class="ic">
+                            🛠
+                        </span>
+                        Reskilling Plan
+                    </a>
+                </li>
+                <li>
+                    <a href="/sdg">
+                        <span class="ic">
+                            🌏
+                        </span>
+                        SDG Impact
+                    </a>
+                </li>
+                <li>
+                    <a href="/scenarios">
+                        <span class="ic">
+                            🎛
+                        </span>
+                        Scenario Simulator
+                    </a>
+                </li>
+            </ul>
+            <ul class="s-foot">
+                <li>
+                    <a href="/settings">
+                        <span class="ic">
+                            ⚙️
+                        </span>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <span class="ic">
+                            🚪
+                        </span>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <div class="scrim" id="scrim">
+        </div>
+
+        <header class="top" id="top">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <line class="l1" x1="4" y1="6" x2="20" y2="6"/>
+                    <line class="l2" x1="4" y1="12" x2="20" y2="12"/>
+                    <line class="l3" x1="4" y1="18" x2="20" y2="18"/>
+                </svg>
+            </button>
+            <a href="#">
+                <img class="logo" src="static/images/logoKZ.png" alt="K&amp;Z">
+            </a>
+            <div class="crumb">
+                K&amp;Z / Career Matches /
+                <b>
+                    Career Detail
+                </b>
+            </div>
+        </header>
+
+        <main>
+        <a href="/career-quiz" class="back">← Back to Results</a>
+        <div class="head">
+            <div class="title"><h1 id="cTitle">Loading…</h1><span class="badge" id="cMatch">– % match</span></div>
+            <button class="save" id="saveBtn" type="button" disabled>Save to My Plan</button>
+        </div>
+        <p class="note" id="msg" hidden></p>
+
+        <div class="tabs" role="tablist">
+            <span class="pill" id="pill"></span>
+            <button class="on" role="tab" data-tab="0">Overview</button>
+            <button role="tab" data-tab="1">Skills &amp; Requirements</button>
+            <button role="tab" data-tab="2">Salary in Malaysia</button>
+            <button role="tab" data-tab="3">Job Outlook</button>
+            <button role="tab" data-tab="4">Related Roles</button>
+        </div>
+
+        <!-- 1. OVERVIEW -->
+        <section class="pane on">
+            <div class="grid2">
+            <div class="panel"><h2>What this career does</h2><p id="cDesc"></p><p class="foot-note">Description from O*NET.</p></div>
+            <div class="panel"><h2>Why this career matches you</h2><div class="lines" id="reasons"></div></div>
+            </div>
+            <div class="panel" style="margin-top:22px">
+            <h2>Key information</h2>
+            <div class="stats" id="keyInfo"></div>
+            <p class="foot-note">The career match % reflects interest alignment only. It is separate from the skills match on the next tab.</p>
+            </div>
+        </section>
+
+        <!-- 2. SKILLS -->
+        <section class="pane">
+            <div class="grid2">
+            <div class="panel">
+                <h2>Required skills for this career</h2>
+                <div class="thead"><span>Skill</span><span>Importance</span><span>Resume evidence</span><span>Status</span></div>
+                <div id="skillRows"></div>
+                <p class="note" id="skillNote"></p>
+            </div>
+            <div class="col">
+                <div class="panel">
+                <h2>Skills match summary</h2>
+                <div class="ring live" id="ring"><b>–</b></div>
+                <div class="legend-l" id="skillLegend"></div>
+                </div>
+                <div class="panel">
+                <h2>Skill gap actions</h2>
+                <p style="color:var(--muted);font-size:.92rem;margin-bottom:14px">Send the skills not detected in your resume to your Reskilling Plan. Courses and learning steps are built there.</p>
+                <button class="save" id="toPlan" type="button" disabled>Send missing skills to Reskilling Plan →</button>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- 3. SALARY -->
+        <section class="pane">
+            <div class="three">
+            <div><label class="lbl">Location</label>
+                <select class="sel" disabled><option>Malaysia (national data only)</option></select></div>
+            <div><label class="lbl" for="fIndustry">Industry (compare)</label>
+                <select class="sel" id="fIndustry"><option value="">No industry selected</option></select></div>
+            <div><label class="lbl">Experience level</label>
+                <select class="sel" disabled><option>Not available in dataset</option></select></div>
+            </div>
+            <div class="grid2">
+            <div class="col">
+                <div class="panel">
+                <h2>Monthly salary range (MYR)</h2>
+                <div class="three" style="margin:0" id="ranges"></div>
+                <p class="foot-note" id="rangeNote"></p>
+                </div>
+                <div class="panel">
+                <h2>Median monthly wage trend (OpenDOSM)</h2>
+                <div class="legend" id="salLegend"></div>
+                <div id="salChart"></div>
+                <p class="foot-note" id="salSrc"></p>
+                </div>
+            </div>
+            <div class="panel"><h2>Key takeaways</h2><div class="lines" id="salTake"></div></div>
+            </div>
+        </section>
+
+        <!-- 4. OUTLOOK -->
+        <section class="pane">
+            <div class="grid2">
+            <div class="panel">
+                <h2>Labour-market context</h2>
+                <div class="three" style="margin:0" id="outStats"></div>
+                <p class="foot-note">Wage growth is a labour-market signal for the whole occupation group. It is not a measure of job demand and not a forecast.</p>
+            </div>
+            <div class="panel">
+                <h2>Evidence and confidence</h2>
+                <div class="lines" id="outEvidence"></div>
+            </div>
+            </div>
+            <div class="grid2" style="margin-top:22px;grid-template-columns:1fr 1fr">
+            <div class="panel"><h2>Top industries hiring</h2><p class="note" style="margin:0">Not available yet. This needs dated job-posting data, which isn't connected.</p></div>
+            <div class="panel"><h2>Hot technologies (O*NET)</h2><div class="chips" id="chips"></div></div>
+            </div>
+        </section>
+
+        <!-- 5. RELATED -->
+        <section class="pane">
+            <h2 style="font:800 1.3rem var(--display)">Related career paths</h2>
+            <p style="color:var(--muted);font-size:.92rem;margin-bottom:16px">Careers with a similar interest profile, with your own match shown for each.</p>
+            <div class="cards" id="cards"></div>
+            <div class="panel cmpbox" id="cmpBox" hidden></div>
+        </section>
+        </main>
+
+        <footer>
+            © 2026 K&amp;Z. People × AI × Sustainable Tomorrow.
+        </footer>
+
+        <script>
+            const $=s=>document.querySelector(s);
+            const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim'),topbar=$('#top');
+            function setMenu(o){
+                side.classList.toggle('show',o);scrim.classList.toggle('show',o);
+                btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);
+                btn.setAttribute('aria-label',o?'Close menu':'Open menu');
+            }
+            btn.onclick=()=>setMenu(!side.classList.contains('show'));
+            scrim.onclick=()=>setMenu(false);
+            addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+            addEventListener('scroll',()=>topbar.classList.toggle('solid',scrollY>30),{passive:true});
+            
+            /* Tabs: switch panels (layout only, no data behind them yet) */
+            const tabBtns=[...document.querySelectorAll('.tabs button')],panes=[...document.querySelectorAll('.pane')];
+            tabBtns.forEach(b=>b.onclick=()=>{
+                const i=+b.dataset.tab;
+                tabBtns.forEach((x,j)=>{x.classList.toggle('on',j===i);x.setAttribute('aria-selected',j===i)});
+                panes.forEach((p,j)=>p.classList.toggle('on',j===i));
+                $('#pill').style.transform=`translateX(${i*100}%)`;
+            });
+            
+            /* Salary filters: dropdowns open and change, but have no real options yet.
+            When data is ready, call fillFilter('location', [{value:'kl',label:'Kuala Lumpur'}, ...]) */
+            const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            const rm=n=>n==null?'–':'RM '+Math.round(n).toLocaleString();
+            const code=new URLSearchParams(location.search).get('code')||'top';
+            let D=null;
+
+            fetch('/api/career/'+encodeURIComponent(code)).then(async r=>{
+            const j=await r.json().catch(()=>({}));
+            if(!r.ok) throw new Error(j.error||'Could not load this career.');
+            D=j; renderAll();
+            }).catch(e=>{
+            $('#cTitle').textContent='Career not available';
+            const m=$('#msg'); m.hidden=false;
+            m.innerHTML=esc(e.message)+' <a href="/career-quiz" style="color:var(--sky)">Go to Career Quiz</a>';
+            });
+
+            function renderAll(){
+            $('#cTitle').textContent=D.title;
+            $('#cMatch').textContent=D.match!=null?D.match.toFixed(1)+'% match':'Not ranked';
+            $('#saveBtn').disabled=false; $('#toPlan').disabled=false;
+            if(D.saved) $('#saveBtn').textContent='✓ Saved to My Plan';
+            overview(); skills(); salary(); outlook(); related();
+            }
+
+            /* ---- Overview ---- */
+            function overview(){
+            $('#cDesc').textContent=D.description;
+            $('#reasons').innerHTML=D.reasons.map(t=>`<div class="reason"><span class="ok">✓</span><span>${esc(t)}</span></div>`).join('');
+            if(!D.has_resume) $('#reasons').innerHTML+='<p class="note" style="margin:6px 0 0">No resume analysed yet. Upload one to see skills evidence here.</p>';
+            const ai=D.salary.ai, o=D.outlook;
+            const cards=[
+                ['💰','Typical monthly wage', ai?`${rm(ai.min)} – ${rm(ai.max)}`:rm(D.wage_ref.median),
+                ai?'AI estimate, not official data':'OpenDOSM broad occupation group'],
+                ['📈','Wage growth (3 yrs)', o.growth_pct!=null?`${o.growth_pct>0?'+':''}${o.growth_pct}%`:'Not available',
+                o.growth_pct!=null?'Occupation group, since '+o.since:'No matching wage group'],
+                ['🛠','Hot technologies', o.hot.length?o.hot.slice(0,2).join(', '):'Not available','From O*NET'],
+            ];
+            $('#keyInfo').innerHTML=cards.map(c=>`<div class="stat"><i class="on">${c[0]}</i><div><small style="color:var(--muted)">${c[1]}</small><br><b>${esc(c[2])}</b><br><small style="color:var(--muted)">${esc(c[3])}</small></div></div>`).join('');
+            }
+
+            /* ---- Skills ---- */
+            const ST={found:'Matched',missing:'Not detected',unknown:'–'};
+            const EV={found:'Mentioned in resume',missing:'Not found in resume',unknown:'No resume analysed'};
+            function skills(){
+            const S=D.skills;
+            $('#skillRows').innerHTML=S.map(s=>`<div class="row">
+                <span>${esc(s.name)}<br><small style="color:var(--muted)">${esc(s.kind)}${s.tags.length?' · '+esc(s.tags.join(', ')):''}</small></span>
+                <span class="track">${s.importance!=null?`<i style="width:${s.importance}%"></i>`:''}</span>
+                <span style="color:var(--muted)">${EV[s.status]}</span>
+                <span class="st-${s.status}">${ST[s.status]}</span></div>`).join('');
+            const hit=S.filter(s=>s.status==='found').length, miss=S.filter(s=>s.status==='missing').length;
+            if(D.has_resume&&S.length){
+                const p=Math.round(hit/S.length*100);
+                $('#ring').style.setProperty('--p',p); $('#ring b').textContent=p+'%';
+                $('#skillLegend').innerHTML=`<div><i style="background:var(--green)"></i>${hit} matched</div><div><i style="background:var(--amber)"></i>${miss} not detected</div>`;
+                $('#skillNote').textContent='"Not detected" means the skill was not found in your resume text. It does not mean you lack it. Soft skills are often not written down explicitly.';
+            } else {
+                $('#skillLegend').innerHTML='<div>Upload a resume to see your skills match.</div>';
+                $('#skillNote').textContent='No resume analysed yet, so skill evidence is unavailable.';
+            }
+            }
+
+            /* ---- Save / send to plan ---- */
+            async function savePlan(){
+            const r=await fetch('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({code:D.code,title:D.title,missing_skills:D.skills.filter(s=>s.status==='missing').map(s=>s.name)})});
+            if(!r.ok){const j=await r.json().catch(()=>({}));const m=$('#msg');m.hidden=false;m.textContent=j.error||'Could not save.';}
+            return r.ok;
+            }
+            $('#saveBtn').onclick=async()=>{ if(await savePlan()) $('#saveBtn').textContent='✓ Saved to My Plan'; };
+            $('#toPlan').onclick=async()=>{ if(await savePlan()) location.href='/reskilling'; };
+
+            /* ---- Line chart (inline SVG) ---- */
+            function chart(el,series){
+            const pts=series.flatMap(s=>s.points);
+            if(!pts.length){el.innerHTML='<div class="dash chart">No wage data available for this selection.</div>';return;}
+            const W=640,H=240,L=56,R=14,T=12,B=28;
+            const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+            const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys)*.95,y1=Math.max(...ys)*1.05;
+            const X=x=>L+(x1===x0?.5:(x-x0)/(x1-x0))*(W-L-R), Y=y=>H-B-(y-y0)/((y1-y0)||1)*(H-T-B);
+            let g='';
+            for(let i=0;i<=3;i++){const v=y0+(y1-y0)*i/3;g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(255,255,255,.08)"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end" fill="#a9c3cf" font-size="11">${Math.round(v).toLocaleString()}</text>`;}
+            [...new Set(xs)].sort().forEach(x=>g+=`<text x="${X(x)}" y="${H-8}" text-anchor="middle" fill="#a9c3cf" font-size="11">${x}</text>`);
+            series.forEach(s=>{
+                g+=`<path d="${s.points.map((p,i)=>(i?'L':'M')+X(p.x)+' '+Y(p.y)).join(' ')}" fill="none" stroke="${s.color}" stroke-width="2.5"/>`;
+                s.points.forEach(p=>g+=`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="3.5" fill="${s.color}"><title>${p.x}: RM ${p.y.toLocaleString()}</title></circle>`);
+            });
+            el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" role="img" aria-label="Wage trend chart">${g}</svg>`;
+            }
+
+            /* ---- Salary ---- */
+            function salary(){
+            const S=D.salary, ai=S.ai;
+            $('#ranges').innerHTML=ai?[['Entry-level',ai.min],['Mid-level',ai.median],['Senior-level',ai.max]].map(r=>
+                `<div class="range"><small>${r[0]}</small><b style="font-size:1.15rem">${rm(r[1])}</b></div>`).join('')
+                :'<p class="note" style="grid-column:1/-1;margin:0">No salary estimate available for this career.</p>';
+            $('#rangeNote').textContent=ai?`AI-generated estimate (${ai.confidence} confidence)${ai.note?' · '+ai.note:''}. Not official statistics. DOSM does not publish salaries by experience level.`:'';
+            $('#fIndustry').innerHTML='<option value="">No industry selected</option>'+
+                S.industries.map(i=>`<option value="${esc(i.name)}">${esc(i.name)}</option>`).join('');
+            $('#fIndustry').onchange=drawSalary; drawSalary();
+            }
+            function drawSalary(){
+            const S=D.salary, sel=$('#fIndustry').value, series=[];
+            if(S.group_series.length) series.push({name:S.group+' (occupation group)',color:'#19b4d6',points:S.group_series});
+            const ind=S.industries.find(i=>i.name===sel);
+            if(ind) series.push({name:ind.name+' (industry)',color:'#f6b02c',points:ind.series});
+            $('#salLegend').innerHTML=series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join('');
+            chart($('#salChart'),series);
+            $('#salSrc').textContent='Source: OpenDOSM wages_occupation.csv and wages_industry.csv. Median monthly wage in MYR, both sexes. This is a broad occupation group, not this exact job title.';
+            const t=[], g=S.group_series;
+            if(g.length) t.push(`The ${S.group} group's median wage was ${rm(g[g.length-1].y)} in ${g[g.length-1].x}.`);
+            if(g.length>1){const a=g[0],b=g[g.length-1];t.push(`It changed ${((b.y-a.y)/a.y*100).toFixed(1)}% between ${a.x} and ${b.x}.`);}
+            if(ind&&ind.series.length) t.push(`${ind.name} had a median of ${rm(ind.series[ind.series.length-1].y)} in ${ind.series[ind.series.length-1].x}, for comparison.`);
+            if(!t.length) t.push('No matching OpenDOSM wage group was found for this career.');
+            $('#salTake').innerHTML=t.map(x=>`<div class="reason"><span class="ok">✓</span><span>${esc(x)}</span></div>`).join('');
+            }
+
+            /* ---- Outlook ---- */
+            function outlook(){
+            const o=D.outlook, has=o.growth_pct!=null;
+            $('#outStats').innerHTML=[
+                ['Wage growth (3 yrs)',has?`${o.growth_pct>0?'+':''}${o.growth_pct}%`:'–'],
+                ['Rank among groups',has?`#${o.rank} of ${o.groups}`:'–'],
+                ['Hot technologies',o.hot.length],
+            ].map(r=>`<div class="range"><small>${r[0]}</small><b style="font-size:1.2rem">${esc(r[1])}</b></div>`).join('');
+            const ev=['Source: OpenDOSM occupation wages (labour-market context) and O*NET technology flags.',
+                'No dated job-posting data is connected, so demand trends, hiring industries and forecasts are not shown.',
+                'Confidence: low. Wage growth alone cannot show whether hiring is rising or falling.'];
+            $('#outEvidence').innerHTML=ev.map(x=>`<div class="reason"><span class="ok">i</span><span>${esc(x)}</span></div>`).join('');
+            $('#chips').innerHTML=o.hot.length?o.hot.map(h=>`<span class="chip t">${esc(h)}</span>`).join(''):'<p class="note" style="margin:0">No flagged technologies for this career.</p>';
+            }
+
+            /* ---- Related ---- */
+            function related(){
+            $('#cards').innerHTML=D.related.map((r,i)=>`<div class="panel"><div class="lines">
+                <h3 style="margin:0">${esc(r.title)} ${r.match!=null?`<span class="badge" style="margin-left:6px;border-style:solid">${r.match.toFixed(1)}% match</span>`:''}</h3>
+                <p style="color:var(--muted);font-size:.9rem">${esc(r.description)}…</p>
+                <small style="color:var(--muted)">Overlapping skills</small>
+                <div class="chips">${r.overlap.map(s=>`<span class="chip t">${esc(s)}</span>`).join('')||'<small>None in the top skills</small>'}</div>
+                <small style="color:var(--muted)">Additional skills</small>
+                <div class="chips">${r.extra.map(s=>`<span class="chip t">${esc(s)}</span>`).join('')||'<small>None</small>'}</div>
+                <small style="color:var(--muted)">Salary benchmark (broad group): ${rm(r.wage)}</small>
+                <div style="display:flex;gap:10px;margin-top:6px">
+                <a class="btn2" href="/careerde?code=${encodeURIComponent(r.code)}">View career</a>
+                <button class="btn2" type="button" onclick="compare(${i})">Compare career</button></div>
+            </div></div>`).join('');
+            }
+            function compare(i){
+            const r=D.related[i], b=$('#cmpBox');
+            b.hidden=false;
+            b.innerHTML=`<h2>${esc(D.title)} vs ${esc(r.title)}</h2>
+            <table><tr><th></th><th>${esc(D.title)}</th><th>${esc(r.title)}</th></tr>
+            <tr><th>Your interest match</th><td>${D.match!=null?D.match.toFixed(1)+'%':'–'}</td><td>${r.match!=null?r.match.toFixed(1)+'%':'–'}</td></tr>
+            <tr><th>Shared core skills</th><td colspan="2">${esc(r.overlap.join(', ')||'None in the top skills')}</td></tr>
+            <tr><th>Extra skills in ${esc(r.title)}</th><td colspan="2">${esc(r.extra.join(', ')||'None')}</td></tr>
+            <tr><th>Wage benchmark (broad group)</th><td>${rm(D.wage_ref.median)}</td><td>${rm(r.wage)}</td></tr></table>
+            <p class="foot-note">Why consider it: ${esc(r.why)}</p>`;
+            b.scrollIntoView({behavior:'smooth',block:'nearest'});
+            }
+        </script>
+    </body>
+</html>
