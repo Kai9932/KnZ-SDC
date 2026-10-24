@@ -50,7 +50,7 @@ from fastapi.responses import Response
 
 from models.lesson_ai import generate_lesson, generate_quiz
 
-# Project root: the parent directory of backend/
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
@@ -71,14 +71,14 @@ LESSON_DIR.mkdir(parents=True, exist_ok=True)
 SDG_DIR = DATA_DIR / "sdg"
 SDG_DIR.mkdir(parents=True, exist_ok=True)
 
-MAX_RESUME_SIZE = 5 * 1024 * 1024  # 5 MB
+MAX_RESUME_SIZE = 5 * 1024 * 1024  
 ALLOWED_RESUME_EXTENSIONS = {".pdf", ".docx"}
 
 SC_DIR = DATA_DIR / "scenarios"
 SC_DIR.mkdir(parents=True, exist_ok=True)
 SC_EXPOSURE_FILE = SC_DIR / "exposure_cache.json"
 SC_YEARS = 5
-SC_SPEED = {"moderate": 1.0, "fast": 2.0}  # scenario definition: how fast AI is adopted
+SC_SPEED = {"moderate": 1.0, "fast": 2.0} 
 DEEPSEEK_MODEL = "deepseek-chat"
 
 SETTINGS_DIR = DATA_DIR / "settings"
@@ -86,7 +86,6 @@ SETTINGS_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI()
 
-# Allow Python to import modules from the project root.
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
@@ -106,8 +105,6 @@ QUESTION_CATEGORY = {q: category for category, qs in QUESTION_MAP.items() for q 
 class QuizSubmission(BaseModel):
     answers: dict[int, int]
 
-
-# ---------- RESUME CLASSIFIER V2 ----------
 
 RESUME_MODEL_DIR = BASE_DIR / "models" / "distilbert_resume_classifier_v2"
 RESUME_LABEL_ENCODER = (
@@ -181,7 +178,6 @@ def extract_resume_text(filename: str, content: bytes) -> str:
         document = Document(io.BytesIO(content))
         paragraphs = [p.text for p in document.paragraphs]
 
-        # Include text inside tables, which often contain resume details.
         for table in document.tables:
             for row in table.rows:
                 paragraphs.extend(cell.text for cell in row.cells)
@@ -289,7 +285,6 @@ def predict_resume_category(text: str):
     return category, confidence, top_categories
 
 
-# ---------- RESUME ANALYSIS (saved per user) ----------
 
 logger = logging.getLogger("resume")
 
@@ -396,14 +391,12 @@ def _save_quiz_result(request: Request, record: dict) -> bool:
     try:
         tmp = path.with_suffix(".tmp")
         tmp.write_text(json.dumps(record), encoding="utf-8")
-        tmp.replace(path)  # atomic: never leaves a half-written file
+        tmp.replace(path)
         return True
     except OSError:
         logger.exception("Could not save quiz result")
         return False
 
-
-# ---------- CAREER PLAN (saved per user) ----------
 
 PLAN_DIR = DATA_DIR / "plans"
 PLAN_DIR.mkdir(parents=True, exist_ok=True)
@@ -471,11 +464,10 @@ class ReskillRequest(BaseModel):
     hours: int = Field(5, ge=1, le=15)
     style: str = Field("Mixed", max_length=60)
     free_only: bool = True
-    target_date: str | None = Field(None, max_length=10)  # yyyy-mm-dd
-    force: bool = False  # True = Regenerate button
+    target_date: str | None = Field(None, max_length=10)  
+    force: bool = False 
 
 
-# ---------- RESUME ANALYSIS API ----------
 
 
 @app.post("/api/resume/analyze")
@@ -502,7 +494,6 @@ async def analyze_resume(request: Request, file: UploadFile = File(...)):
             detail="The file content does not match a valid PDF or DOCX.",
         )
 
-    # 1) Analyse first. Nothing is written to disk if this fails.
     try:
         result = await run_in_threadpool(_run_analysis, original_name, content)
     except HTTPException:
@@ -513,7 +504,6 @@ async def analyze_resume(request: Request, file: UploadFile = File(...)):
             status_code=500, detail="Resume analysis failed. Please try again."
         )
 
-    # 2) Save only for signed-in users, and replace their previous upload.
     result_path = _result_path(request)
     result["saved"] = False
 
@@ -574,7 +564,7 @@ app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 try:
     from backend.chatbot_routes import router as chatbot_router
-except ImportError:  # if you start the server from inside backend/
+except ImportError: 
     from chatbot_routes import router as chatbot_router
 app.include_router(chatbot_router)
 
@@ -629,7 +619,6 @@ async def auth(request: Request):
     if not user:
         return RedirectResponse(url="/login", status_code=303)
 
-    # Save basic Google account information in the session.
     request.session["user"] = {
         "sub": user.get("sub"),
         "name": user.get("name"),
@@ -644,7 +633,6 @@ async def auth(request: Request):
 async def homepage(request: Request):
     user = request.session.get("user")
 
-    # Users must sign in before accessing the homepage.
     if not user:
         return RedirectResponse(url="/login", status_code=303)
 
@@ -691,7 +679,7 @@ async def career_quiz(request: Request):
             for n, text in QUESTIONS.items()
         ],
         "cats": [{"name": c, "letter": RIASEC_LETTERS[c]} for c in RIASEC_COLUMNS],
-        "saved": _load_quiz_result(request),  # None if never taken / not signed in
+        "saved": _load_quiz_result(request), 
     }
     return templates.TemplateResponse(
         request=request,
@@ -700,7 +688,6 @@ async def career_quiz(request: Request):
     )
 
 
-# Plain `def` (not async): pandas work is blocking, so FastAPI runs it in a thread.
 @app.post("/api/quiz/submit")
 def quiz_submit(payload: QuizSubmission, request: Request):
     try:
@@ -713,7 +700,7 @@ def quiz_submit(payload: QuizSubmission, request: Request):
         return JSONResponse({"error": f"Dataset missing: {e}"}, status_code=500)
 
     careers = json.loads(results.to_json(orient="records"))
-    careers = apply_ai_salaries(careers)  # <-- new
+    careers = apply_ai_salaries(careers)
 
     record = {
         "scores": scores,
@@ -722,7 +709,7 @@ def quiz_submit(payload: QuizSubmission, request: Request):
         "answers": {str(q): v for q, v in payload.answers.items()},
         "completed_at": datetime.now(timezone.utc).isoformat(),
     }
-    saved = _save_quiz_result(request, record)  # overwrites the previous result
+    saved = _save_quiz_result(request, record)
 
     return JSONResponse(
         {**record, "saved": saved}, headers={"Cache-Control": "no-store"}
@@ -820,7 +807,6 @@ def get_wage_trends():
     df.columns = [str(c).strip().lower() for c in df.columns]
     df["year"] = pd.to_datetime(df["date"], errors="coerce").dt.year
 
-    # One row per occupation and year: both sexes, no "overall" total.
     df = df[(df["sex"] == "both") & (df["occupation"] != "overall")]
     df = df.dropna(subset=["year", "wages_median"])
     df["year"] = df["year"].astype(int)
@@ -873,8 +859,6 @@ def reskilling_plan_get(code: str, request: Request):
         headers={"Cache-Control": "no-store"},
     )
 
-
-# Plain `def`: the DeepSeek call blocks, so FastAPI runs it in a worker thread.
 @app.post("/api/reskilling/plan")
 def reskilling_plan_make(req: ReskillRequest, request: Request):
     path = _reskill_path(request)
@@ -937,7 +921,6 @@ def reskilling_plan_make(req: ReskillRequest, request: Request):
     )
 
 
-# lesson
 
 
 class LessonRef(BaseModel):
@@ -1063,7 +1046,7 @@ def quiz_result_save(r: QuizResult, request: Request):
     data[r.code][r.skill] = {
         "score": r.score,
         "total": r.total,
-        "passed": passed or bool(prev.get("passed")),  # once passed, stays passed
+        "passed": passed or bool(prev.get("passed")), 
         "best": max(r.score / r.total, prev.get("best", 0)),
         "at": datetime.now(timezone.utc).isoformat(),
     }
@@ -1085,10 +1068,6 @@ def lesson_progress(request: Request):
     return JSONResponse({"progress": data}, headers={"Cache-Control": "no-store"})
 
 
-# OPTIONAL: in settings_delete(), also wipe lessons when what in ("reskilling", "all"):
-#     for f in LESSON_DIR.glob(f"{uid}_*.json"):
-#         f.unlink(missing_ok=True)
-
 
 @app.get("/sdg", response_class=HTMLResponse)
 async def sdg_page(request: Request):
@@ -1105,7 +1084,7 @@ def _career_context(request: Request, code: str):
     plan = _load_plan(request)
     item = None
     if code == "auto":
-        item = plan[-1] if plan else None  # most recently saved career
+        item = plan[-1] if plan else None 
         code = item["code"] if item else quiz["careers"][0]["O*NET-SOC Code"]
     else:
         item = next((p for p in plan if p["code"] == code), None)
@@ -1268,7 +1247,7 @@ def _sc_build() -> dict:
         fits[name] = (ys, b)
     spread = max(
         float(np.std([b for _, b in fits.values()])), 0.005
-    )  # data-derived scale
+    ) 
     expo = _exposure(list(series))
 
     out = []
@@ -1282,7 +1261,7 @@ def _sc_build() -> dict:
         latest = by[latest_year]
         scen = {}
         for key, speed in SC_SPEED.items():
-            shift = net * speed * spread  # extra log-growth per year caused by AI
+            shift = net * speed * spread 
             pts = []
             for t, (m, se) in enumerate(base, 1):
                 m2 = m + shift * t
@@ -1402,8 +1381,6 @@ def scenarios_insight(request: Request, occupation: str, personal: bool = False)
         return {"takeaways": items, "by": f"DeepSeek ({DEEPSEEK_MODEL})"}
     return {"takeaways": fallback, "by": "template"}
 
-
-# settings
 
 
 def _uid(request: Request):
