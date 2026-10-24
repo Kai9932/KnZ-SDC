@@ -1,0 +1,2 @@
+pip install fastapi "uvicorn[standard]" pandas numpy requests python-dotenv authlib python-multipart jinja2 itsdangerous pydantic PyMuPDF python-docx scikit-learn joblib
+pip install torch transformers
