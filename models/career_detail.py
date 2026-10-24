@@ -36,12 +36,10 @@ def _clean(o):
 
 def _cos(a, b):
     d = np.linalg.norm(a) * np.linalg.norm(b)
-    if d == 0 or len(np.unique(a)) == 1:      # flat profile = no real preference
+    if d == 0 or len(np.unique(a)) == 1:    
         return None
     return round(float(np.clip(a @ b / d, 0, 1)) * 100, 1)
 
-
-# ---------- skills ----------
 def _rows(df, code):
     if df is None:
         return pd.DataFrame(columns=["Element Name"])
@@ -102,7 +100,6 @@ def _skills(code, raw):
     return out, hot
 
 
-# ---------- wages (OpenDOSM) ----------
 def _csv(name):
     p = DATA_DIR / name
     if not p.exists(): return None
@@ -121,7 +118,7 @@ def _label(df, prefer):
     for c in prefer:
         if c in df.columns:
             return c
-    for c in df.columns:                      # partial match, e.g. "industry_group"
+    for c in df.columns:       
         if any(p in c for p in prefer):
             return c
     skip = {"date", "sex", "year", "wages_median", "wages_mean"}
@@ -174,8 +171,6 @@ def _outlook(occ, group, hot):
                    rank=sorted(ch.values(), key=lambda v: -v[0]).index(me) + 1)
     return out
 
-
-# ---------- related roles ----------
 def _related(code, ovec, uvec, n=4):
     occ = _occ()
     M = occ[RIASEC_COLUMNS].to_numpy(float)
@@ -198,8 +193,6 @@ def _related(code, ovec, uvec, n=4):
         })
     return out
 
-
-# ---------- main entry ----------
 def build_detail(code, user_scores, resume_text):
     occ = _occ()
     m = occ[occ["O*NET-SOC Code"] == code]
