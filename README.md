@@ -11,4 +11,5 @@ If on replit use main.py
 
 ## deepseek api key ##
 
-please get it from me (0123909932) as it is a private key
+please get it from me (0123909932) as it is a private key and paste it into env file
+DEEPSEEK_API_KEY= PASTE IT HERE
