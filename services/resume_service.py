@@ -2,15 +2,14 @@
 import re
 from pathlib import Path
 
-import fitz  # PyMuPDF
+import fitz  
 from docx import Document
 
 
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+MAX_FILE_SIZE = 5 * 1024 * 1024
 
 SUPPORTED_EXTENSIONS = {".pdf", ".docx"}
 
-# Starter skill vocabulary. Expand this using your actual skill dataset.
 SKILL_KEYWORDS = {
     "Python": ["python"],
     "Java": ["java"],
@@ -70,7 +69,6 @@ def extract_resume_text(
         document = Document(io.BytesIO(file_bytes))
         paragraphs = [p.text for p in document.paragraphs]
 
-        # Include text contained in tables, where many CVs store details.
         for table in document.tables:
             for row in table.rows:
                 paragraphs.append(
@@ -99,7 +97,6 @@ def extract_skills(resume_text: str) -> list[str]:
 
     for skill, keywords in SKILL_KEYWORDS.items():
         for keyword in keywords:
-            # Avoid matching short terms inside unrelated words.
             pattern = (
                 r"(?<![a-z0-9+#.])"
                 + re.escape(keyword)
@@ -122,7 +119,6 @@ def analyse_resume(file_bytes: bytes, filename: str) -> dict:
     predicted_role = None
     classifier_status = "not_configured"
 
-    # Connect your existing DistilBERT classifier if available.
     try:
         try:
             from models.classifier import predict_role
@@ -133,8 +129,7 @@ def analyse_resume(file_bytes: bytes, filename: str) -> dict:
         classifier_status = "success"
 
     except (ImportError, FileNotFoundError):
-        # Resume extraction and skill detection can still work
-        # while the classifier is being configured.
+
         pass
 
     return {
