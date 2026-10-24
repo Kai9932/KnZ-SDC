@@ -21,7 +21,6 @@ GOALS = {
     16: "Peace, Justice & Strong Institutions", 17: "Partnerships for the Goals",
 }
 
-# Goal-level explanations used by the fallback (and as the default target).
 GOAL_REASON = {
     3: "supports health services and better care decisions",
     4: "supports learning, training and access to skills",
@@ -137,7 +136,7 @@ def _clean(raw: dict, title: str, have: list[str], missing: list[str]) -> dict:
     skills = []
     for item in raw.get("skills", []):
         key = str(item.get("name", "")).lower()
-        if key not in status:          # ignore skills the model made up
+        if key not in status:    
             continue
         ids = [int(i) for i in item.get("sdgs", []) if str(i).isdigit() and int(i) in GOALS][:2]
         if not ids:

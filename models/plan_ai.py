@@ -33,7 +33,6 @@ SOFT_SKILLS = {
     "active learning", "management of personnel resources",
 }
 
-# Small hint table used only by the fallback plan.
 TOPIC_HINTS = {
     "programming": "Programming fundamentals in Python",
     "data base user interface and query software": "SQL basics: SELECT, WHERE, JOIN",
@@ -78,8 +77,6 @@ json format:
   "gaps": [{"skill": "<one of the skills>", "topic": "...", "priority": 90}]
 }"""
 
-
-# ---------- helpers ----------
 
 def _num(v, lo, hi, default):
     try:
@@ -126,14 +123,14 @@ def _ask_deepseek(career, skills, prefs, weeks_available) -> dict:
     url = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip("/") + "/chat/completions"
 
     last_err = None
-    for _ in range(2):  # one retry (JSON mode can occasionally return empty content)
+    for _ in range(2):
         try:
             r = httpx.post(url, json=body, timeout=60,
                            headers={"Authorization": f"Bearer {key}"})
             r.raise_for_status()
             content = r.json()["choices"][0]["message"]["content"]
             return json.loads(content)
-        except Exception as e:  # noqa: BLE001
+        except Exception as e: 
             last_err = e
     raise RuntimeError(f"DeepSeek call failed: {last_err}")
 
@@ -222,7 +219,7 @@ def _normalise(raw: dict, skills, hpw: int, weeks_avail) -> dict:
             seen.add(s)
             gaps.append({"skill": s, "topic": str(g.get("topic") or s)[:120],
                          "priority": int(_num(g.get("priority"), 1, 100, 50))})
-    for ph in phases:  # make sure every planned skill appears
+    for ph in phases: 
         for m in ph["modules"]:
             if m["skill"] not in seen:
                 seen.add(m["skill"])
@@ -242,8 +239,6 @@ def _normalise(raw: dict, skills, hpw: int, weeks_avail) -> dict:
     }
 
 
-# ---------- public API ----------
-
 def generate_plan(career: str, skills: list[str], level: str = "Beginner",
                   hours_per_week: int = 5, style: str = "Mixed",
                   free_only: bool = True, target_date: str | None = None) -> dict:
@@ -259,7 +254,7 @@ def generate_plan(career: str, skills: list[str], level: str = "Beginner",
     try:
         plan = _normalise(_ask_deepseek(career, skills, prefs, weeks_avail), skills, hpw, weeks_avail)
         plan["ai_generated"], plan["note"] = True, None
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         log.warning("AI plan failed, using fallback: %s", e)
         plan = _normalise(_fallback_raw(skills, prefs["level"]), skills, hpw, weeks_avail)
         plan["ai_generated"] = False

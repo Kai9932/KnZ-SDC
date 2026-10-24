@@ -1,6 +1,4 @@
-# ---------- SCENARIO SIMULATOR v2 (data-driven) ----------
-# REPLACE the old scenario block in main.py with this whole file.
-# Needs: DEEPSEEK_API_KEY in .env (optional). numpy/requests/pandas already installed.
+
 import math
 import requests
 import numpy as np
@@ -10,7 +8,7 @@ SC_DIR = DATA_DIR / "scenarios"
 SC_DIR.mkdir(parents=True, exist_ok=True)
 SC_EXPOSURE_FILE = SC_DIR / "exposure_cache.json"
 SC_YEARS = 5
-SC_SPEED = {"moderate": 1.0, "fast": 2.0}      # scenario definition: how fast AI is adopted
+SC_SPEED = {"moderate": 1.0, "fast": 2.0} 
 DEEPSEEK_MODEL = "deepseek-chat"
 
 
@@ -114,7 +112,7 @@ def _sc_build() -> dict:
         ys = list(by)[-8:]
         b, _ = _fit(ys, [by[y] for y in ys], [])
         fits[name] = (ys, b)
-    spread = max(float(np.std([b for _, b in fits.values()])), 0.005)   # data-derived scale
+    spread = max(float(np.std([b for _, b in fits.values()])), 0.005) 
     expo = _exposure(list(series))
 
     out = []
@@ -126,7 +124,7 @@ def _sc_build() -> dict:
         latest = by[latest_year]
         scen = {}
         for key, speed in SC_SPEED.items():
-            shift = net * speed * spread                 # extra log-growth per year caused by AI
+            shift = net * speed * spread           
             pts = []
             for t, (m, se) in enumerate(base, 1):
                 m2 = m + shift * t

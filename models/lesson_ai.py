@@ -16,7 +16,6 @@ import requests
 log = logging.getLogger("lesson_ai")
 MODEL = "deepseek-chat"
 
-# Skill -> direct W3Schools tutorial home (checked longest key first).
 W3_DIRECT = {
     "python": "https://www.w3schools.com/python/",
     "pandas": "https://www.w3schools.com/python/pandas/",
@@ -42,7 +41,6 @@ W3_DIRECT = {
     "artificial intelligence": "https://www.w3schools.com/ai/",
 }
 
-# provider -> (URL builder, is_free)
 PROVIDERS = {
     "youtube": (lambda q: "https://www.youtube.com/results?search_query=" + quote_plus(q + " tutorial"), True),
     "freecodecamp": (lambda q: "https://www.freecodecamp.org/news/search/?query=" + quote_plus(q), True),

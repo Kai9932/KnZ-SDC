@@ -12,8 +12,8 @@ from pathlib import Path
 
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "chatbot.db"
 
-MAX_CONVERSATIONS = 50          # oldest chats are removed beyond this
-MAX_MESSAGES_PER_CHAT = 200     # stops a single chat growing forever
+MAX_CONVERSATIONS = 50 
+MAX_MESSAGES_PER_CHAT = 200 
 
 
 @contextmanager
@@ -71,7 +71,7 @@ def create_conversation(user_id: str, title: str) -> dict:
             "VALUES (?, ?, ?, ?, ?)",
             (cid, user_id, title, now, now),
         )
-        # Keep only the newest MAX_CONVERSATIONS chats for this user.
+
         con.execute(
             "DELETE FROM conversations WHERE user_id = ? AND id NOT IN ("
             "  SELECT id FROM conversations WHERE user_id = ? "
