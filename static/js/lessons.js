@@ -1,6 +1,3 @@
-/* static/js/lessons.js
-   Usage: openLesson(careerCode, skillName)   e.g. openLesson('15-2051.00', 'Python')
-   Shows AI lesson + real links, then a 5-question quiz. */
 (function () {
   const css = `
   .lz-back{position:fixed;inset:0;z-index:200;background:rgba(3,12,22,.7);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:5vh 4vw}
@@ -139,8 +136,8 @@
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code, skill, score, total: qs.length })
         });
-      } catch (_) { /* score still shown even if saving fails */ }
+      } catch (_) {}
       document.dispatchEvent(new CustomEvent('lesson-done', { detail: { code, skill, pass } }));
-    };   // closes the onclick handler
-  }      // closes loadQuiz
-})();    // closes the IIFE
+    };   
+  }     
+})(); 

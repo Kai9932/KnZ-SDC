@@ -1,4 +1,3 @@
-/* static/js/reskilling.js — load AFTER the page's inline <script> */
 (() => {
   const q = s => document.querySelector(s);
   const qa = s => [...document.querySelectorAll(s)];
@@ -67,7 +66,6 @@
     notes().forEach(n => { n.textContent = text; n.className = 'note ' + cls; });
   }
 
-  /* ---------- preferences ---------- */
   function readPrefs() {
     return {
       code,
@@ -88,7 +86,6 @@
     q('#pDate').value = p.target_date || '';
   }
 
-  /* ---------- progress (ring, stats, skills gained, upcoming) ---------- */
   function updateProgress() {
     const mods = flat();
     if (!plan || !mods.length) return;
@@ -125,7 +122,6 @@
       upNext = next ? mods.indexOf(next) : 0;
   }
 
-  /* ---------- rendering ---------- */
   function render() {
     const p = plan, mods = flat();
     loadDone();
@@ -222,7 +218,6 @@
     if (small) small.textContent = `${mods.filter(isDone).length} of ${mods.length} completed`;
   }
 
-  /* ---------- Modules tab ---------- */
   function renderModulesPane() {
     const pane = qa('#vc .ipane')[1];
     let idx = -1;
@@ -238,7 +233,6 @@
       r.onclick = () => { modIdx = +r.dataset.i; renderCourse(); });
   }
 
-  /* ---------- Resources tab (AI lesson + real links) ---------- */
   const icon = { video: '▶', article: '📄', course: '🎓', docs: '📚' };
   const resPane = () => qa('#vc .ipane')[2];
 
@@ -285,7 +279,6 @@
     q('#resQuiz').onclick = () => startQuiz(m);
   }
 
-  /* ---------- quiz gate: only a passed quiz marks the module complete ---------- */
   function startQuiz(m) {
     pending = key(m);
     window.openLesson(code, m.skill);   // lessons.js modal: lesson tab -> quiz tab
@@ -304,7 +297,6 @@
     status(`✅ "${m.title}" completed!` + (next >= 0 ? ' Next module is ready.' : ' You finished your whole plan!'), 'ok');
   });
 
-  /* ---------- loading / generating ---------- */
   async function generate(force) {
     if (!code) return;
     const btn = q('#regen');
@@ -338,7 +330,6 @@
     }
   }
 
-  /* ---------- init ---------- */
   qa('.career').forEach(el => el.addEventListener('change', () => selectCareer(el.value)));
   q('#regen').addEventListener('click', () => generate(true));
     q('[data-open-course]').addEventListener('click', () => {
@@ -371,7 +362,6 @@
 
 
 
-/*later remove*/
 let plan = null, code = '', modIdx = 0, saved = [];
 let done = new Set(), pending = null, resToken = 0;
 let upNext = 0;   // index of the "upcoming" module

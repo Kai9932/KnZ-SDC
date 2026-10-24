@@ -1,4 +1,3 @@
-/* KnZ AI Career Counsellor widget. No dependencies. */
 (function () {
   "use strict";
   var root = document.getElementById("knz-chat-root");
@@ -14,7 +13,6 @@
 
   var state = { open: false, view: "chat", convId: null, busy: false, loaded: false, signedIn: true };
 
-  /* ---------- helpers ---------- */
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -33,7 +31,6 @@
     });
   }
 
-  // Safe renderer: everything is escaped first, then **bold**, lists and paragraphs are added.
   function esc(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
@@ -69,7 +66,7 @@
       : d.toLocaleDateString([], { day: "numeric", month: "short" });
   }
 
-  /* ---------- build DOM ---------- */
+
   var fab = el("button", "kc-fab");
   fab.type = "button";
   fab.setAttribute("aria-label", "Open AI Career Counsellor");
@@ -111,7 +108,7 @@
   panel.append(head, body, hist, histFoot, form, note);
   root.append(fab, panel);
 
-  /* ---------- view switching ---------- */
+
   function show(view) {
     state.view = view;
     var chat = view === "chat";
@@ -166,7 +163,6 @@
     form.hidden = true;
   }
 
-  /* ---------- data ---------- */
   function openConversation(id) {
     return api("/conversations/" + encodeURIComponent(id)).then(function (r) {
       if (!r.ok) { state.convId = null; welcome(); return; }
@@ -249,7 +245,7 @@
   function submit(text) {
     text = (text || "").trim();
     if (!text || state.busy || !state.signedIn) return;
-    if (!body.querySelector(".kc-msg")) body.textContent = "";   // remove welcome screen
+    if (!body.querySelector(".kc-msg")) body.textContent = "";  
     addMsg("user", text);
     input.value = "";
     autosize();
@@ -280,7 +276,6 @@
       });
   }
 
-  /* ---------- events ---------- */
   function autosize() {
     input.style.height = "auto";
     input.style.height = Math.min(input.scrollHeight, 110) + "px";
