@@ -57,8 +57,7 @@
                 outline:3px solid var(--amber);
                 outline-offset:3px
             }
-            
-            /* SIDEBAR (same as other pages) */
+
             .edge{
                 position:fixed;
                 left:0;
@@ -266,8 +265,7 @@
             .crumb b{
                 color:#fff
             }
-            
-            /* PAGE */
+
             main{
                 max-width:1180px;
                 margin:0 auto;
@@ -408,8 +406,7 @@
                 font:700 1rem var(--display);
                 margin-bottom:10px
             }
-            
-            /* skeleton parts */
+
             .ph{
                 display:block;
                 height:12px;
@@ -1080,8 +1077,7 @@
             scrim.onclick=()=>setMenu(false);
             addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
             addEventListener('scroll',()=>topbar.classList.toggle('solid',scrollY>30),{passive:true});
-            
-            /* Tabs: switch panels (layout only, no data behind them yet) */
+
             const tabBtns=[...document.querySelectorAll('.tabs button')],panes=[...document.querySelectorAll('.pane')];
             tabBtns.forEach(b=>b.onclick=()=>{
                 const i=+b.dataset.tab;
@@ -1090,8 +1086,7 @@
                 $('#pill').style.transform=`translateX(${i*100}%)`;
             });
             
-            /* Salary filters: dropdowns open and change, but have no real options yet.
-            When data is ready, call fillFilter('location', [{value:'kl',label:'Kuala Lumpur'}, ...]) */
+
             const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
             const rm=n=>n==null?'–':'RM '+Math.round(n).toLocaleString();
             const code=new URLSearchParams(location.search).get('code')||'top';
@@ -1115,7 +1110,6 @@
             overview(); skills(); salary(); outlook(); related();
             }
 
-            /* ---- Overview ---- */
             function overview(){
             $('#cDesc').textContent=D.description;
             $('#reasons').innerHTML=D.reasons.map(t=>`<div class="reason"><span class="ok">✓</span><span>${esc(t)}</span></div>`).join('');
@@ -1131,7 +1125,6 @@
             $('#keyInfo').innerHTML=cards.map(c=>`<div class="stat"><i class="on">${c[0]}</i><div><small style="color:var(--muted)">${c[1]}</small><br><b>${esc(c[2])}</b><br><small style="color:var(--muted)">${esc(c[3])}</small></div></div>`).join('');
             }
 
-            /* ---- Skills ---- */
             const ST={found:'Matched',missing:'Not detected',unknown:'–'};
             const EV={found:'Mentioned in resume',missing:'Not found in resume',unknown:'No resume analysed'};
             function skills(){
@@ -1153,7 +1146,6 @@
             }
             }
 
-            /* ---- Save / send to plan ---- */
             async function savePlan(){
             const r=await fetch('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({code:D.code,title:D.title,missing_skills:D.skills.filter(s=>s.status==='missing').map(s=>s.name)})});
@@ -1163,7 +1155,6 @@
             $('#saveBtn').onclick=async()=>{ if(await savePlan()) $('#saveBtn').textContent='✓ Saved to My Plan'; };
             $('#toPlan').onclick=async()=>{ if(await savePlan()) location.href='/reskilling'; };
 
-            /* ---- Line chart (inline SVG) ---- */
             function chart(el,series){
             const pts=series.flatMap(s=>s.points);
             if(!pts.length){el.innerHTML='<div class="dash chart">No wage data available for this selection.</div>';return;}
@@ -1181,7 +1172,6 @@
             el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" role="img" aria-label="Wage trend chart">${g}</svg>`;
             }
 
-            /* ---- Salary ---- */
             function salary(){
             const S=D.salary, ai=S.ai;
             $('#ranges').innerHTML=ai?[['Entry-level',ai.min],['Mid-level',ai.median],['Senior-level',ai.max]].map(r=>
@@ -1208,7 +1198,6 @@
             $('#salTake').innerHTML=t.map(x=>`<div class="reason"><span class="ok">✓</span><span>${esc(x)}</span></div>`).join('');
             }
 
-            /* ---- Outlook ---- */
             function outlook(){
             const o=D.outlook, has=o.growth_pct!=null;
             $('#outStats').innerHTML=[
@@ -1223,7 +1212,7 @@
             $('#chips').innerHTML=o.hot.length?o.hot.map(h=>`<span class="chip t">${esc(h)}</span>`).join(''):'<p class="note" style="margin:0">No flagged technologies for this career.</p>';
             }
 
-            /* ---- Related ---- */
+
             function related(){
             $('#cards').innerHTML=D.related.map((r,i)=>`<div class="panel"><div class="lines">
                 <h3 style="margin:0">${esc(r.title)} ${r.match!=null?`<span class="badge" style="margin-left:6px;border-style:solid">${r.match.toFixed(1)}% match</span>`:''}</h3>

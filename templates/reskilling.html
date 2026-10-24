@@ -59,7 +59,6 @@
                 outline-offset:3px
             }
 
-            /* SIDEBAR + TOP BAR (same as other pages) */
 .edge{
                 position:fixed;
                 left:0;
@@ -268,7 +267,6 @@
                 color:#fff
             }
 
-            /* PAGE */
 main{
                 max-width:1180px;
                 margin:0 auto;
@@ -454,7 +452,6 @@ main{
                 flex:1
             }
 
-            /* skeleton parts */
 .ph{
                 display:block;
                 height:12px;
@@ -541,7 +538,6 @@ main{
                 flex:none
             }
 
-            /* timeline dots */
 .phases{
                 display:grid;
                 grid-template-columns:repeat(4,1fr);
@@ -582,7 +578,6 @@ main{
                 gap:7px
             }
 
-            /* upcoming / course header */
 .flex{
                 display:flex;
                 gap:18px;
@@ -594,7 +589,6 @@ main{
                 min-width:200px
             }
 
-            /* inner tabs (course) */
 .itabs{
                 display:flex;
                 gap:6px;
@@ -657,7 +651,6 @@ main{
                 margin-top:8px
             }
 
-            /* progress */
 .chart{
                 height:200px;
                 background:repeating-linear-gradient(0deg,transparent 0 39px,rgba(255,255,255,.06) 39px 40px),rgba(0,0,0,.15)
@@ -707,7 +700,7 @@ main{
                 font-weight:700
             }
 
-            /* customise */
+
 .field{
                 margin-bottom:18px
             }
@@ -1545,7 +1538,6 @@ main{
             addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
             addEventListener('scroll',()=>topbar.classList.toggle('solid',scrollY>30),{passive:true});
 
-            /* Views: 3 main tabs + course details page */
             const tabBtns=$$('#mainTabs button'),views=['v0','v1','v2'];
             let last=0;
             function show(id){
@@ -1567,8 +1559,7 @@ main{
                 $$('.ipane').forEach((p,j)=>p.classList.toggle('on',j===i));
             });
 
-            /* Target career dropdowns: work, but no options yet.
-            Later: fillCareers([{value:'data-analyst',label:'Data Analyst'}, ...]) */
+
             function fillCareers(opts){
                 $$('.career').forEach(el=>{
                     const first=el.options[0];el.innerHTML='';el.appendChild(first);
@@ -1576,13 +1567,12 @@ main{
                 });
             }
             $$('.career').forEach(el=>el.addEventListener('change',()=>{
-                $$('.career').forEach(o=>o.value=el.value); /* keep both dropdowns in sync */
-                /* TODO: load the plan for el.value */
+                $$('.career').forEach(o=>o.value=el.value); 
+
             }));
             $('#pHours').oninput=e=>$('#hrsOut').textContent=e.target.value+' hours/week';
-            $('#regen').onclick=()=>{/* TODO: regenerate the plan from the preference fields */};
+            $('#regen').onclick=()=>{};
 
-            /* Empty skeleton builders. Replace with real data later. */
             const rep=(n,f)=>Array.from({length:n},(_,i)=>f(i)).join('');
             $('#phases').innerHTML=rep(4,()=>'<div><span class="ph w80"></span><span class="ph w60" style="height:10px"></span></div>');
             $('#dots').innerHTML=rep(16,()=>'<i></i>');

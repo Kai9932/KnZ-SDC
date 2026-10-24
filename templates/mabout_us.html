@@ -80,7 +80,6 @@
                 z-index:120
             }
 
-            /* SIDEBAR: hidden by default. Opens on hover at left edge, or with the menu button (pin). */
 
 .edge{
 
@@ -246,7 +245,6 @@
                 pointer-events:auto
             }
 
-            /* TOP BAR */
 
 .top{
 
@@ -335,7 +333,6 @@
                 color:#fff
             }
 
-            /* MAIN */
 
 main{
 
@@ -430,7 +427,6 @@ main{
                 line-height:1.5
             }
 
-            /* STEPS */
 
 .steps{
 
@@ -505,7 +501,6 @@ main{
                 box-shadow:0 0 0 9px rgba(0,168,150,.18)
             }
 
-            /* IMAGE SLOTS: leave src="" for now. Add your picture path later, e.g. src="images/step1.png" */
 
 .media{
 
@@ -611,7 +606,7 @@ main{
                 background:rgba(0,168,150,.34)
             }
 
-            /* CTA */
+
 
 .cta{
 
@@ -1121,7 +1116,6 @@ main{
 
             const side=$('#sidebar'), btn=$('#menuBtn'), scrim=$('#scrim');
 
-            /* Menu button pins the sidebar open; hovering the left edge also shows it. */
 
             function setMenu(open){
 
@@ -1139,7 +1133,6 @@ main{
 
             addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
 
-            /* Top bar + progress */
 
             const topbar=$('#top'),prog=$('#progress');
 
@@ -1155,7 +1148,6 @@ main{
 
             addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-            /* Steps light up as they reach the middle of the screen */
 
             const steps=[...document.querySelectorAll('.step')];
 

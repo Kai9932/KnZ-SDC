@@ -62,7 +62,6 @@
                 outline-offset:3px
             }
 
-            /* SIDEBAR: appears on hover at the left edge, or with the menu button */
             .edge {
                 position:fixed;
                 left:0;
@@ -272,7 +271,6 @@
                 color:#fff
             }
 
-            /* PAGE */
             main {
                 max-width:1180px;
                 margin:0 auto;
@@ -378,7 +376,6 @@
                 margin-bottom:16px
             }
 
-            /* SKILL TABLE (empty skeleton) */
             .thead,.row {
                 display:grid;
                 grid-template-columns:1.1fr 1.4fr 70px;
@@ -439,7 +436,6 @@
                 border-radius:14px
             }
 
-            /* CHART (empty frame) */
             .legend {
                 display:flex;
                 justify-content:center;
@@ -489,7 +485,6 @@
                 padding:0 6px
             }
 
-            /* DATA SOURCE (empty) */
             .src {
                 display:flex;
                 align-items:center;
@@ -863,7 +858,6 @@
 
             const $=s=>document.querySelector(s);
 
-            /* Sidebar: hover the left edge, or use the menu button */
             const side=$('#sidebar'),btn=$('#menuBtn'),scrim=$('#scrim'),topbar=$('#top');
             function setMenu(o){
                 side.classList.toggle('show',o);scrim.classList.toggle('show',o);
@@ -875,7 +869,7 @@
             addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
             addEventListener('scroll',()=>topbar.classList.toggle('solid',scrollY>30),{passive:true});
 
-            /* Tabs + real wage data */
+
             const tabBtns=[...document.querySelectorAll('.tabs button')];
             let wageData=null, currentTab=0, selectedName=null;
 
