@@ -6,12 +6,8 @@ import numpy as np
 import pandas as pd
 
 
-# ==========================================================
-# CONFIGURATION
-# ==========================================================
-
 SCRIPT_DIR = Path(__file__).resolve().parent
-# Support running this script from either the project root or its src/ folder.
+
 PROJECT_DIR = (
     SCRIPT_DIR
     if (SCRIPT_DIR / "processed").is_dir()
@@ -43,9 +39,6 @@ RIASEC_LETTERS = {
     "Conventional": "C",
 }
 
-# IMPORTANT:
-# Confirm this mapping against the scoring columns in your
-# original Career_Quiz.pdf before using real user results.
 QUESTION_MAP = {
     "Realistic": [1, 7, 14, 22, 30, 32, 37],
     "Investigative": [2, 11, 18, 21, 26, 33, 39],
@@ -62,17 +55,11 @@ REQUIRED_OCCUPATION_COLUMNS = [
     *RIASEC_COLUMNS,
 ]
 
-# A fuzzy title match below this threshold is not accepted.
-# This helps avoid attaching an unrelated occupation's wages.
 MIN_WAGE_TITLE_SIMILARITY = 0.82
 
 TOP_ESSENTIAL_SKILLS = 5
 TOP_SOFTWARE_SKILLS = 5
 
-
-# ==========================================================
-# GENERAL HELPERS
-# ==========================================================
 
 def read_csv_if_available(path):
     """Load a CSV, returning None if it is an optional missing file."""
@@ -122,9 +109,6 @@ def format_skill_list(items):
     return "; ".join(cleaned) if cleaned else "No matching data available"
 
 
-# ==========================================================
-# RIASEC QUESTION SCORING
-# ==========================================================
 
 QUESTIONS = {
     1: "I like to work on cars",
@@ -228,10 +212,6 @@ def score_riasec(answers):
     return scores, interest_code
 
 
-# ==========================================================
-# LOAD OCCUPATION PROFILES
-# ==========================================================
-
 def load_occupations():
     """Load and validate occupation-level RIASEC profiles."""
     if not DATA_PATH.exists():
@@ -275,10 +255,6 @@ def load_occupations():
 
     return df.reset_index(drop=True)
 
-
-# ==========================================================
-# ESSENTIAL SKILLS
-# ==========================================================
 
 def load_essential_skills():
     """
@@ -341,10 +317,6 @@ def get_essential_skills(skills_df, occupation_code):
     )
 
 
-# ==========================================================
-# SOFTWARE SKILLS
-# ==========================================================
-
 def load_software_skills():
     """
     Load software skills.
@@ -396,7 +368,6 @@ def get_software_skills(skills_df, occupation_code):
     if rows.empty:
         return "No matching software skills available"
 
-    # Prefer hot technologies and in-demand skills when these columns exist.
     priority = pd.Series(0, index=rows.index, dtype=int)
 
     if "Hot Technology" in rows.columns:
@@ -438,10 +409,6 @@ def get_software_skills(skills_df, occupation_code):
     return format_skill_list(descriptions)
 
 
-# ==========================================================
-# MALAYSIAN WAGE DATA
-# ==========================================================
-
 def load_malaysia_wages():
     """
     Load Malaysian wage data.
@@ -480,10 +447,6 @@ def load_malaysia_wages():
 
     return df
 
-
-
-# Map detailed O*NET career titles to broad wage groups available in the
-# Malaysian wage dataset. These are group-level references, NOT career-specific salaries.
 def wage_group_for_title(title):
     text = normalise_text(title)
 
@@ -537,10 +500,6 @@ def match_wage_occupation(wages_df, occupation_title):
     if not target:
         return empty_result
 
-    # The supplied Malaysian wage file uses broad occupational groups rather
-    # than detailed O*NET titles. Use a transparent group-level reference when
-    # a detailed title cannot be matched exactly. Urban/regional planners are
-    # explicitly included under professionals.
     group = wage_group_for_title(occupation_title)
     if group is not None:
         group_rows = wages_df[
@@ -568,7 +527,6 @@ def match_wage_occupation(wages_df, occupation_title):
                 "malaysia_mean_wage": safe_number(row.get("wages_mean", np.nan)),
                 "wage_data_date": date_label,
                 "wage_matched_occupation": row.get("occupation", group),
-                # 0.0 means this is a broad group estimate, not a title match.
                 "wage_title_similarity": 0.0,
             }
 
@@ -602,8 +560,6 @@ def match_wage_occupation(wages_df, occupation_title):
             candidates["_normalised_occupation"] == best_title
         ].copy()
 
-    # Prefer a clearly identified all-sex/overall row, when the dataset has
-    # a sex column. Do not silently use an arbitrary sex-specific wage.
     if "sex" in matched.columns:
         sex_normalised = matched["sex"].apply(normalise_text)
 
@@ -621,10 +577,9 @@ def match_wage_occupation(wages_df, occupation_title):
         if not overall.empty:
             matched = overall
         else:
-            # The dataset may be sex-specific only. Leave the wage blank.
+
             return empty_result
 
-    # If multiple records remain, use the latest available date.
     if "_date_parsed" in matched.columns:
         matched = matched.sort_values(
             "_date_parsed",
@@ -652,9 +607,6 @@ def match_wage_occupation(wages_df, occupation_title):
     }
 
 
-# ==========================================================
-# CAREER MATCH EXPLANATIONS
-# ==========================================================
 
 def explain_match(user_scores, occupation_row):
     """
@@ -676,8 +628,6 @@ def explain_match(user_scores, occupation_row):
         ),
     )
 
-    # Describe the user's strongest interests. If all scores are tied,
-    # the explanation will explicitly indicate that the profile is balanced.
     top_user_score = max(user_scores.values())
     strongest_user = [
         category for category in ranked_user
@@ -695,9 +645,6 @@ def explain_match(user_scores, occupation_row):
             + ", ".join(strongest_user)
             + "."
         )
-
-    # Compare the occupation's three highest RIASEC dimensions against
-    # the user's three highest categories.
     occupation_top = sorted(
         RIASEC_COLUMNS,
         key=lambda category: (
@@ -720,11 +667,6 @@ def explain_match(user_scores, occupation_row):
         )
 
     return f"{user_summary} {alignment}"
-
-
-# ==========================================================
-# CAREER MATCHING
-# ==========================================================
 
 def match_careers(user_scores, top_n=10):
     """
@@ -759,7 +701,6 @@ def match_careers(user_scores, top_n=10):
             "All RIASEC scores are zero. Complete the questionnaire first."
         )
 
-    # Load occupation profiles.
     occupations = load_occupations()
 
     occupation_vectors = occupations[
@@ -780,21 +721,16 @@ def match_careers(user_scores, top_n=10):
     if len(occupations) == 0:
         raise ValueError("No valid occupation profiles are available.")
 
-    # A flat user profile has no directional preference. In that case,
-    # cosine similarity would produce misleadingly high-looking percentages,
-    # so leave scores unranked and list careers alphabetically for exploration.
     flat_profile = len(np.unique(user_vector)) == 1
 
     if flat_profile:
         occupations["match_score"] = np.nan
     else:
-        # Cosine similarity compares profile direction rather than score scale.
         normalised_user = user_vector / np.linalg.norm(user_vector)
         normalised_occupations = occupation_vectors / row_norms
         similarities = normalised_occupations @ normalised_user
         occupations["match_score"] = np.clip(similarities * 100, 0, 100)
 
-    # Load supporting datasets once per matching run.
     essential_skills = load_essential_skills()
     software_skills = load_software_skills()
     wages = load_malaysia_wages()
@@ -835,7 +771,6 @@ def match_careers(user_scores, top_n=10):
         axis=1,
     )
 
-    # Rank first, then enrich only the occupations being returned.
     if flat_profile:
         results = occupations.sort_values("Title", ascending=True).head(top_n).copy()
     else:
@@ -888,9 +823,6 @@ def match_careers(user_scores, top_n=10):
     return results[output_columns].reset_index(drop=True)
 
 
-# ==========================================================
-# RESULTS DISPLAY
-# ==========================================================
 
 def display_results(results):
     """Print enriched career results in the terminal."""
@@ -963,9 +895,6 @@ def display_results(results):
     )
 
 
-# ==========================================================
-# INTERACTIVE TEST
-# ==========================================================
 
 def main():
     print("\n" + "=" * 48)
