@@ -13,9 +13,9 @@ from models.career_chatbot import ChatbotError, reply
 
 router = APIRouter(prefix="/api/chatbot")
 
-HISTORY_WINDOW = 12            # messages sent to DeepSeek per request
-RATE_LIMIT = 15                # messages ...
-RATE_WINDOW = 60               # ... per this many seconds, per user
+HISTORY_WINDOW = 12      
+RATE_LIMIT = 15            
+RATE_WINDOW = 60       
 NO_STORE = {"Cache-Control": "no-store"}
 
 chat_store.init_db()
@@ -52,9 +52,6 @@ class MessageIn(BaseModel):
     conversation_id: str | None = Field(None, max_length=64)
     message: str = Field(..., max_length=1000)
 
-
-# Plain `def` endpoints: SQLite and the DeepSeek call block, so FastAPI
-# runs them in a worker thread.
 
 @router.get("/conversations")
 def list_chats(request: Request):
@@ -121,7 +118,6 @@ def send_message(body: MessageIn, request: Request):
     try:
         answer = reply(history)
     except ChatbotError as e:
-        # The user's message stays saved, so they can simply retry.
         return JSONResponse(
             {"error": str(e), "conversation_id": cid, "title": title},
             status_code=502, headers=NO_STORE)
